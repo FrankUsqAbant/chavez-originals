@@ -77,12 +77,13 @@ El candado junto al botón de WhatsApp abre el **panel de administración**: cre
 - Las fotos se guardan en el bucket público `productos` (solo el admin escribe; máx. 1 MB; solo imágenes). El panel las reduce a 900 px y las convierte a WebP antes de subirlas.
 - La sesión vive en la pestaña (se cierra al cerrarla). Los datos tienen validaciones también en el servidor (precio, longitudes, imagen obligatoria).
 
-**Crear la cuenta de administrador (una sola vez):**
-1. Supabase > Authentication > Users > **Add user** > *Create new user*: correo + contraseña larga, con **Auto Confirm User** marcado.
-2. Supabase > Authentication > Sign In / Providers: desactiva **Allow new users to sign up** (nadie más podrá registrarse).
-3. Supabase > SQL Editor: `select public.hacer_admin('tu-correo@ejemplo.com');`
+**Cuenta de administrador.** Ya existe (usquizafranquer@gmail.com). Se creó con una contraseña **temporal** que se entregó aparte (no se guarda en el código): mientras siga siendo la temporal, la base de datos no le da ningún permiso de escritura y el panel obliga a elegir una nueva en el primer ingreso. Después se puede cambiar cuando se quiera con el botón "Cambiar contraseña" del panel (pide la actual, exige 10+ caracteres con letras y números, y cierra las demás sesiones).
 
-Para quitar a un admin: borrar su fila en la tabla `admins`. Para varios admins, repetir los pasos 1 y 3.
+**Agregar otro administrador:**
+1. Supabase > Authentication > Users > **Add user** > *Create new user*: correo + contraseña larga, con **Auto Confirm User** marcado.
+2. Supabase > SQL Editor: `select public.hacer_admin('otro-correo@ejemplo.com');`
+
+Para quitar a un admin: borrar su fila en la tabla `admins`. Recomendado: en Supabase > Authentication > Sign In / Providers, desactivar **Allow new users to sign up** (nadie más podrá registrarse).
 
 **Qué cubre y qué no.**
 - Cubre todo el catálogo. Un producto puede usar las imágenes de un modelo que ya viene con el sitio (cambian con el color) o una foto propia (se ve igual en todos los colores).
@@ -100,7 +101,7 @@ Para quitar a un admin: borrar su fila en la tabla `admins`. Para varios admins,
 
 ## Pendiente de confirmar por el negocio
 
-- Crear la cuenta de administrador (ver "Administración de productos") y desactivar el registro público en Supabase.
+- Que el administrador cambie la contraseña temporal en su primer ingreso, y desactivar el registro público en Supabase (Authentication > Sign In / Providers).
 - RUC y correo en `storeData.ts` (marcados con `TODO`).
 - Las imágenes de producto son generadas con IA: confirmar que coinciden con los productos reales (logos, colores, diseño).
 - Los colores son recoloreados digitalmente, no fotos del producto real.

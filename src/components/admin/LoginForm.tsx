@@ -4,7 +4,8 @@ import { LogIn } from 'lucide-react';
 
 interface LoginFormProps {
   client: SupabaseClient;
-  onLoggedIn: () => void;
+  /** 'admin' = acceso completo · 'cambiar_clave' = entra con contraseña temporal y debe cambiarla. */
+  onLoggedIn: (estado: 'admin' | 'cambiar_clave') => void;
 }
 
 export const inputClass =
@@ -28,13 +29,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ client, onLoggedIn }) => {
         setError(authError.status === 429 ? 'Demasiados intentos. Espera unos minutos e inténtalo de nuevo.' : 'Correo o contraseña incorrectos.');
         return;
       }
-      const { data: isAdmin, error: rpcError } = await client.rpc('es_admin');
-      if (rpcError || isAdmin !== true) {
+      const { data: estado, error: rpcError } = await client.rpc('estado_admin');
+      if (rpcError || (estado !== 'admin' && estado !== 'cambiar_clave')) {
         await client.auth.signOut();
         setError('Esta cuenta no tiene permisos de administrador.');
         return;
       }
-      onLoggedIn();
+      onLoggedIn(estado);
     } catch {
       setError('No se pudo conectar. Revisa tu conexión a internet.');
     } finally {
