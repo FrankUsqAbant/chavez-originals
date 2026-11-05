@@ -1,6 +1,7 @@
 import React from 'react';
 import { STORE_INFO } from '../data/storeData';
 import { generateWhatsAppOrderLink } from '../utils/b2b-logic';
+import { useStoreStatus } from '../hooks/useStoreStatus';
 import {
   MapPin,
   Store,
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react';
 
 export const LogisticsSection: React.FC = () => {
+  const status = useStoreStatus();
   const handleConsultStoreWhatsApp = () => {
     const link = generateWhatsAppOrderLink({
       phone: STORE_INFO.whatsapp,
@@ -24,7 +26,7 @@ export const LogisticsSection: React.FC = () => {
       modelName: 'Consulta en Tienda Física',
       notes: '¡Hola Chavez Originals! Deseo consultar modelos y tallas disponibles para visitar su tienda en Av. San Martín 736.',
     });
-    window.open(link, '_blank');
+    window.open(link, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -67,7 +69,9 @@ export const LogisticsSection: React.FC = () => {
               {/* Storefront Image */}
               <div className="relative rounded-2xl overflow-hidden border border-emerald-500/20 bg-black/60 group shadow-lg">
                 <img
-                  src="/assets/aistudio/Chaves_Originals_61e42aa8.jpg"
+                  loading="lazy"
+                  decoding="async"
+                  src="/assets/aistudio/Chaves_Originals_61e42aa8.webp"
                   alt="Fachada Tienda Chavez Originals Av. San Martín 736 Cajamarca"
                   className="w-full h-56 sm:h-64 object-cover filter brightness-95 group-hover:scale-105 transition-transform duration-500"
                 />
@@ -75,8 +79,12 @@ export const LogisticsSection: React.FC = () => {
                 
                 {/* Badge on photo */}
                 <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 border border-emerald-500/30 text-[11px] font-bold text-[#00ff66] backdrop-blur-md flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-[#00ff66] animate-pulse" />
-                  <span>Abierto para Atención</span>
+                  <span
+                    className={`w-2 h-2 rounded-full ${status.isOpen ? 'bg-[#00ff66] animate-pulse' : 'bg-gray-400'}`}
+                  />
+                  <span>
+                    {status.badge} · {status.detail}
+                  </span>
                 </div>
 
                 {/* Bottom Address banner */}
@@ -109,7 +117,7 @@ export const LogisticsSection: React.FC = () => {
                       Prueba tu talla en vivo
                     </h4>
                     <p className="text-[11px] text-gray-400 leading-snug mt-0.5">
-                      Pruébate los chimpunes en losa o césped sintético y las zapatillas urbanas de la talla 38 a la 44.
+                      Pruébate los chimpunes en losa o césped sintético y las zapatillas urbanas (tallas 38 a 44 según el modelo).
                     </p>
                   </div>
                 </div>
@@ -264,7 +272,7 @@ export const LogisticsSection: React.FC = () => {
             <div className="pt-6 space-y-3">
               <button
                 onClick={handleConsultStoreWhatsApp}
-                className="w-full py-4 px-6 rounded-2xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-black text-base tracking-wide uppercase shadow-[0_0_25px_rgba(0,255,102,0.4)] hover:shadow-[0_0_35px_rgba(0,255,102,0.7)] transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer"
+                className="w-full py-4 px-6 rounded-2xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-black text-base tracking-wide uppercase transition-all duration-300 transform active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer"
               >
                 <MessageCircle className="w-5 h-5 fill-current" />
                 <span>Consultar Modelos y Tallas en Tienda</span>

@@ -3,6 +3,8 @@ import { Award, ShieldCheck, ShoppingBag, Store, MapPin, X } from 'lucide-react'
 import { STORE_INFO } from '../data/storeData';
 import { generateWhatsAppOrderLink } from '../utils/b2b-logic';
 import { ChavezLogo } from './ChavezLogo';
+import { useModal } from '../hooks/useModal';
+import { useStoreStatus } from '../hooks/useStoreStatus';
 
 interface ShowcaseItem {
   id: string;
@@ -18,7 +20,7 @@ const SHOWCASE_MODELS: ShowcaseItem[] = [
     id: 'stealth-runner',
     name: 'Punto Original Stealth Runner',
     code: 'STH-2026-BLK',
-    image: '/assets/aistudio/showroom_stealth_sideprofile.jpg',
+    image: '/assets/aistudio/showroom_stealth_sideprofile.webp',
     alt: 'Punto Original Stealth Runner',
     availableSizes: [38, 39, 40, 41, 42, 43, 44],
   },
@@ -26,7 +28,7 @@ const SHOWCASE_MODELS: ShowcaseItem[] = [
     id: 'urban-chunky',
     name: 'Punto Original Urban Chunky',
     code: 'URB-2026-CH',
-    image: '/assets/aistudio/showroom_chunky_16x9.jpg',
+    image: '/assets/aistudio/showroom_chunky_16x9.webp',
     alt: 'Punto Original Urban Chunky',
     availableSizes: [38, 39, 40, 41, 42, 43, 44],
   },
@@ -34,20 +36,14 @@ const SHOWCASE_MODELS: ShowcaseItem[] = [
     id: 'air-glow',
     name: 'Punto Original Air Glow',
     code: 'URB-AIR-026',
-    image: '/assets/aistudio/showroom_airglow_16x9.jpg',
+    image: '/assets/aistudio/showroom_airglow_16x9.webp',
     alt: 'Punto Original Air Glow',
     availableSizes: [38, 39, 40, 41, 42, 43, 44],
   },
 ];
 
-interface ComboSectionProps {
-  onSelectProductModal?: (productId: string) => void;
-  onExploreCatalog: () => void;
-}
-
-export const ComboSection: React.FC<ComboSectionProps> = ({
-  onExploreCatalog,
-}) => {
+export const ComboSection: React.FC = () => {
+  const status = useStoreStatus();
   const [selectedSizes, setSelectedSizes] = useState<Record<string, number>>({
     'stealth-runner': 40,
     'urban-chunky': 40,
@@ -59,6 +55,7 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
   const [rotationAngle, setRotationAngle] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
+  const viewerRef = useModal<HTMLDivElement>(active3DProduct !== null, () => setActive3DProduct(null));
 
   const handleSelectSize = (itemId: string, size: number) => {
     setSelectedSizes((prev) => ({
@@ -76,7 +73,7 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
       size,
       notes: `Hola Chavez Originals, deseo pedir el modelo ${item.name} en talla ${size}.`,
     });
-    window.open(link, '_blank');
+    window.open(link, '_blank', 'noopener,noreferrer');
   };
 
   // 3D showcase drag handlers
@@ -94,6 +91,16 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
 
   const handleMouseUp = () => {
     setIsDragging(false);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const x = e.touches[0].clientX;
+    setRotationAngle((prev) => prev + (x - startX) * 0.5);
+    setStartX(x);
   };
 
   return (
@@ -127,7 +134,7 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
 
             {/* Patrocinador Oficial */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/15 border border-emerald-400/40 flex items-center justify-center text-[#00ff66] shadow-[0_0_15px_rgba(0,255,102,0.25)]">
+              <div className="w-10 h-10 rounded-full bg-emerald-500/15 border border-emerald-400/40 flex items-center justify-center text-[#00ff66]">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div className="text-left">
@@ -180,6 +187,8 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
                   title="Clic para ver en campaña 3D"
                 >
                   <img
+                    loading="lazy"
+                    decoding="async"
                     src={item.image}
                     alt={item.alt}
                     className="w-full h-full object-cover object-center transform group-hover/img:scale-105 transition-transform duration-500"
@@ -210,7 +219,7 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
                         onClick={() => handleSelectSize(item.id, size)}
                         className={`w-9 h-9 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center justify-center ${
                           isSelected
-                            ? 'bg-[#00ff66] text-black font-extrabold shadow-[0_0_12px_rgba(0,255,102,0.45)] scale-105'
+                            ? 'bg-[#00ff66] text-black font-extrabold scale-105'
                             : 'text-gray-400 hover:text-white hover:bg-white/10'
                         }`}
                         aria-label={`Talla ${size}`}
@@ -226,9 +235,9 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
                   <button
                     type="button"
                     onClick={() => handleOrderShoe(item)}
-                    className="w-full py-3 px-5 rounded-full bg-[#00ff66] hover:bg-[#1aff75] text-black font-bold text-xs uppercase tracking-wider transition-all duration-200 active:scale-98 shadow-[0_0_15px_rgba(0,255,102,0.25)] hover:shadow-[0_0_25px_rgba(0,255,102,0.45)] cursor-pointer flex items-center justify-center gap-2"
+                    className="w-full py-3 px-5 rounded-full bg-[#00ff66] hover:bg-[#1aff75] text-black font-bold text-xs uppercase tracking-wider transition-all duration-200 active:scale-98 cursor-pointer flex items-center justify-center gap-2"
                   >
-                    <ShoppingBag className="w-4 h-4 fill-current" />
+                    <ShoppingBag className="w-4 h-4" />
                     <span>Pedir por WhatsApp</span>
                   </button>
                 </div>
@@ -242,7 +251,9 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
         <div className="rounded-3xl bg-gradient-to-r from-[#101b15] via-[#0b130e] to-[#070b09] border border-emerald-500/20 p-6 sm:p-8 flex flex-col lg:flex-row items-center gap-8 shadow-2xl">
           <div className="lg:w-1/2 relative rounded-2xl overflow-hidden border border-emerald-500/30 shadow-2xl group w-full">
             <img
-              src="/assets/aistudio/Chaves_Originals_61e42aa8.jpg"
+              loading="lazy"
+              decoding="async"
+              src="/assets/aistudio/Chaves_Originals_61e42aa8.webp"
               alt="Fachada Tienda Física Chavez Originals Av. San Martín 736 Cajamarca"
               className="w-full h-64 sm:h-80 object-cover object-center group-hover:scale-105 transition-transform duration-500"
             />
@@ -252,8 +263,12 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
                 <MapPin className="w-5 h-5 text-[#00ff66]" />
                 <span className="font-bold text-sm">Av. San Martín 736, Cajamarca</span>
               </div>
-              <span className="text-xs bg-[#00ff66] text-black font-bold px-2.5 py-1 rounded-full">
-                Abierto Ahora
+              <span
+                className={`text-xs font-bold px-2.5 py-1 rounded-full ${
+                  status.isOpen ? 'bg-[#00ff66] text-black' : 'bg-white/90 text-black'
+                }`}
+              >
+                {status.badge}
               </span>
             </div>
           </div>
@@ -304,9 +319,11 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
       {/* 3D Advertising Campaign Showcase Modal: Pure Product, Zero Text */}
       {active3DProduct && (
         <div
+          ref={viewerRef}
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-2xl animate-in fade-in duration-300 select-none"
+          aria-label={`Vista 360° de ${active3DProduct.name}`}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-2xl animate-in select-none outline-none"
           onClick={() => setActive3DProduct(null)}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -327,6 +344,8 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
             className="relative w-full max-w-5xl h-[85vh] flex items-center justify-center p-4"
             onClick={(e) => e.stopPropagation()}
             onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
           >
             {/* Cinematic light beams & spotlights */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-radial from-emerald-400/20 via-emerald-500/5 to-transparent blur-3xl pointer-events-none" />
@@ -348,6 +367,8 @@ export const ComboSection: React.FC<ComboSectionProps> = ({
               >
                 {/* Pure Product Showcase on Marble Pedestal */}
                 <img
+                  loading="lazy"
+                  decoding="async"
                   src={active3DProduct.image}
                   alt={active3DProduct.alt}
                   draggable={false}

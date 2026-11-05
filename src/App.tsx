@@ -29,10 +29,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#070b09] text-white flex flex-col font-sans selection:bg-[#00ff66] selection:text-black">
       {/* Top Navbar */}
-      <Navbar
-        onOpenLibroReclamaciones={() => setIsLibroOpen(true)}
-        onNavigateSection={handleNavigateSection}
-      />
+      <Navbar onNavigateSection={handleNavigateSection} />
 
       <main className="flex-1">
         {/* MÓDULO 01: Hero & Showcase 360° */}
@@ -42,12 +39,7 @@ export default function App() {
         />
 
         {/* MÓDULO 02: Colección B2C, Combo Campo & Showroom */}
-        <ComboSection
-          onSelectProductModal={(productId) => {
-            // Find and set
-          }}
-          onExploreCatalog={() => handleNavigateSection('modulo-catalogo')}
-        />
+        <ComboSection />
 
         {/* Catálogo Completo 2026 */}
         <CatalogSection
@@ -70,7 +62,7 @@ export default function App() {
           href={`https://wa.me/51${STORE_INFO.whatsapp}?text=${encodeURIComponent('Hola Chavez Originals, deseo cotizar calzado deportivo y urbano.')}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#00ff66] text-black shadow-[0_0_25px_rgba(0,255,102,0.6)] hover:shadow-[0_0_35px_rgba(0,255,102,0.9)] hover:scale-110 active:scale-95 transition-all duration-300"
+          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#00ff66] text-black hover:scale-110 active:scale-95 transition-all duration-300"
           aria-label="Contactar por WhatsApp directamente"
         >
           <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-[#070b09] animate-pulse" />
@@ -78,7 +70,7 @@ export default function App() {
           
           {/* Tooltip on hover */}
           <span className="absolute right-16 px-3 py-1.5 rounded-xl bg-black/90 border border-emerald-500/30 text-white text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
-            ¡Escríbenos al 918902447!
+            ¡Escríbenos al {STORE_INFO.whatsapp}!
           </span>
         </a>
       </aside>

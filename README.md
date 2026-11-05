@@ -1,20 +1,27 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Chavez Originals
 
-# Run and deploy your AI Studio app
+Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React 19 + Vite + Tailwind 4 + TypeScript. Los pedidos se coordinan por WhatsApp; no hay backend.
 
-This contains everything you need to run your app locally.
+## Comandos
 
-View your app in AI Studio: https://ai.studio/apps/6f1123e2-4659-4772-b120-2a2bceef0f09
+| Comando | Acción |
+|---|---|
+| `npm install` | Instala dependencias |
+| `npm run dev` | Servidor local en http://localhost:3000 |
+| `npm run build` / `npm run preview` | Build de producción y vista previa |
+| `npm run lint` | Chequeo de tipos |
+| `npm test` | Tests de la lógica de negocio |
+| `npm run images` | Convierte imágenes de `archive/originals` a WebP en `public/assets/aistudio` |
 
-## Run Locally
+## Estructura
 
-**Prerequisites:**  Node.js
+- `src/data/storeData.ts`: productos y datos de la tienda (editar aquí precios, tallas y contacto).
+- `src/utils/b2b-logic.ts`: enlaces de WhatsApp, horario de atención, cálculo mayorista.
+- `src/components/`: secciones y modales.
+- `archive/`: imágenes de prueba y originales pesados, fuera del build.
 
+## Pendiente de confirmar por el negocio
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- RUC, premios, patrocinio, correo y Facebook en `storeData.ts` (marcados con `TODO`).
+- Guardado real del Libro de Reclamaciones (hoy se envía por WhatsApp y se guarda una copia en el navegador).
+- Fotos reales por color: los colores del hero son simulados con filtros CSS.

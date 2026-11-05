@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ChavezLogo } from './ChavezLogo';
+import { LegalModal, type LegalDocId } from './LegalModal';
 import { STORE_INFO } from '../data/storeData';
 import {
   MapPin,
@@ -23,7 +24,10 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
   onOpenLibroReclamaciones,
   onNavigateSection,
 }) => {
+  const [legalDoc, setLegalDoc] = useState<LegalDocId | null>(null);
+
   return (
+    <>
     <footer className="relative bg-[#060a08] text-gray-300 pt-16 pb-12 border-t border-emerald-500/15 overflow-hidden">
       {/* Background soft ambient green lighting */}
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#00ff66]/5 rounded-full blur-[140px] pointer-events-none" />
@@ -79,7 +83,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                   onClick={() => onNavigateSection('modulo-hero')}
                   className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer text-left"
                 >
-                  Inicio (Showcase 360°)
+                  Inicio
                 </button>
               </li>
               <li>
@@ -87,7 +91,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                   onClick={() => onNavigateSection('modulo-combos')}
                   className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer text-left"
                 >
-                  Combos & Ofertas B2C
+                  Exhibición de modelos
                 </button>
               </li>
               <li>
@@ -116,40 +120,19 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
             </h4>
             <ul className="space-y-2.5 text-xs font-semibold">
               <li>
-                <a
-                  href="#terminos"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert('Términos y Condiciones: Todas las ventas al por mayor y menor se rigen por la garantía de fábrica Punto Original con reemplazo inmediato en tienda.');
-                  }}
-                  className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer"
-                >
+                <button type="button" onClick={() => setLegalDoc('terminos')} className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer text-left">
                   Términos y Condiciones
-                </a>
+                </button>
               </li>
               <li>
-                <a
-                  href="#privacidad"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert('Política de Privacidad: Sus datos de contacto son confidenciales y se utilizan únicamente para procesar y coordinar envíos con agencias de transporte.');
-                  }}
-                  className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer"
-                >
+                <button type="button" onClick={() => setLegalDoc('privacidad')} className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer text-left">
                   Política de Privacidad
-                </a>
+                </button>
               </li>
               <li>
-                <a
-                  href="#garantias"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert('Envíos y Garantías: Despachos seguros con guía de remisión a todo el norte peruano. Garantía por defecto de fabricación.');
-                  }}
-                  className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer"
-                >
+                <button type="button" onClick={() => setLegalDoc('garantias')} className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer text-left">
                   Envíos y Garantías
-                </a>
+                </button>
               </li>
             </ul>
 
@@ -157,7 +140,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
             <div className="pt-2">
               <button
                 onClick={onOpenLibroReclamaciones}
-                className="group relative inline-flex items-center gap-3 px-5 py-3 rounded-full bg-[#0a120e] hover:bg-[#101e17] border-2 border-[#00ff66] text-white shadow-[0_0_20px_rgba(0,255,102,0.35)] hover:shadow-[0_0_25px_rgba(0,255,102,0.6)] transition-all duration-300 transform active:scale-95 cursor-pointer"
+                className="group relative inline-flex items-center gap-3 px-5 py-3 rounded-full bg-[#0a120e] hover:bg-[#101e17] border-2 border-[#00ff66] text-white transition-all duration-300 transform active:scale-95 cursor-pointer"
                 aria-label="Abrir Libro de Reclamaciones Virtual"
               >
                 <BookOpen className="w-5 h-5 text-[#00ff66] group-hover:scale-110 transition-transform" />
@@ -200,7 +183,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                   href={`https://wa.me/51${STORE_INFO.whatsapp}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-7 h-7 rounded-full bg-[#00ff66] flex items-center justify-center text-black flex-shrink-0 shadow-[0_0_10px_#00ff66]"
+                  className="w-7 h-7 rounded-full bg-[#00ff66] flex items-center justify-center text-black flex-shrink-0"
                 >
                   <MessageCircle className="w-3.5 h-3.5 fill-current" />
                 </a>
@@ -309,5 +292,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
 
       </div>
     </footer>
+    <LegalModal doc={legalDoc} onClose={() => setLegalDoc(null)} />
+    </>
   );
 };

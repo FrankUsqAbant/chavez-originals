@@ -4,7 +4,6 @@ import { STORE_INFO } from '../data/storeData';
 import { MessageCircle, Menu, X } from 'lucide-react';
 
 interface NavbarProps {
-  onOpenLibroReclamaciones: () => void;
   onNavigateSection: (sectionId: string) => void;
 }
 
@@ -57,7 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-[#070b09]/95 border-b border-emerald-500/15 shadow-lg transition-all duration-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between gap-8">
         
         {/* Zone 1: Logo */}
         <button
@@ -88,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 <span>{item.label}</span>
                 {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00ff66] rounded-full shadow-[0_0_8px_#00ff66]" />
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00ff66] rounded-full" />
                 )}
               </button>
             );
@@ -101,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             href={`https://wa.me/51${STORE_INFO.whatsapp}?text=${encodeURIComponent('Hola Chavez Originals, deseo consultar sobre el calzado en exhibición.')}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-extrabold text-sm tracking-wide shadow-[0_0_15px_rgba(0,255,102,0.3)] hover:shadow-[0_0_25px_rgba(0,255,102,0.5)] transition-all duration-200 active:scale-95 cursor-pointer whitespace-nowrap"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-extrabold text-sm tracking-wide transition-all duration-200 active:scale-95 cursor-pointer whitespace-nowrap"
             aria-label="Contactar por WhatsApp"
           >
             <MessageCircle className="w-4 h-4 fill-current" />
@@ -157,7 +156,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               href={`https://wa.me/51${STORE_INFO.whatsapp}?text=${encodeURIComponent('Hola Chavez Originals, deseo información.')}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#00ff66] text-black font-extrabold text-sm shadow-[0_0_15px_rgba(0,255,102,0.3)]"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#00ff66] text-black font-extrabold text-sm"
             >
               <MessageCircle className="w-5 h-5 fill-current" />
               <span>Contactar por WhatsApp</span>

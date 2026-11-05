@@ -24,7 +24,7 @@ export const ChavezLogo: React.FC<ChavezLogoProps> = ({
     return (
       <div className={`flex items-center gap-2 ${className}`}>
         <img
-          src="/assets/aistudio/Logo_9636b3b5.jpg"
+          src="/assets/aistudio/Logo_9636b3b5.webp"
           alt="Chavez Originals Logo"
           className={`${size === 'sm' ? 'h-8' : size === 'lg' ? 'h-14' : size === 'xl' ? 'h-20' : 'h-10'} w-auto object-contain rounded-md bg-black/40 p-1 border border-emerald-500/20`}
         />
@@ -38,7 +38,7 @@ export const ChavezLogo: React.FC<ChavezLogoProps> = ({
       <div className="relative flex items-center justify-center">
         <svg
           viewBox="0 0 100 100"
-          className={`${size === 'sm' ? 'w-8 h-8' : size === 'lg' ? 'w-12 h-12' : size === 'xl' ? 'w-16 h-16' : 'w-10 h-10'} drop-shadow-[0_0_12px_rgba(0,255,102,0.8)]`}
+          className={`${size === 'sm' ? 'w-8 h-8' : size === 'lg' ? 'w-12 h-12' : size === 'xl' ? 'w-16 h-16' : 'w-10 h-10'}`}
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -66,7 +66,7 @@ export const ChavezLogo: React.FC<ChavezLogoProps> = ({
       {/* Typography: CHAVEZ ORIGINALS */}
       <div className="flex flex-col">
         <div className="flex items-baseline font-black italic tracking-tighter leading-none">
-          <span className="text-[#00ff66] drop-shadow-[0_0_10px_rgba(0,255,102,0.6)] text-2xl md:text-3xl font-extrabold pr-0.5">
+          <span className="text-[#00ff66] text-2xl md:text-3xl font-extrabold pr-0.5">
             C
           </span>
           <span className="text-white text-2xl md:text-3xl font-black tracking-tight uppercase">
@@ -74,7 +74,7 @@ export const ChavezLogo: React.FC<ChavezLogoProps> = ({
           </span>
         </div>
         {showSubtitle && (
-          <span className="text-[10px] md:text-[11px] font-bold tracking-[0.35em] text-[#00ff66] uppercase mt-0.5 drop-shadow-[0_0_8px_rgba(0,255,102,0.4)]">
+          <span className="text-[10px] md:text-[11px] font-bold tracking-[0.35em] text-[#00ff66] uppercase mt-0.5">
             ORIGINALS
           </span>
         )}

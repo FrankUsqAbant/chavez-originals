@@ -32,7 +32,7 @@ const HERO_MODELS: HeroModel[] = [
     bgName: 'FÚTBOL PRO',
     kicker: 'ALTA COMPETENCIA · MODELO OFICIAL 2026',
     description: 'Chimpún de alta competencia con tecnología de tracción dinámica para césped y losa, capellada microtexturizada y tobillera de ajuste anatómico.',
-    image: '/assets/aistudio/punto_cleat_isolated.png',
+    image: '/assets/aistudio/punto_cleat_isolated.webp',
     colorways: [
       { id: 'red', name: 'Rojo Furia', colorHex: '#e51e2b', shoeStyle: 'filter-none' },
       { id: 'neon-green', name: 'Verde Chavez', colorHex: '#00ff66', shoeStyle: 'hue-rotate-[95deg] saturate-[1.65]' },
@@ -48,7 +48,7 @@ const HERO_MODELS: HeroModel[] = [
     bgName: 'URBAN LOW',
     kicker: 'LÍNEA STREETWEAR · MINIMALISTA',
     description: 'Silueta urbana de perfil bajo y líneas limpias. Cuero sintético reforzado de alta durabilidad con suela cosida antideslizante para el día a día.',
-    image: '/assets/aistudio/hero_model_urban_low.png',
+    image: '/assets/aistudio/hero_model_urban_low.webp',
     colorways: [
       { id: 'urban-white', name: 'Blanco Original', colorHex: '#f8fafc', shoeStyle: 'filter-none' },
       { id: 'urban-emerald', name: 'Verde Glow', colorHex: '#00ff66', shoeStyle: 'hue-rotate-[90deg] saturate-[1.5]' },
@@ -63,7 +63,7 @@ const HERO_MODELS: HeroModel[] = [
     bgName: 'AIR GLOW',
     kicker: 'CÁPSULA AIR TECH · AMORTIGUACIÓN',
     description: 'Amortiguación reactiva con cámara de aire visible y refuerzos aerodinámicos. Absorción superior de impacto pensada para máxima energía.',
-    image: '/assets/aistudio/hero_model_air_glow_tech.png',
+    image: '/assets/aistudio/hero_model_air_glow_tech.webp',
     colorways: [
       { id: 'air-white', name: 'Blanco & Plata', colorHex: '#e2e8f0', shoeStyle: 'filter-none' },
       { id: 'air-emerald', name: 'Esmeralda Chavez', colorHex: '#00ff66', shoeStyle: 'hue-rotate-[85deg] saturate-[1.5]' },
@@ -78,7 +78,7 @@ const HERO_MODELS: HeroModel[] = [
     bgName: 'CHUNKY',
     kicker: 'LÍNEA STREETWEAR · PLATAFORMA EVA',
     description: 'Diseño audaz con plataforma chunky ultraligera de polímero EVA. Estructura anatómica que ofrece altura, comodidad y presencia imponente.',
-    image: '/assets/aistudio/hero_model_chunky_lavender.png',
+    image: '/assets/aistudio/hero_model_chunky_lavender.webp',
     colorways: [
       { id: 'chunky-lav', name: 'Lavanda & Crema', colorHex: '#d8b4e2', shoeStyle: 'filter-none' },
       { id: 'chunky-mint', name: 'Menta Fresco', colorHex: '#a7f3d0', shoeStyle: 'hue-rotate-[110deg] saturate-[1.3]' },
@@ -93,7 +93,7 @@ const HERO_MODELS: HeroModel[] = [
     bgName: 'VELOCITY',
     kicker: 'LÍNEA SPORT ACTIVE · VELOCIDAD',
     description: 'Zapatilla multideportiva ultraligera con malla transpirable antidesgarro y suela de tracción multidireccional para respuesta inmediata.',
-    image: '/assets/aistudio/hero_model_velocity_silver.png',
+    image: '/assets/aistudio/hero_model_velocity_silver.webp',
     colorways: [
       { id: 'velocity-silver', name: 'Plata Metálico', colorHex: '#cbd5e1', shoeStyle: 'filter-none' },
       { id: 'velocity-green', name: 'Verde Neón', colorHex: '#00ff66', shoeStyle: 'hue-rotate-[90deg] saturate-[1.6]' },
@@ -213,7 +213,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <button
                 type="button"
                 onClick={onExploreCatalog}
-                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#00ff66] hover:bg-[#1aff75] text-black font-bold text-sm tracking-wide shadow-[0_0_20px_rgba(0,255,102,0.3)] hover:shadow-[0_0_30px_rgba(0,255,102,0.5)] transition-all duration-200 active:scale-95 cursor-pointer"
+                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#00ff66] hover:bg-[#1aff75] text-black font-bold text-sm tracking-wide transition-all duration-200 active:scale-95 cursor-pointer"
               >
                 <span>Ver Colección</span>
               </button>
@@ -247,7 +247,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     onClick={() => handleSelectModel(idx)}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer whitespace-nowrap ${
                       isSelected
-                        ? 'bg-emerald-500/20 border border-[#00ff66] text-[#00ff66] shadow-[0_0_12px_rgba(0,255,102,0.3)]'
+                        ? 'bg-emerald-500/20 border border-[#00ff66] text-[#00ff66]'
                         : 'bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white'
                     }`}
                   >
@@ -319,6 +319,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     <img
                       src={currentModel.image}
                       alt={currentModel.name}
+                      fetchPriority="high"
+                      decoding="async"
                       className={`max-w-[92%] max-h-[92%] object-contain pointer-events-none select-none ${currentColor.shoeStyle} transition-all duration-300 drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]`}
                       draggable={false}
                     />
@@ -353,7 +355,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                       onClick={() => handleSelectColor(idx)}
                       className={`w-5 h-5 rounded-full transition-all duration-200 cursor-pointer ${
                         isActive
-                          ? 'ring-2 ring-[#00ff66] ring-offset-2 ring-offset-[#070b09] scale-110 shadow-[0_0_10px_rgba(0,255,102,0.6)]'
+                          ? 'ring-2 ring-[#00ff66] ring-offset-2 ring-offset-[#070b09] scale-110'
                           : 'opacity-50 hover:opacity-100'
                       }`}
                       style={{ backgroundColor: c.colorHex }}
@@ -368,6 +370,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <span className="text-xs font-semibold text-gray-300 px-3 py-1 rounded-full bg-white/5 border border-white/5">
                 {currentColor.name}
               </span>
+              <span className="text-[11px] text-gray-500">Color referencial · consulta disponibilidad</span>
             </div>
 
             {/* Pure manual showcase controls cue */}

@@ -48,7 +48,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
       comboIncluded: product.category === 'combo',
       notes: `Hola Chavez Originals, deseo pedir el modelo ${product.name} en talla ${size}.`,
     });
-    window.open(link, '_blank');
+    window.open(link, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -92,7 +92,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
             onClick={() => setActiveCategory('all')}
             className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all cursor-pointer whitespace-nowrap ${
               activeCategory === 'all'
-                ? 'bg-[#00ff66] text-black font-bold shadow-[0_0_12px_rgba(0,255,102,0.4)]'
+                ? 'bg-[#00ff66] text-black font-bold'
                 : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -102,7 +102,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
             onClick={() => setActiveCategory('futbol')}
             className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all cursor-pointer whitespace-nowrap ${
               activeCategory === 'futbol'
-                ? 'bg-[#00ff66] text-black font-bold shadow-[0_0_12px_rgba(0,255,102,0.4)]'
+                ? 'bg-[#00ff66] text-black font-bold'
                 : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -112,7 +112,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
             onClick={() => setActiveCategory('urbano')}
             className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all cursor-pointer whitespace-nowrap ${
               activeCategory === 'urbano'
-                ? 'bg-[#00ff66] text-black font-bold shadow-[0_0_12px_rgba(0,255,102,0.4)]'
+                ? 'bg-[#00ff66] text-black font-bold'
                 : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -122,7 +122,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
             onClick={() => setActiveCategory('combo')}
             className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all cursor-pointer whitespace-nowrap ${
               activeCategory === 'combo'
-                ? 'bg-[#00ff66] text-black font-bold shadow-[0_0_12px_rgba(0,255,102,0.4)]'
+                ? 'bg-[#00ff66] text-black font-bold'
                 : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -157,6 +157,8 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                   title="Clic para ver ficha técnica detallada"
                 >
                   <img
+                    loading="lazy"
+                    decoding="async"
                     src={product.image}
                     alt={product.name}
                     className="w-full h-full object-cover object-center transform group-hover/img:scale-105 transition-transform duration-500"
@@ -204,7 +206,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                           onClick={() => handleSelectSize(product.id, sz)}
                           className={`w-8 h-8 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center justify-center ${
                             isSelected
-                              ? 'bg-[#00ff66] text-black font-extrabold shadow-[0_0_10px_rgba(0,255,102,0.4)] scale-105'
+                              ? 'bg-[#00ff66] text-black font-extrabold scale-105'
                               : 'text-gray-400 hover:text-white hover:bg-white/10 border border-white/5'
                           }`}
                           aria-label={`Talla ${sz}`}
@@ -221,9 +223,9 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                   <button
                     type="button"
                     onClick={() => handleOrderWhatsApp(product)}
-                    className="w-full py-3 px-5 rounded-full bg-[#00ff66] hover:bg-[#1aff75] text-black font-bold text-xs uppercase tracking-wider transition-all duration-200 active:scale-98 shadow-[0_0_15px_rgba(0,255,102,0.25)] hover:shadow-[0_0_25px_rgba(0,255,102,0.45)] cursor-pointer flex items-center justify-center gap-2"
+                    className="w-full py-3 px-5 rounded-full bg-[#00ff66] hover:bg-[#1aff75] text-black font-bold text-xs uppercase tracking-wider transition-all duration-200 active:scale-98 cursor-pointer flex items-center justify-center gap-2"
                   >
-                    <ShoppingBag className="w-4 h-4 fill-current" />
+                    <ShoppingBag className="w-4 h-4" />
                     <span>Pedir Talla {currentSize} por WhatsApp</span>
                   </button>
                 </div>

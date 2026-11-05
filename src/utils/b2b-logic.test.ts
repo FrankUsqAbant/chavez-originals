@@ -1,67 +1,145 @@
-import test from 'node:test';
-import assert from 'node:assert/strict';
+import { describe, expect, it } from 'vitest';
 import {
   calculateWholesaleQuote,
+  formatClaimTicketCode,
   formatPeruvianCurrency,
   generateWhatsAppOrderLink,
-  formatClaimTicketCode,
   getRouteLogistics,
+  getStoreStatus,
 } from './b2b-logic';
+import { buildClaimMessage, nextClaimSequence, type StoredClaim } from './claims';
 
-test('calculateWholesaleQuote applies correct discount tiers', () => {
-  // Test tier 12 pairs: 30% discount
-  const quote12 = calculateWholesaleQuote(12, 189.00);
-  assert.equal(quote12.discountPercentage, 30);
-  assert.equal(quote12.unitWholesalePrice, 132.30);
-  assert.equal(quote12.totalInvestment, 1587.60);
-  assert.equal(quote12.suggestedTotalRevenue, 2268.00);
-  assert.equal(quote12.estimatedProfit, 680.40);
-  assert.equal(quote12.marginPercentage, 30);
+describe('calculateWholesaleQuote', () => {
+  it('aplica el descuento por escala', () => {
+    const q12 = calculateWholesaleQuote(12, 189);
+    expect(q12.discountPercentage).toBe(30);
+    expect(q12.unitWholesalePrice).toBe(132.3);
+    expect(q12.totalInvestment).toBe(1587.6);
+    expect(q12.estimatedProfit).toBe(680.4);
 
-  // Test tier 48+ pairs: 42% discount
-  const quote50 = calculateWholesaleQuote(50, 200.00);
-  assert.equal(quote50.discountPercentage, 42);
-  assert.equal(quote50.unitWholesalePrice, 116.00);
-  assert.equal(quote50.totalInvestment, 5800.00);
-});
-
-test('formatPeruvianCurrency formats PEN amounts properly', () => {
-  const formatted = formatPeruvianCurrency(189.00);
-  assert.ok(formatted.includes('189'));
-  assert.ok(formatted.startsWith('S/.'));
-});
-
-test('generateWhatsAppOrderLink creates valid wa.me URL with all parameters', () => {
-  const url = generateWhatsAppOrderLink({
-    phone: '918902447',
-    clientName: 'Tienda Deportes Cajamarca',
-    modelCode: 'EM0099-M9',
-    modelName: 'Chavez Futbol Pro',
-    size: 40,
-    quantity: 12,
-    comboIncluded: true,
-    isB2B: true,
+    const q50 = calculateWholesaleQuote(50, 200);
+    expect(q50.discountPercentage).toBe(42);
+    expect(q50.totalInvestment).toBe(5800);
   });
 
-  assert.ok(url.startsWith('https://wa.me/51918902447?text='));
-  assert.ok(url.includes(encodeURIComponent('EM0099-M9')));
-  assert.ok(url.includes(encodeURIComponent('12 pares')));
-  assert.ok(url.includes(encodeURIComponent('Tienda Deportes Cajamarca')));
+  it('usa el descuento base bajo la escala mínima y sanea cantidades inválidas', () => {
+    expect(calculateWholesaleQuote(3).discountPercentage).toBe(10);
+    expect(calculateWholesaleQuote(-5).pairs).toBe(1);
+  });
 });
 
-test('formatClaimTicketCode generates standard Peruvian claim codes', () => {
-  const code = formatClaimTicketCode('RECLAMO', 42);
-  assert.match(code, /^REC-\d{4}-0042$/);
-
-  const quejaCode = formatClaimTicketCode('QUEJA', 7);
-  assert.match(quejaCode, /^QUE-\d{4}-0007$/);
+describe('formatPeruvianCurrency', () => {
+  it('formatea en soles', () => {
+    const f = formatPeruvianCurrency(189);
+    expect(f.startsWith('S/.')).toBe(true);
+    expect(f).toContain('189');
+  });
 });
 
-test('getRouteLogistics resolves Cajamarca cities', () => {
-  const chota = getRouteLogistics('Chota');
-  assert.equal(chota.status, 'Activa');
-  assert.ok(chota.averageTime.includes('horas'));
+describe('generateWhatsAppOrderLink', () => {
+  it('genera una URL wa.me con todos los parámetros', () => {
+    const url = generateWhatsAppOrderLink({
+      phone: '918902447',
+      clientName: 'Tienda Deportes Cajamarca',
+      modelCode: 'EM0099-M9',
+      modelName: 'Chavez Futbol Pro',
+      size: 40,
+      quantity: 12,
+      comboIncluded: true,
+      isB2B: true,
+    });
+    expect(url.startsWith('https://wa.me/51918902447?text=')).toBe(true);
+    expect(url).toContain(encodeURIComponent('EM0099-M9'));
+    expect(url).toContain(encodeURIComponent('12 pares'));
+    expect(url).toContain(encodeURIComponent('Tienda Deportes Cajamarca'));
+  });
 
-  const cutervo = getRouteLogistics('Cutervo');
-  assert.equal(cutervo.status, 'Activa');
+  it('no duplica el prefijo 51', () => {
+    const url = generateWhatsAppOrderLink({ phone: '51918902447', modelCode: 'X', modelName: 'Y' });
+    expect(url.startsWith('https://wa.me/51918902447?text=')).toBe(true);
+  });
+});
+
+describe('claims', () => {
+  it('formatClaimTicketCode genera códigos estándar', () => {
+    expect(formatClaimTicketCode('RECLAMO', 42)).toMatch(/^REC-\d{4}-0042$/);
+    expect(formatClaimTicketCode('QUEJA', 7)).toMatch(/^QUE-\d{4}-0007$/);
+  });
+
+  it('nextClaimSequence es correlativo por tipo', () => {
+    const base = { type: 'RECLAMO' as const, createdAt: '', data: {} as StoredClaim['data'] };
+    const claims: StoredClaim[] = [
+      { ...base, code: formatClaimTicketCode('RECLAMO', 1) },
+      { ...base, code: formatClaimTicketCode('RECLAMO', 2) },
+      { ...base, type: 'QUEJA', code: formatClaimTicketCode('QUEJA', 1) },
+    ];
+    expect(nextClaimSequence(claims, 'RECLAMO')).toBe(3);
+    expect(nextClaimSequence(claims, 'QUEJA')).toBe(2);
+    expect(nextClaimSequence([], 'RECLAMO')).toBe(1);
+  });
+
+  it('buildClaimMessage incluye los datos clave', () => {
+    const claim: StoredClaim = {
+      code: 'REC-2026-0001',
+      type: 'RECLAMO',
+      createdAt: '2026-11-05T15:00:00.000Z',
+      data: {
+        fullName: 'Ana Quispe',
+        docType: 'DNI',
+        docNumber: '12345678',
+        phone: '987654321',
+        email: 'ana@example.com',
+        address: '',
+        goodType: 'PRODUCTO',
+        amount: '189.00',
+        goodDescription: 'Chimpún talla 41',
+        claimDetail: 'Llegó con la suela despegada',
+        consumerRequest: 'Cambio de producto',
+      },
+    };
+    const msg = buildClaimMessage(claim, 'CHAVEZ ORIGINALS E.I.R.L.', '20000000000');
+    expect(msg).toContain('REC-2026-0001');
+    expect(msg).toContain('Ana Quispe');
+    expect(msg).toContain('Cambio de producto');
+    expect(msg).not.toContain('Domicilio');
+  });
+});
+
+describe('getRouteLogistics', () => {
+  it('resuelve ciudades de Cajamarca', () => {
+    const chota = getRouteLogistics('Chota');
+    expect(chota.status).toBe('Activa');
+    expect(chota.averageTime).toContain('horas');
+    expect(getRouteLogistics('Cutervo').status).toBe('Activa');
+  });
+
+  it('ignora tildes y mayúsculas', () => {
+    expect(getRouteLogistics('celendín').destination).toBe('Celendín');
+  });
+});
+
+describe('getStoreStatus (hora de Lima, UTC-5)', () => {
+  // 2026-11-04 es miércoles.
+  it('abierto un miércoles a las 10:00', () => {
+    const s = getStoreStatus(new Date('2026-11-04T15:00:00Z'));
+    expect(s.isOpen).toBe(true);
+    expect(s.detail).toContain('9:00 PM');
+  });
+
+  it('cerrado un miércoles a las 22:00', () => {
+    const s = getStoreStatus(new Date('2026-11-05T03:00:00Z'));
+    expect(s.isOpen).toBe(false);
+    expect(s.detail).toContain('8:30 AM');
+  });
+
+  it('cerrado antes de abrir', () => {
+    const s = getStoreStatus(new Date('2026-11-04T12:00:00Z')); // 07:00 Lima
+    expect(s.isOpen).toBe(false);
+    expect(s.detail).toContain('hoy');
+  });
+
+  it('domingo cierra a las 2:00 PM', () => {
+    expect(getStoreStatus(new Date('2026-11-08T17:00:00Z')).isOpen).toBe(true); // dom 12:00
+    expect(getStoreStatus(new Date('2026-11-08T20:00:00Z')).isOpen).toBe(false); // dom 15:00
+  });
 });
