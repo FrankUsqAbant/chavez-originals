@@ -25,13 +25,11 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
 
   return (
     <>
-    <footer className="relative bg-[#060a08] text-gray-300 pt-16 pb-12 border-t border-emerald-500/15 overflow-hidden">
-      {/* Background soft ambient green lighting */}
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.12),transparent)] pointer-events-none" />
+    <footer className="relative bg-[#060a08] text-gray-300 pt-16 pb-12 overflow-hidden">
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
-        {/* Main 4-Column Grid (Matching Image 03) */}
+        {/* Main 4-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
           
           {/* Column 1: Brand & National Award (4 Cols) */}
@@ -42,28 +40,22 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
               Distribuidor Exclusivo de Calzado Deportivo de Alta Competencia y Línea Urbana.
             </p>
 
-            <div className="font-mono text-xs text-emerald-400 font-semibold tracking-wider">
-              RUC: {STORE_INFO.ruc}
-            </div>
 
-            {/* Gold National Award Seal (Recreating the emblem in Image 03) */}
-            <div className="inline-flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-r from-amber-950/40 via-amber-900/20 to-transparent border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.15)]">
+            {/* TODO: confirmar que el premio es real y documentable antes de publicar. */}
+            {/* Gold National Award Seal */}
+            <div className="inline-flex items-center gap-3 p-3 rounded-2xl bg-gradient-to-r from-amber-950/40 via-amber-900/20 to-transparent border border-amber-500/30">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-300 via-amber-500 to-amber-700 p-0.5 shadow-md flex items-center justify-center flex-shrink-0">
                 <div className="w-full h-full rounded-full bg-black/80 flex flex-col items-center justify-center text-amber-300 text-center">
                   <Award className="w-5 h-5 text-amber-400" />
-                  <span className="text-[7px] font-black tracking-tighter">2026</span>
                 </div>
               </div>
 
               <div className="text-left">
-                <div className="text-[10px] font-black uppercase text-amber-300 tracking-wider">
+                <div className="text-xs font-black uppercase text-amber-300 tracking-wider">
                   PREMIO NACIONAL
                 </div>
                 <div className="text-xs font-extrabold text-white">
                   INNOVACIÓN EMPRESARIAL 2026
-                </div>
-                <div className="text-[9px] font-medium text-amber-400/80 tracking-wide uppercase">
-                  Service Quality Excellence
                 </div>
               </div>
             </div>
@@ -85,14 +77,6 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => onNavigateSection('modulo-combos')}
-                  className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer text-left"
-                >
-                  Exhibición de modelos
-                </button>
-              </li>
-              <li>
-                <button
                   onClick={() => onNavigateSection('modulo-catalogo')}
                   className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer text-left"
                 >
@@ -104,7 +88,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                   onClick={() => onNavigateSection('modulo-tienda')}
                   className="text-gray-400 hover:text-[#00ff66] transition-colors cursor-pointer text-left"
                 >
-                  Tienda Oficial (Av. San Martín 736)
+                  Nuestra Tienda
                 </button>
               </li>
             </ul>
@@ -133,7 +117,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
               </li>
             </ul>
 
-            {/* Glowing Libro de Reclamaciones Virtual Button (From Image 03) */}
+            {/* Glowing Libro de Reclamaciones Virtual Button */}
             <div className="pt-2">
               <button
                 onClick={onOpenLibroReclamaciones}
@@ -148,7 +132,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                   <div className="text-xs font-black tracking-wide text-white leading-tight">
                     Reclamaciones
                   </div>
-                  <div className="text-[9px] font-bold text-[#00ff66] uppercase tracking-wider">
+                  <div className="text-xs font-bold text-[#00ff66] uppercase tracking-wider">
                     Virtual
                   </div>
                 </div>
@@ -170,7 +154,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                 </div>
                 <div className="text-gray-300 leading-tight">
                   <span className="font-semibold block text-white">{STORE_INFO.address}</span>
-                  <span className="text-gray-400 text-[11px]">Sede central de distribución</span>
+                  <span className="text-gray-400 text-xs">Sede central de distribución</span>
                 </div>
               </div>
 
@@ -241,7 +225,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
 
         </div>
 
-        {/* Bottom Bar: Payment Badges & Credits (Matching Image 03 Bottom) */}
+        {/* Bottom Bar: Payment Badges & Credits */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
           
           {/* Peruvian Payment Methods */}
@@ -268,7 +252,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                 <div className="w-3.5 h-3.5 rounded-full bg-[#eb001b]" />
                 <div className="w-3.5 h-3.5 rounded-full bg-[#f79e1b] opacity-90" />
               </div>
-              <span className="text-[10px] font-bold text-gray-300 ml-1">mastercard</span>
+              <span className="text-xs font-bold text-gray-300 ml-1">mastercard</span>
             </div>
           </div>
 
@@ -277,10 +261,10 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
             <div className="text-gray-300 font-medium">
               © 2026 {STORE_INFO.legalName}
             </div>
-            <div className="text-[11px] text-gray-400">
+            <div className="text-xs text-gray-400">
               RUC {STORE_INFO.ruc} · Todos los derechos reservados
             </div>
-            <div className="text-[11px] text-gray-400">
+            <div className="text-xs text-gray-400">
               Tienda Oficial de Calzado Deportivo y Urbano en Cajamarca, Perú
             </div>
           </div>

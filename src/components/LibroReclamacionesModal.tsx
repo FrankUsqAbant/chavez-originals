@@ -204,7 +204,7 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     }`}
                   >
                     <div className="font-extrabold text-xs uppercase text-[#00ff66]">{title}</div>
-                    <div className="text-[10px] text-gray-300 mt-0.5">{desc}</div>
+                    <div className="text-xs text-gray-300 mt-0.5">{desc}</div>
                   </button>
                 ))}
               </div>
@@ -321,7 +321,7 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 onChange={(e) => setAgreed(e.target.checked)}
                 className="mt-0.5 rounded border-white/20 accent-[#00ff66]"
               />
-              <label htmlFor="legal-agree" className="text-[11px] leading-tight text-gray-400">
+              <label htmlFor="legal-agree" className="text-xs leading-tight text-gray-400">
                 Declaro ser el titular del servicio o apoderado y que la información consignada en esta
                 hoja de reclamación es verídica.
               </label>

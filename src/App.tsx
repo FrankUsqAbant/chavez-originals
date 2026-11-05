@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { scrollToSection } from './lib/smoothScroll';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
-import { ComboSection } from './components/ComboSection';
 import { CatalogSection } from './components/CatalogSection';
 import { LogisticsSection } from './components/LogisticsSection';
 import { FooterSection } from './components/FooterSection';
@@ -33,9 +32,6 @@ export default function App() {
           onExploreCatalog={() => handleNavigateSection('modulo-catalogo')}
           onExploreStore={() => handleNavigateSection('modulo-tienda')}
         />
-
-        {/* MÓDULO 02: Colección B2C, Combo Campo & Showroom */}
-        <ComboSection />
 
         {/* Catálogo Completo 2026 */}
         <CatalogSection

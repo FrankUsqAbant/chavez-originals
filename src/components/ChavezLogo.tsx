@@ -4,27 +4,13 @@ interface ChavezLogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   showSubtitle?: boolean;
-  useImageFallback?: boolean;
 }
 
 export const ChavezLogo: React.FC<ChavezLogoProps> = ({
   className = '',
   size = 'md',
   showSubtitle = true,
-  useImageFallback = false,
 }) => {
-  if (useImageFallback) {
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        <img
-          src="/assets/aistudio/Logo_9636b3b5.webp"
-          alt="Chavez Originals Logo"
-          className={`${size === 'sm' ? 'h-8' : size === 'lg' ? 'h-14' : size === 'xl' ? 'h-20' : 'h-10'} w-auto object-contain rounded-md bg-black/40 p-1 border border-emerald-500/20`}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className={`flex items-center gap-3 select-none ${className}`}>
       {/* Dynamic Runner Graphic in Neon Green */}
@@ -67,7 +53,7 @@ export const ChavezLogo: React.FC<ChavezLogoProps> = ({
           </span>
         </div>
         {showSubtitle && (
-          <span className="text-[10px] md:text-[11px] font-bold tracking-[0.35em] text-[#00ff66] uppercase mt-0.5">
+          <span className="text-xs md:text-xs font-bold tracking-[0.35em] text-[#00ff66] uppercase mt-0.5">
             ORIGINALS
           </span>
         )}

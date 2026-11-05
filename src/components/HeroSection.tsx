@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import heroSpec from '../data/hero-models.json';
 
 interface HeroSectionProps {
@@ -125,17 +125,12 @@ const ModelWatermark: React.FC<{ text: string; color: string }> = ({ text, color
 
 /* ---------------------------------- Hero ---------------------------------- */
 
-export const HeroSection: React.FC<HeroSectionProps> = ({
-  onExploreCatalog,
-  onExploreStore,
-}) => {
+const ARROW_CLASS =
+  'absolute z-30 w-11 h-11 rounded-full bg-black/60 hover:bg-emerald-500/20 border border-white/15 hover:border-[#00ff66]/50 text-gray-300 hover:text-[#00ff66] flex items-center justify-center transition-colors duration-200 active:scale-95 cursor-pointer';
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onExploreStore }) => {
   const [modelIndex, setModelIndex] = useState(0);
   const [colorIndex, setColorIndex] = useState(0);
-  const [rotationAngle, setRotationAngle] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const startXRef = useRef(0);
-  const startAngleRef = useRef(0);
 
   const currentModel = HERO_MODELS[modelIndex];
   const colorways = COLORWAYS[currentModel.id];
@@ -156,63 +151,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const goToModel = (index: number) => {
     setModelIndex((index + HERO_MODELS.length) % HERO_MODELS.length);
     setColorIndex(0);
-    setRotationAngle(0);
-  };
-
-  const handleNext = () => goToModel(modelIndex + 1);
-  const handlePrev = () => goToModel(modelIndex - 1);
-  const handleSelectModel = (index: number) => goToModel(index);
-  const handleSelectColor = (index: number) => setColorIndex(index);
-
-  // Drag interaction for 360° interactive rotation
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    startXRef.current = e.clientX;
-    startAngleRef.current = rotationAngle;
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    const deltaX = e.clientX - startXRef.current;
-    setRotationAngle((startAngleRef.current + deltaX * 0.8) % 360);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true);
-    startXRef.current = e.touches[0].clientX;
-    startAngleRef.current = rotationAngle;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
-    const deltaX = e.touches[0].clientX - startXRef.current;
-    setRotationAngle((startAngleRef.current + deltaX * 0.8) % 360);
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragging(false);
   };
 
   return (
     <section
       id="modulo-hero"
       className="relative min-h-[85vh] flex items-center bg-[#070b09] overflow-hidden py-12 lg:py-20 scroll-mt-20"
-      onMouseUp={handleMouseUp}
     >
-      {/* Soft, calm ambient radial glow */}
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.12),transparent)] pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-
-          {/* Left Column: Clean, confident typography with dynamic model awareness */}
+          {/* Texto */}
           <div className="lg:col-span-5 space-y-6 z-10 text-left">
-
-            {/* Dynamic model kicker */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[#00ff66] text-xs font-semibold">
               <span className="w-2 h-2 rounded-full bg-[#00ff66] animate-pulse" />
               <span>{currentModel.kicker}</span>
@@ -226,35 +177,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               {currentModel.description}
             </p>
 
-            {/* Clean action buttons */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
                 type="button"
                 onClick={onExploreCatalog}
-                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#00ff66] hover:bg-[#1aff75] text-black font-bold text-sm tracking-wide transition-all duration-200 active:scale-95 cursor-pointer"
+                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#00ff66] hover:bg-[#1aff75] text-black font-bold text-sm tracking-wide transition-colors duration-200 active:scale-95 cursor-pointer"
               >
-                <span>Ver Colección</span>
+                Ver Colección
               </button>
-
               <button
                 type="button"
                 onClick={onExploreStore}
-                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-medium text-sm tracking-wide transition-all duration-200 active:scale-95 cursor-pointer"
+                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-medium text-sm tracking-wide transition-colors duration-200 active:scale-95 cursor-pointer"
               >
-                <span>Visitar Tienda</span>
+                Visitar Tienda
               </button>
-            </div>
-
-            {/* Quiet trust line */}
-            <div className="pt-2 text-xs text-gray-500 font-medium tracking-wide">
-              Tienda Oficial en Av. San Martín 736, Cajamarca · Stock y prueba en vivo
             </div>
           </div>
 
-          {/* Right Column: modelos con nombre al fondo y color seleccionable */}
+          {/* Modelos */}
           <div className="lg:col-span-7 relative flex flex-col items-center justify-center">
-
-            {/* Top 5 Model Switcher Tabs (Manual) */}
             <div className="w-full flex items-center justify-center gap-2 mb-4 overflow-x-auto pb-1 scrollbar-none">
               {HERO_MODELS.map((m, idx) => {
                 const isSelected = modelIndex === idx;
@@ -262,9 +204,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <button
                     key={m.id}
                     type="button"
-                    onClick={() => handleSelectModel(idx)}
+                    onClick={() => goToModel(idx)}
                     aria-pressed={isSelected}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-colors duration-200 cursor-pointer whitespace-nowrap ${
                       isSelected
                         ? 'bg-emerald-500/20 border border-[#00ff66] text-[#00ff66]'
                         : 'bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white'
@@ -276,69 +218,37 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               })}
             </div>
 
-            {/* Main Stage with Left and Right Navigation Arrows */}
             <div className="relative w-full max-w-[520px] flex items-center justify-center">
-
               <button
                 type="button"
-                onClick={handlePrev}
-                className="absolute left-0 z-30 w-11 h-11 rounded-full bg-black/60 hover:bg-emerald-500/20 border border-white/15 hover:border-[#00ff66]/50 text-gray-300 hover:text-[#00ff66] flex items-center justify-center transition-all duration-200 shadow-xl active:scale-95 cursor-pointer"
+                onClick={() => goToModel(modelIndex - 1)}
+                className={`${ARROW_CLASS} left-0`}
                 aria-label="Modelo anterior"
                 title="Modelo anterior"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
 
-              {/* Showcase Stage & Rotatable Sneaker */}
               <div className="relative w-full aspect-square max-w-[440px] flex items-center justify-center">
-
-                {/* 1. Nombre del modelo detrás de la zapatilla */}
                 <ModelWatermark key={currentModel.id} text={currentModel.bgName} color={currentColor.hex} />
 
-                {/* 2. Soft studio lighting behind shoe */}
-                <div className="absolute inset-8 rounded-full bg-radial from-emerald-500/10 via-transparent to-transparent blur-2xl pointer-events-none z-0" />
-
-                {/* 3. Subtle exhibition pedestal ring */}
-                <div className="absolute bottom-12 w-64 h-12 rounded-full border border-emerald-500/10 bg-emerald-500/[0.02] pointer-events-none z-0 transform rotate-[-2deg]" />
-
-                {/* 4. Rotatable sneaker on clean stage (z-10 over watermark) */}
-                <div
-                  onMouseDown={handleMouseDown}
-                  onMouseMove={handleMouseMove}
-                  onMouseUp={handleMouseUp}
-                  onTouchStart={handleTouchStart}
-                  onTouchMove={handleTouchMove}
-                  onTouchEnd={handleTouchEnd}
-                  className="relative z-10 cursor-grab active:cursor-grabbing select-none w-full h-full flex items-center justify-center"
-                  style={{ perspective: '1000px' }}
-                >
-                  <div
-                    className="relative w-full h-full flex items-center justify-center px-6 pt-20 pb-4 transition-transform duration-100 ease-out"
-                    style={{
-                      transform: `rotateY(${rotationAngle}deg) rotateZ(-3deg)`,
-                      transformStyle: 'preserve-3d',
-                    }}
-                  >
-                    <img
-                      key={`${currentModel.id}-${currentColor.id}`}
-                      src={heroImage(currentModel.id, currentColor.id)}
-                      alt={`${currentModel.name}, color ${currentColor.name}`}
-                      fetchPriority="high"
-                      decoding="async"
-                      className="max-w-[92%] max-h-[92%] object-contain pointer-events-none select-none animate-in drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]"
-                      draggable={false}
-                    />
-                  </div>
+                <div className="relative z-10 w-full h-full flex items-center justify-center px-6 pt-20 pb-4">
+                  <img
+                    key={`${currentModel.id}-${currentColor.id}`}
+                    src={heroImage(currentModel.id, currentColor.id)}
+                    alt={`${currentModel.name}, color ${currentColor.name}`}
+                    fetchPriority="high"
+                    decoding="async"
+                    className="max-w-[92%] max-h-[92%] object-contain -rotate-3 select-none animate-in drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]"
+                    draggable={false}
+                  />
                 </div>
-
-                {/* 5. Floor contact shadow */}
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-52 h-3.5 rounded-[100%] bg-black/70 blur-md pointer-events-none z-0" />
               </div>
 
               <button
                 type="button"
-                onClick={handleNext}
-                className="absolute right-0 z-30 w-11 h-11 rounded-full bg-black/60 hover:bg-emerald-500/20 border border-white/15 hover:border-[#00ff66]/50 text-gray-300 hover:text-[#00ff66] flex items-center justify-center transition-all duration-200 shadow-xl active:scale-95 cursor-pointer"
+                onClick={() => goToModel(modelIndex + 1)}
+                className={`${ARROW_CLASS} right-0`}
                 aria-label="Siguiente modelo"
                 title="Siguiente modelo"
               >
@@ -346,7 +256,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </button>
             </div>
 
-            {/* Clean Colorway Picker with Active Color Name */}
             <div className="mt-4 flex flex-col sm:flex-row items-center gap-3 z-10">
               <div
                 className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10"
@@ -359,7 +268,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     <button
                       key={c.id}
                       type="button"
-                      onClick={() => handleSelectColor(idx)}
+                      onClick={() => setColorIndex(idx)}
                       aria-pressed={isActive}
                       className={`w-5 h-5 rounded-full border border-white/20 transition-all duration-200 cursor-pointer ${
                         isActive
@@ -377,32 +286,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <span className="text-xs font-semibold text-gray-300 px-3 py-1 rounded-full bg-white/5 border border-white/5">
                 {currentColor.name}
               </span>
-              <span className="text-[11px] text-gray-500">Color referencial · consulta disponibilidad</span>
+              <span className="text-xs text-gray-500">Color referencial · consulta disponibilidad</span>
             </div>
-
-            {/* Pure manual showcase controls cue */}
-            <div className="mt-3 flex items-center gap-3 text-[11px] text-gray-400 font-mono tracking-wide z-10">
-              <span>Modelo {modelIndex + 1} de {HERO_MODELS.length}</span>
-              <span className="text-gray-600">·</span>
-              <span>Arrastra para rotar 360°</span>
-              {rotationAngle !== 0 && (
-                <>
-                  <span className="text-gray-600">·</span>
-                  <button
-                    type="button"
-                    onClick={() => setRotationAngle(0)}
-                    className="inline-flex items-center gap-1 hover:text-[#00ff66] transition-colors cursor-pointer text-emerald-400"
-                    title="Restablecer ángulo"
-                  >
-                    <RotateCcw className="w-3 h-3" />
-                    <span>Centrar</span>
-                  </button>
-                </>
-              )}
-            </div>
-
           </div>
-
         </div>
       </div>
     </section>

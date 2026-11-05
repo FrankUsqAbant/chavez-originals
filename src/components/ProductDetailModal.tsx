@@ -68,7 +68,7 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
               className="relative z-10 w-full max-h-72 object-contain rounded-xl"
             />
             {product.badge && (
-              <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#00ff66] text-black font-extrabold text-[10px] tracking-wider uppercase">
+              <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#00ff66] text-black font-extrabold text-xs tracking-wider uppercase">
                 {product.badge}
               </span>
             )}
@@ -154,7 +154,7 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
 
             <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-4">
               <div>
-                <span className="text-[11px] text-gray-400 block">Precio Oficial</span>
+                <span className="text-xs text-gray-400 block">Precio Oficial</span>
                 <span className="text-2xl sm:text-3xl font-black text-[#00ff66]">
                   {formatPeruvianCurrency(product.price)}
                 </span>

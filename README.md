@@ -24,13 +24,15 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
 
 ## Estructura
 
+- Página: Inicio (hero) → Catálogo → Tienda. Las tallas se eligen en la ficha del producto.
 - `src/data/storeData.ts`: productos y datos de la tienda (editar aquí precios, tallas y contacto).
-- `src/utils/b2b-logic.ts`: enlaces de WhatsApp, horario de atención, cálculo mayorista.
+- `src/utils/b2b-logic.ts`: enlaces de pedido por WhatsApp y horario de atención.
+- `src/lib/smoothScroll.ts`: scroll con inercia (Lenis) y navegación entre secciones.
 - `src/components/`: secciones y modales.
-- `archive/`: imágenes de prueba y originales pesados, fuera del build.
+- `archive/`: fuentes de las imágenes (`originals`, `hero-src`), fuera del build.
 
 ## Pendiente de confirmar por el negocio
 
 - RUC, premios, patrocinio, correo y Facebook en `storeData.ts` (marcados con `TODO`).
 - Guardado real del Libro de Reclamaciones (hoy se envía por WhatsApp y se guarda una copia en el navegador).
-- Fotos reales por color: los colores del hero son simulados con filtros CSS.
+- Fotos reales por color: los colores del hero son recoloreados digitalmente, no fotos del producto real.

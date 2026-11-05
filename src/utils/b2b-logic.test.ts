@@ -1,32 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
-  calculateWholesaleQuote,
   formatClaimTicketCode,
   formatPeruvianCurrency,
   generateWhatsAppOrderLink,
-  getRouteLogistics,
   getStoreStatus,
 } from './b2b-logic';
 import { buildClaimMessage, nextClaimSequence, type StoredClaim } from './claims';
-
-describe('calculateWholesaleQuote', () => {
-  it('aplica el descuento por escala', () => {
-    const q12 = calculateWholesaleQuote(12, 189);
-    expect(q12.discountPercentage).toBe(30);
-    expect(q12.unitWholesalePrice).toBe(132.3);
-    expect(q12.totalInvestment).toBe(1587.6);
-    expect(q12.estimatedProfit).toBe(680.4);
-
-    const q50 = calculateWholesaleQuote(50, 200);
-    expect(q50.discountPercentage).toBe(42);
-    expect(q50.totalInvestment).toBe(5800);
-  });
-
-  it('usa el descuento base bajo la escala mínima y sanea cantidades inválidas', () => {
-    expect(calculateWholesaleQuote(3).discountPercentage).toBe(10);
-    expect(calculateWholesaleQuote(-5).pairs).toBe(1);
-  });
-});
 
 describe('formatPeruvianCurrency', () => {
   it('formatea en soles', () => {
@@ -37,26 +16,26 @@ describe('formatPeruvianCurrency', () => {
 });
 
 describe('generateWhatsAppOrderLink', () => {
-  it('genera una URL wa.me con todos los parámetros', () => {
+  it('genera una URL wa.me con los datos del pedido', () => {
     const url = generateWhatsAppOrderLink({
       phone: '918902447',
-      clientName: 'Tienda Deportes Cajamarca',
       modelCode: 'EM0099-M9',
       modelName: 'Chavez Futbol Pro',
       size: 40,
-      quantity: 12,
+      color: 'Rojo Furia',
       comboIncluded: true,
-      isB2B: true,
     });
     expect(url.startsWith('https://wa.me/51918902447?text=')).toBe(true);
     expect(url).toContain(encodeURIComponent('EM0099-M9'));
-    expect(url).toContain(encodeURIComponent('12 pares'));
-    expect(url).toContain(encodeURIComponent('Tienda Deportes Cajamarca'));
+    expect(url).toContain(encodeURIComponent('Talla:* 40'));
+    expect(url).toContain(encodeURIComponent('Rojo Furia'));
+    expect(url).toContain(encodeURIComponent('Combo Gratis'));
   });
 
-  it('no duplica el prefijo 51', () => {
+  it('no duplica el prefijo 51 ni incluye líneas vacías', () => {
     const url = generateWhatsAppOrderLink({ phone: '51918902447', modelCode: 'X', modelName: 'Y' });
     expect(url.startsWith('https://wa.me/51918902447?text=')).toBe(true);
+    expect(decodeURIComponent(url)).not.toContain('Talla');
   });
 });
 
@@ -102,19 +81,6 @@ describe('claims', () => {
     expect(msg).toContain('Ana Quispe');
     expect(msg).toContain('Cambio de producto');
     expect(msg).not.toContain('Domicilio');
-  });
-});
-
-describe('getRouteLogistics', () => {
-  it('resuelve ciudades de Cajamarca', () => {
-    const chota = getRouteLogistics('Chota');
-    expect(chota.status).toBe('Activa');
-    expect(chota.averageTime).toContain('horas');
-    expect(getRouteLogistics('Cutervo').status).toBe('Activa');
-  });
-
-  it('ignora tildes y mayúsculas', () => {
-    expect(getRouteLogistics('celendín').destination).toBe('Celendín');
   });
 });
 

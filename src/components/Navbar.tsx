@@ -14,7 +14,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [activeSection, setActiveSection] = useState<string>('modulo-hero');
 
   React.useEffect(() => {
-    const ids = ['modulo-hero', 'modulo-combos', 'modulo-catalogo', 'modulo-tienda'];
+    const ids = ['modulo-hero', 'modulo-catalogo', 'modulo-tienda'];
     const LINE = 160; // sección activa = la que cruza esta línea desde el borde superior
     let observer: IntersectionObserver | null = null;
 
@@ -46,7 +46,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const navItems = [
     { id: 'modulo-hero', label: 'Inicio' },
-    { id: 'modulo-combos', label: 'Exhibición' },
     { id: 'modulo-catalogo', label: 'Catálogo' },
     { id: 'modulo-tienda', label: 'Nuestra Tienda' },
   ];
@@ -107,15 +106,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Mobile menu trigger */}
         <div className="flex md:hidden items-center gap-2">
-          <a
-            href={`https://wa.me/51${STORE_INFO.whatsapp}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 rounded-xl bg-[#00ff66] text-black"
-            aria-label="WhatsApp directo"
-          >
-            <MessageCircle className="w-5 h-5 fill-current" />
-          </a>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 focus:outline-none cursor-pointer"
@@ -148,17 +138,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             );
           })}
 
-          <div className="pt-2">
-            <a
-              href={`https://wa.me/51${STORE_INFO.whatsapp}?text=${encodeURIComponent('Hola Chavez Originals, deseo información.')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#00ff66] text-black font-extrabold text-sm"
-            >
-              <MessageCircle className="w-5 h-5 fill-current" />
-              <span>Contactar por WhatsApp</span>
-            </a>
-          </div>
         </div>
       )}
     </header>

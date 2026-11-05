@@ -4,15 +4,12 @@ export interface Product {
   code: string;
   category: 'futbol' | 'urbano' | 'combo';
   price: number;
-  wholesaleMinPrice: number;
   image: string;
   badge?: string;
   description: string;
   sizes: number[];
   colors: { name: string; hex: string; previewImage?: string }[];
   features: string[];
-  inStock: boolean;
-  isHeroFeatured?: boolean;
 }
 
 export const PRODUCTS: Product[] = [
@@ -22,7 +19,6 @@ export const PRODUCTS: Product[] = [
     code: 'EM0099-M9',
     category: 'futbol',
     price: 189.00,
-    wholesaleMinPrice: 116.00,
     image: '/assets/aistudio/showroom_cleat.webp',
     badge: 'ALTA COMPETENCIA',
     description: 'Chimpún de alto rendimiento con tecnología de agarre dinámico y capellada microtexturizada para máxima precisión.',
@@ -40,8 +36,6 @@ export const PRODUCTS: Product[] = [
       'Capellada micro-nervada para golpeo preciso',
       'Incluye gratis: Mochila + Canilleras + Medias 3/4',
     ],
-    inStock: true,
-    isHeroFeatured: true,
   },
   {
     id: 'combo-campo-pro',
@@ -49,7 +43,6 @@ export const PRODUCTS: Product[] = [
     code: 'CMB-CAMPO-01',
     category: 'combo',
     price: 189.00,
-    wholesaleMinPrice: 125.00,
     image: '/assets/aistudio/showroom_cleat.webp',
     badge: 'COMBO COMPLETO',
     description: 'Chimpún oficial Punto Original acompañado de mochila deportiva, canilleras protectoras y medias de compresión 3/4.',
@@ -64,7 +57,6 @@ export const PRODUCTS: Product[] = [
       '1x Par de Canilleras ergonómicas de alto impacto',
       '1x Par de Medias 3/4 de alto rendimiento',
     ],
-    inStock: true,
   },
   {
     id: 'urbana-chavez-street',
@@ -72,7 +64,6 @@ export const PRODUCTS: Product[] = [
     code: 'URB-2026-CH',
     category: 'urbano',
     price: 169.00,
-    wholesaleMinPrice: 98.00,
     image: '/assets/aistudio/showroom_chunky_16x9.webp',
     badge: 'LÍNEA STREETWEAR',
     description: 'Zapatilla urbana de plataforma chunky ultraligera con amortiguación de cámara de aire y tonos tierra.',
@@ -88,7 +79,6 @@ export const PRODUCTS: Product[] = [
       'Ligereza con suela de polímero EVA',
       'Silueta vanguardista con soporte anatómico',
     ],
-    inStock: true,
   },
   {
     id: 'urbana-chavez-air-glow',
@@ -96,7 +86,6 @@ export const PRODUCTS: Product[] = [
     code: 'URB-AIR-026',
     category: 'urbano',
     price: 179.00,
-    wholesaleMinPrice: 105.00,
     image: '/assets/aistudio/showroom_airglow_16x9.webp',
     badge: 'CÁPSULA AIR TECH',
     description: 'Cápsula de amortiguación translúcida verde esmeralda y suela esculpida para máximo confort durante el día.',
@@ -112,7 +101,6 @@ export const PRODUCTS: Product[] = [
       'Plantilla ortopédica ergonómica memory foam',
       'Ideal para uso casual, universidad y entrenamiento ligero',
     ],
-    inStock: true,
   },
   {
     id: 'urbana-stealth-runner',
@@ -120,7 +108,6 @@ export const PRODUCTS: Product[] = [
     code: 'STH-2026-BLK',
     category: 'urbano',
     price: 159.00,
-    wholesaleMinPrice: 95.00,
     image: '/assets/aistudio/showroom_stealth_sideprofile.webp',
     badge: 'HIGH PERFORMANCE',
     description: 'Silueta aerodinámica monocromo con suela esculpida de polímero EVA y capellada transpirable.',
@@ -135,14 +122,12 @@ export const PRODUCTS: Product[] = [
       'Diseño ultra ligero para máximo rendimiento',
       'Plantilla acolchada anti-fatiga',
     ],
-    inStock: true,
   },
 ];
 
 export const STORE_INFO = {
   name: 'Chavez Originals',
   legalName: 'CHAVEZ ORIGINALS E.I.R.L.',
-  brandTagline: 'Distribuidor Exclusivo de Calzado Deportivo de Alta Competencia y Línea Urbana',
   // TODO: valor provisional. Confirmar el RUC real antes de publicar.
   ruc: '20601234567',
   address: 'Av. San Martín 736, Cajamarca, Perú',
@@ -155,26 +140,4 @@ export const STORE_INFO = {
   instagramUrl: 'https://instagram.com/chavezoriginals_',
   facebook: 'Chavez Originals',
   facebookUrl: 'https://facebook.com',
-  hours: 'Lunes a Sábado: 8:30 AM – 9:00 PM | Domingos: 9:00 AM – 2:00 PM',
-  // TODO: confirmar que el premio y el patrocinio son reales y documentables antes de publicar.
-  credentials: [
-    {
-      title: 'PREMIO NACIONAL INNOVACIÓN EMPRESARIAL 2026',
-      subtitle: 'Service Quality Excellence - Distinción Nacional en Comercio y Distribución',
-      badge: '2026',
-    },
-    {
-      title: 'PATROCINADOR OFICIAL COPA PERÚ 2026',
-      subtitle: 'Equipando a los mejores clubes y canteras del norte peruano',
-      badge: 'OFICIAL',
-    },
-  ],
-  logisticsHubs: [
-    { city: 'Cajamarca', label: 'Hub Principal Av. San Martín 736', time: '17 - 20 min', status: 'Inmediato' },
-    { city: 'Chota', label: 'Eje Centro Norte', time: '3.5 - 4 horas', status: 'Diario' },
-    { city: 'Cutervo', label: 'Corredor Cutervo Express', time: '4.5 - 5 horas', status: 'Diario' },
-    { city: 'Celendín', label: 'Ruta Cordillera Oriental', time: '2.5 - 3 horas', status: 'Diario' },
-    { city: 'Cajabamba', label: 'Eje Sur Cajamarca', time: '2.5 - 3 horas', status: 'Diario' },
-    { city: 'Jaén', label: 'Nororiente Interprovincial', time: '6 - 7 horas', status: 'Diario' },
-  ],
 };
