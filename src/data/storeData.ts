@@ -134,10 +134,8 @@ export const STORE_INFO = {
   googleMapsUrl: 'https://maps.google.com/?q=Av.+San+Mart%C3%ADn+736,+Cajamarca,+Peru',
   whatsapp: '918902447',
   whatsappDisplay: '+51 918902447',
-  // TODO: confirmar correo y enlace de Facebook reales.
+  // TODO: confirmar que el correo es real.
   email: 'contacto@chavezoriginals.pe',
   instagram: '@chavezoriginals_',
   instagramUrl: 'https://instagram.com/chavezoriginals_',
-  facebook: 'Chavez Originals',
-  facebookUrl: 'https://facebook.com',
 };

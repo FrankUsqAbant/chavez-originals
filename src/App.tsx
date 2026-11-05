@@ -43,10 +43,7 @@ export default function App() {
       </main>
 
       {/* MÓDULO FINAL: Footer Oficial */}
-      <FooterSection
-        onOpenLibroReclamaciones={() => setIsLibroOpen(true)}
-        onNavigateSection={handleNavigateSection}
-      />
+      <FooterSection onOpenLibroReclamaciones={() => setIsLibroOpen(true)} />
 
       {/* Floating Action WhatsApp Button */}
       <aside aria-label="Contacto flotante" className="fixed bottom-6 right-6 z-40">
