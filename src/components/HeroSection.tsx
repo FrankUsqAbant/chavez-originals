@@ -204,7 +204,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       onMouseUp={handleMouseUp}
     >
       {/* Soft, calm ambient radial glow */}
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[550px] h-[550px] bg-emerald-500/[0.08] rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.12),transparent)] pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -282,7 +282,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <button
                 type="button"
                 onClick={handlePrev}
-                className="absolute left-0 z-30 w-11 h-11 rounded-full bg-black/60 hover:bg-emerald-500/20 border border-white/15 hover:border-[#00ff66]/50 text-gray-300 hover:text-[#00ff66] flex items-center justify-center transition-all duration-200 backdrop-blur-md shadow-xl active:scale-95 cursor-pointer"
+                className="absolute left-0 z-30 w-11 h-11 rounded-full bg-black/60 hover:bg-emerald-500/20 border border-white/15 hover:border-[#00ff66]/50 text-gray-300 hover:text-[#00ff66] flex items-center justify-center transition-all duration-200 shadow-xl active:scale-95 cursor-pointer"
                 aria-label="Modelo anterior"
                 title="Modelo anterior"
               >
@@ -338,7 +338,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <button
                 type="button"
                 onClick={handleNext}
-                className="absolute right-0 z-30 w-11 h-11 rounded-full bg-black/60 hover:bg-emerald-500/20 border border-white/15 hover:border-[#00ff66]/50 text-gray-300 hover:text-[#00ff66] flex items-center justify-center transition-all duration-200 backdrop-blur-md shadow-xl active:scale-95 cursor-pointer"
+                className="absolute right-0 z-30 w-11 h-11 rounded-full bg-black/60 hover:bg-emerald-500/20 border border-white/15 hover:border-[#00ff66]/50 text-gray-300 hover:text-[#00ff66] flex items-center justify-center transition-all duration-200 shadow-xl active:scale-95 cursor-pointer"
                 aria-label="Siguiente modelo"
                 title="Siguiente modelo"
               >
@@ -349,7 +349,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {/* Clean Colorway Picker with Active Color Name */}
             <div className="mt-4 flex flex-col sm:flex-row items-center gap-3 z-10">
               <div
-                className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-sm"
+                className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10"
                 role="group"
                 aria-label="Color de la zapatilla"
               >

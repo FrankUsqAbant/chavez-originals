@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { pauseSmoothScroll, resumeSmoothScroll } from '../lib/smoothScroll';
 
 const FOCUSABLE =
   'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
@@ -20,6 +21,7 @@ export function useModal<T extends HTMLElement = HTMLDivElement>(isOpen: boolean
     const previouslyFocused = document.activeElement as HTMLElement | null;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    pauseSmoothScroll();
 
     const node = ref.current;
     const getFocusable = () =>
@@ -54,6 +56,7 @@ export function useModal<T extends HTMLElement = HTMLDivElement>(isOpen: boolean
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = previousOverflow;
+      resumeSmoothScroll();
       previouslyFocused?.focus?.({ preventScroll: true });
     };
   }, [isOpen]);

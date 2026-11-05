@@ -23,6 +23,18 @@
   }
 }
 
+/* Lenis (scroll con inercia): el scroll nativo suave se desactiva mientras está activo. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 /* Utilidad usada en varios componentes para ocultar la barra de scroll horizontal. */
 @utility scrollbar-none {
   scrollbar-width: none;

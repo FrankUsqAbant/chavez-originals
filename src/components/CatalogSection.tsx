@@ -54,7 +54,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
   return (
     <section id="modulo-catalogo" className="relative bg-[#070b09] py-20 border-t border-emerald-500/15 overflow-hidden scroll-mt-20">
       {/* Background ambient lighting */}
-      <div className="absolute top-1/4 left-1/3 w-[600px] h-[350px] bg-emerald-500/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/3 w-[600px] h-[350px] rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.12),transparent)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         
@@ -167,7 +167,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
                   <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/35 pointer-events-none" />
 
                   {/* Clean detail hint overlay */}
-                  <div className="absolute top-3 right-3 p-2 rounded-full bg-black/60 text-gray-400 group-hover/img:text-white group-hover/img:bg-emerald-500/30 transition-all backdrop-blur-sm">
+                  <div className="absolute top-3 right-3 p-2 rounded-full bg-black/60 text-gray-400 group-hover/img:text-white group-hover/img:bg-emerald-500/30 transition-all">
                     <Eye className="w-3.5 h-3.5" />
                   </div>
                 </div>

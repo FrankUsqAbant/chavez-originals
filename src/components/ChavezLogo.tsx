@@ -13,13 +13,6 @@ export const ChavezLogo: React.FC<ChavezLogoProps> = ({
   showSubtitle = true,
   useImageFallback = false,
 }) => {
-  const sizeClasses = {
-    sm: 'h-8 text-lg',
-    md: 'h-10 text-xl',
-    lg: 'h-14 text-2xl',
-    xl: 'h-20 text-4xl',
-  };
-
   if (useImageFallback) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>

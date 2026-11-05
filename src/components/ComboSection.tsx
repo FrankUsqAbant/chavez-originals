@@ -106,12 +106,12 @@ export const ComboSection: React.FC = () => {
   return (
     <section id="modulo-combos" className="relative bg-[#070b09] py-20 border-t border-emerald-500/15 overflow-hidden scroll-mt-20">
       {/* Background ambient lighting */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-emerald-500/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.12),transparent)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
         
         {/* Top Credentials & Institutional Trust Bar */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#0d1612]/90 via-[#101b16]/90 to-[#0d1612]/90 border border-emerald-500/20 backdrop-blur-md shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#0d1612]/90 via-[#101b16]/90 to-[#0d1612]/90 border border-emerald-500/20 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <ChavezLogo size="sm" showSubtitle={true} />
           </div>

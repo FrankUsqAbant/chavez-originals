@@ -9,7 +9,6 @@ import {
   Phone,
   MessageCircle,
   ExternalLink,
-  CheckCircle2,
   Sparkles,
   Truck,
   CreditCard,
@@ -39,7 +38,7 @@ export const LogisticsSection: React.FC = () => {
       <span id="modulo-logistica" className="absolute -top-24" />
 
       {/* Subtle ambient green glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[650px] h-[380px] bg-emerald-500/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[650px] h-[380px] rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.12),transparent)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 relative z-10">
         
@@ -63,7 +62,7 @@ export const LogisticsSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* COLUMN 1: FACHADA & EXPERIENCIA EN TIENDA (5 Cols) */}
-          <div className="lg:col-span-5 rounded-3xl bg-[#0c1410]/90 border border-emerald-500/25 p-6 sm:p-8 flex flex-col justify-between shadow-2xl backdrop-blur-sm">
+          <div className="lg:col-span-5 rounded-3xl bg-[#0c1410]/90 border border-emerald-500/25 p-6 sm:p-8 flex flex-col justify-between shadow-2xl">
             <div className="space-y-6">
               
               {/* Storefront Image */}
@@ -78,7 +77,7 @@ export const LogisticsSection: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                 
                 {/* Badge on photo */}
-                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 border border-emerald-500/30 text-[11px] font-bold text-[#00ff66] backdrop-blur-md flex items-center gap-1.5">
+                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/75 border border-emerald-500/30 text-[11px] font-bold text-[#00ff66] flex items-center gap-1.5">
                   <span
                     className={`w-2 h-2 rounded-full ${status.isOpen ? 'bg-[#00ff66] animate-pulse' : 'bg-gray-400'}`}
                   />
@@ -88,7 +87,7 @@ export const LogisticsSection: React.FC = () => {
                 </div>
 
                 {/* Bottom Address banner */}
-                <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-black/85 border border-emerald-500/30 backdrop-blur-md flex items-center justify-between">
+                <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-black/85 border border-emerald-500/30 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-[#00ff66] shrink-0" />
                     <div>
@@ -169,7 +168,7 @@ export const LogisticsSection: React.FC = () => {
           </div>
 
           {/* COLUMN 2: INFORMACIÓN DE ATENCIÓN, ENVIOS & CONTACTO (7 Cols) */}
-          <div className="lg:col-span-7 rounded-3xl bg-[#0c1410]/90 border border-emerald-500/25 p-6 sm:p-8 flex flex-col justify-between shadow-2xl backdrop-blur-sm">
+          <div className="lg:col-span-7 rounded-3xl bg-[#0c1410]/90 border border-emerald-500/25 p-6 sm:p-8 flex flex-col justify-between shadow-2xl">
             <div className="space-y-6">
               
               {/* Header */}

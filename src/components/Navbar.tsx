@@ -14,31 +14,28 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [activeSection, setActiveSection] = useState<string>('modulo-hero');
 
   React.useEffect(() => {
-    const sections = [
-      { id: 'modulo-hero', offset: 0 },
-      { id: 'modulo-combos', offset: 0 },
-      { id: 'modulo-catalogo', offset: 0 },
-      { id: 'modulo-tienda', offset: 0 },
-    ];
+    const ids = ['modulo-hero', 'modulo-combos', 'modulo-catalogo', 'modulo-tienda'];
+    const LINE = 160; // sección activa = la que cruza esta línea desde el borde superior
+    let observer: IntersectionObserver | null = null;
 
-    const handleScroll = () => {
-      const scrollPos = window.scrollY + 160;
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i].id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          const top = rect.top + window.scrollY;
-          if (scrollPos >= top) {
-            setActiveSection(sections[i].id);
-            break;
-          }
-        }
-      }
+    const setup = () => {
+      observer?.disconnect();
+      observer = new IntersectionObserver(
+        (entries) => entries.forEach((e) => e.isIntersecting && setActiveSection(e.target.id)),
+        { rootMargin: `-${LINE}px 0px -${Math.max(0, window.innerHeight - LINE - 1)}px 0px` },
+      );
+      ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) observer!.observe(el);
+      });
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    setup();
+    window.addEventListener('resize', setup);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', setup);
+    };
   }, []);
 
   const handleNavClick = (sectionId: string) => {
@@ -55,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-[#070b09]/95 border-b border-emerald-500/15 shadow-lg transition-all duration-200">
+    <header className="sticky top-0 z-50 w-full bg-[#070b09] border-b border-emerald-500/15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between gap-8">
         
         {/* Zone 1: Logo */}

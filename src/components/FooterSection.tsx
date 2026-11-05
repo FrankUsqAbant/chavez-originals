@@ -10,9 +10,6 @@ import {
   Facebook,
   BookOpen,
   Award,
-  ShieldCheck,
-  CreditCard,
-  ExternalLink,
 } from 'lucide-react';
 
 interface FooterSectionProps {
@@ -30,7 +27,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
     <>
     <footer className="relative bg-[#060a08] text-gray-300 pt-16 pb-12 border-t border-emerald-500/15 overflow-hidden">
       {/* Background soft ambient green lighting */}
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#00ff66]/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.12),transparent)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
