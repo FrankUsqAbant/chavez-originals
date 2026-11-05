@@ -18,7 +18,6 @@ interface HeroModel {
   name: string;
   modelTag: string;
   bgName: string;
-  kicker: string;
   description: string;
 }
 
@@ -37,7 +36,6 @@ const HERO_MODELS: HeroModel[] = [
     name: 'Punto Original Fútbol Pro 2026',
     modelTag: 'Fútbol Pro 2026',
     bgName: 'FÚTBOL PRO',
-    kicker: 'ALTA COMPETENCIA · MODELO OFICIAL 2026',
     description: 'Chimpún de alta competencia con tecnología de tracción dinámica para césped y losa, capellada microtexturizada y tobillera de ajuste anatómico.',
   },
   {
@@ -45,7 +43,6 @@ const HERO_MODELS: HeroModel[] = [
     name: 'Punto Original Urban Low',
     modelTag: 'Urban Low',
     bgName: 'URBAN LOW',
-    kicker: 'LÍNEA STREETWEAR · MINIMALISTA',
     description: 'Silueta urbana de perfil bajo y líneas limpias. Cuero sintético reforzado de alta durabilidad con suela cosida antideslizante para el día a día.',
   },
   {
@@ -53,7 +50,6 @@ const HERO_MODELS: HeroModel[] = [
     name: 'Punto Original Air Glow Tech',
     modelTag: 'Air Glow Tech',
     bgName: 'AIR GLOW',
-    kicker: 'CÁPSULA AIR TECH · AMORTIGUACIÓN',
     description: 'Amortiguación reactiva con cámara de aire visible y refuerzos aerodinámicos. Absorción superior de impacto pensada para máxima energía.',
   },
   {
@@ -61,7 +57,6 @@ const HERO_MODELS: HeroModel[] = [
     name: 'Punto Original Chunky Lavender',
     modelTag: 'Chunky Lavender',
     bgName: 'CHUNKY',
-    kicker: 'LÍNEA STREETWEAR · PLATAFORMA EVA',
     description: 'Diseño audaz con plataforma chunky ultraligera de polímero EVA. Estructura anatómica que ofrece altura, comodidad y presencia imponente.',
   },
   {
@@ -69,7 +64,6 @@ const HERO_MODELS: HeroModel[] = [
     name: 'Punto Original Velocity Silver',
     modelTag: 'Velocity Silver',
     bgName: 'VELOCITY',
-    kicker: 'LÍNEA SPORT ACTIVE · VELOCIDAD',
     description: 'Zapatilla multideportiva ultraligera con malla transpirable antidesgarro y suela de tracción multidireccional para respuesta inmediata.',
   },
 ];
@@ -164,10 +158,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           {/* Texto */}
           <div className="lg:col-span-5 space-y-6 z-10 text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[#00ff66] text-xs font-semibold">
-              <span className="w-2 h-2 rounded-full bg-[#00ff66] animate-pulse" />
-              <span>{currentModel.kicker}</span>
-            </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-[50px] font-extrabold tracking-tight text-white leading-[1.12]">
               El impulso para tu negocio y tu <span className="text-[#00ff66]">pasión</span>.
