@@ -41,7 +41,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({ onSelectProductM
                   decoding="async"
                   src={product.image}
                   alt={product.name}
-                  className="relative w-full h-full object-contain p-6 pt-9 transition-transform duration-500 group-hover:scale-105"
+                  className="relative w-full h-full object-contain p-3 pt-8 transition-transform duration-500 group-hover:scale-105"
                 />
                 {product.badge && (
                   <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 text-[#00ff66] text-xs font-semibold tracking-wide">

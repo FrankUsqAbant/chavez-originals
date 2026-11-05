@@ -28,9 +28,9 @@ const COLORWAYS = Object.fromEntries(
   Object.entries(heroSpec).map(([id, m]) => [id, m.colorways as SneakerColorway[]]),
 ) as Record<string, SneakerColorway[]>;
 
-/** Una imagen real por modelo y color (generadas con `npm run hero`). */
+/** Vista de perfil de cada modelo y color (la primera vista generada con `npm run spin`). */
 const heroImage = (modelId: string, colorId: string) =>
-  `/assets/aistudio/hero/${modelId}-${colorId}.webp`;
+  `/assets/aistudio/spin/${modelId}/${colorId}/01.webp`;
 
 const HERO_MODELS: HeroModel[] = [
   {
@@ -39,13 +39,6 @@ const HERO_MODELS: HeroModel[] = [
     modelTag: 'Fútbol Pro 2026',
     bgName: 'FÚTBOL PRO',
     description: 'Chimpún de alta competencia con tecnología de tracción dinámica para césped y losa, capellada microtexturizada y tobillera de ajuste anatómico.',
-  },
-  {
-    id: 'urban-low',
-    name: 'Punto Original Urban Low',
-    modelTag: 'Urban Low',
-    bgName: 'URBAN LOW',
-    description: 'Silueta urbana de perfil bajo y líneas limpias. Cuero sintético reforzado de alta durabilidad con suela cosida antideslizante para el día a día.',
   },
   {
     id: 'air-glow-tech',
@@ -60,13 +53,6 @@ const HERO_MODELS: HeroModel[] = [
     modelTag: 'Chunky Lavender',
     bgName: 'CHUNKY',
     description: 'Diseño audaz con plataforma chunky ultraligera de polímero EVA. Estructura anatómica que ofrece altura, comodidad y presencia imponente.',
-  },
-  {
-    id: 'velocity-silver',
-    name: 'Punto Original Velocity Silver',
-    modelTag: 'Velocity Silver',
-    bgName: 'VELOCITY',
-    description: 'Zapatilla multideportiva ultraligera con malla transpirable antidesgarro y suela de tracción multidireccional para respuesta inmediata.',
   },
 ];
 

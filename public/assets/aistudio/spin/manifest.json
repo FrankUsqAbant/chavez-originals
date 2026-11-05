@@ -1,19 +1,4 @@
 {
-  "urban-low": {
-    "frames": 4,
-    "labels": [
-      "Perfil",
-      "Frente",
-      "Lado opuesto",
-      "Atrás"
-    ],
-    "colors": [
-      "urban-white",
-      "urban-emerald",
-      "urban-silver",
-      "urban-dark"
-    ]
-  },
   "futbol-pro": {
     "frames": 4,
     "labels": [
@@ -42,21 +27,6 @@
       "air-emerald",
       "air-crimson",
       "air-stealth"
-    ]
-  },
-  "velocity-silver": {
-    "frames": 4,
-    "labels": [
-      "Perfil",
-      "3/4",
-      "Frente",
-      "Atrás"
-    ],
-    "colors": [
-      "velocity-silver",
-      "velocity-green",
-      "velocity-blue",
-      "velocity-black"
     ]
   },
   "chunky-lavender": {

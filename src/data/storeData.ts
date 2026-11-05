@@ -3,8 +3,8 @@ import heroSpec from './hero-models.json';
 type ShoeSpec = Record<string, { colorways: { id: string; name: string; hex: string }[] }>;
 const SHOES = heroSpec as ShoeSpec;
 
-/** Imagen sin fondo de un modelo en un color (generada con `npm run hero`). */
-const shoeImage = (model: string, colorId: string) => `/assets/aistudio/hero/${model}-${colorId}.webp`;
+/** Vista de perfil (sin fondo) de un modelo en un color: la primera de las vistas de `npm run spin`. */
+const shoeImage = (model: string, colorId: string) => `/assets/aistudio/spin/${model}/${colorId}/01.webp`;
 
 /** Colores de un producto, con la imagen correspondiente a cada uno. Si se pasan ids, respeta ese orden. */
 const colorsFor = (model: string, ids?: string[]) => {
@@ -31,7 +31,6 @@ export interface Product {
 }
 
 // Un producto por modelo, en el mismo orden y con los mismos nombres que el hero.
-// TODO: confirmar precios, tallas y características de Urban Low y Velocity Silver (sin precio todavía).
 export const PRODUCTS: Product[] = [
   {
     id: 'futbol-pro',
@@ -50,21 +49,6 @@ export const PRODUCTS: Product[] = [
       'Incluye gratis: Mochila + Canilleras + Medias 3/4',
     ],
     comboIncluded: true,
-  },
-  {
-    id: 'urban-low',
-    name: 'Punto Original Urban Low',
-    image: shoeImage('urban-low', 'urban-white'),
-    badge: 'LÍNEA STREETWEAR',
-    description: 'Silueta urbana de perfil bajo y líneas limpias. Cuero sintético reforzado de alta durabilidad con suela cosida antideslizante para el día a día.',
-    sizes: [38, 39, 40, 41, 42, 43, 44],
-    colors: colorsFor('urban-low'),
-    features: [
-      'Perfil bajo y líneas limpias',
-      'Cuero sintético reforzado de alta durabilidad',
-      'Suela cosida antideslizante',
-      'Ideal para el día a día',
-    ],
   },
   {
     id: 'air-glow-tech',
@@ -98,21 +82,6 @@ export const PRODUCTS: Product[] = [
       'Resistencia ante uso diario intensivo',
       'Ligereza con suela de polímero EVA',
       'Silueta vanguardista con soporte anatómico',
-    ],
-  },
-  {
-    id: 'velocity-silver',
-    name: 'Punto Original Velocity Silver',
-    image: shoeImage('velocity-silver', 'velocity-silver'),
-    badge: 'SPORT ACTIVE',
-    description: 'Zapatilla multideportiva ultraligera con malla transpirable antidesgarro y suela de tracción multidireccional para respuesta inmediata.',
-    sizes: [38, 39, 40, 41, 42, 43, 44],
-    colors: colorsFor('velocity-silver'),
-    features: [
-      'Malla transpirable antidesgarro',
-      'Suela de tracción multidireccional',
-      'Ultraligera y multideportiva',
-      'Respuesta inmediata en cada paso',
     ],
   },
 ];

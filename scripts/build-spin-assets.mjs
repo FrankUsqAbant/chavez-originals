@@ -4,8 +4,8 @@
 //
 // Carpeta de origen: archive/spin-src/<modelo>/  (una de dos):
 //   A) VISTAS: fotos sueltas + views.json  { "views": [ { "file": "01-perfil.jpg", "label": "Perfil", "flip": false }, … ] }
-//      El orden del archivo es el orden del visor. La primera vista (Perfil) también se usa como foto
-//      principal del modelo (archive/hero-src/<modelo>.png → npm run hero).
+//      El orden del archivo es el orden del visor. La primera vista (Perfil) es también la foto del catálogo
+//      y de las fichas (…/<color>/01.webp).
 //   B) GIRO: 24–36 fotos (o un video, requiere ffmpeg) tomadas girando la zapatilla una vuelta completa.
 //
 // Salida: public/assets/aistudio/spin/<modelo>/<color>/NN.webp  +  manifest.json (todos los colores del modelo).
@@ -64,7 +64,7 @@ const outRoot = path.join(root, 'public', 'assets', 'aistudio', 'spin');
 const recolor = spec[model].kind === 'accent' ? recolorAccent : recolorBody;
 
 /** Un conjunto de fotogramas WebP por cada color del modelo. `frames` = buffers RGBA crudos de W×H. */
-async function writeColorSets(frames, W, H, { box = null, width = 1000 } = {}) {
+async function writeColorSets(frames, W, H, { box = null, width = 900 } = {}) {
   rmSync(path.join(outRoot, model), { recursive: true, force: true });
   for (const cw of spec[model].colorways) {
     const dir = path.join(outRoot, model, cw.id);
@@ -84,7 +84,7 @@ async function writeColorSets(frames, W, H, { box = null, width = 1000 } = {}) {
       if (box) img = img.extract(box);
       await img
         .resize({ width, kernel: 'lanczos3' })
-        .webp({ quality: 86, alphaQuality: 95, effort: 4 })
+        .webp({ quality: 80, alphaQuality: 90, effort: 6 })
         .toFile(path.join(dir, `${String(i + 1).padStart(2, '0')}.webp`));
     }
     console.log(`  color ${cw.id}: ${frames.length} imágenes`);
@@ -105,7 +105,7 @@ if (existsSync(viewsFile)) {
   const { views } = JSON.parse(readFileSync(viewsFile, 'utf8'));
   const cutDir = path.join(root, 'archive', 'views-cut', model); // caché de recortes (no se versiona)
   mkdirSync(cutDir, { recursive: true });
-  const CW = 1000, CH = 660;
+  const CW = 900, CH = 594; // 900 px alcanzan para pantallas de alta densidad (el visor muestra ~400 px)
 
   // Plano de 1 canal (alfa) -> desenfoque + umbral. Devuelve siempre 1 byte por píxel.
   async function plane(buf, W, H, blur, thr) {
@@ -214,12 +214,6 @@ if (existsSync(viewsFile)) {
       .extract({ left: bb.x0, top: bb.y0, width: bb.w, height: bb.h })
       .png()
       .toBuffer();
-
-    // La primera vista (Perfil) es también la foto principal del modelo (hero, catálogo y ficha).
-    if (i === 0) {
-      mkdirSync(path.join(root, 'archive', 'hero-src'), { recursive: true });
-      await sharp(trimmed).toFile(path.join(root, 'archive', 'hero-src', spec[model].source));
-    }
 
     // Todas las vistas en el mismo lienzo para que el visor no "salte" de tamaño
     const scale = Math.min((CW * 0.92) / bb.w, (CH * 0.92) / bb.h);

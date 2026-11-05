@@ -1,6 +1,5 @@
 {
   "futbol-pro": {
-    "source": "futbol-pro.png",
     "kind": "accent",
     "colorways": [
       {
@@ -31,35 +30,7 @@
       }
     ]
   },
-  "urban-low": {
-    "source": "urban-low.png",
-    "kind": "body",
-    "colorways": [
-      {
-        "id": "urban-white",
-        "name": "Blanco Original",
-        "hex": "#f8fafc",
-        "original": true
-      },
-      {
-        "id": "urban-emerald",
-        "name": "Verde Glow",
-        "hex": "#00ff66"
-      },
-      {
-        "id": "urban-silver",
-        "name": "Plata Urbano",
-        "hex": "#94a3b8"
-      },
-      {
-        "id": "urban-dark",
-        "name": "Negro Obsidiana",
-        "hex": "#18181b"
-      }
-    ]
-  },
   "air-glow-tech": {
-    "source": "air-glow-tech.png",
     "kind": "body",
     "colorways": [
       {
@@ -86,7 +57,6 @@
     ]
   },
   "chunky-lavender": {
-    "source": "chunky-lavender.png",
     "kind": "body",
     "toneLow": 0.3,
     "colorways": [
@@ -110,33 +80,6 @@
         "id": "chunky-smoke",
         "name": "Gris Grafito",
         "hex": "#71717a"
-      }
-    ]
-  },
-  "velocity-silver": {
-    "source": "velocity-silver.png",
-    "kind": "body",
-    "colorways": [
-      {
-        "id": "velocity-silver",
-        "name": "Plata Metálico",
-        "hex": "#cbd5e1",
-        "original": true
-      },
-      {
-        "id": "velocity-green",
-        "name": "Verde Neón",
-        "hex": "#00ff66"
-      },
-      {
-        "id": "velocity-blue",
-        "name": "Azul Polar",
-        "hex": "#38bdf8"
-      },
-      {
-        "id": "velocity-black",
-        "name": "Negro Titanio",
-        "hex": "#0f172a"
       }
     ]
   }
