@@ -13,6 +13,8 @@
   "urban-low": {
     "source": "urban-low.png",
     "kind": "body",
+    "cleanAlpha": true,
+    "scale": 1.4,
     "colorways": [
       { "id": "urban-white", "name": "Blanco Original", "hex": "#f8fafc", "original": true },
       { "id": "urban-emerald", "name": "Verde Glow", "hex": "#00ff66" },
@@ -23,6 +25,8 @@
   "air-glow-tech": {
     "source": "air-glow-tech.png",
     "kind": "body",
+    "cleanAlpha": true,
+    "scale": 1.4,
     "colorways": [
       { "id": "air-white", "name": "Blanco & Plata", "hex": "#e2e8f0", "original": true },
       { "id": "air-emerald", "name": "Esmeralda Chavez", "hex": "#00ff66" },

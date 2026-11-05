@@ -126,7 +126,7 @@ async function loadSource(file, cleanAlpha = false) {
   return { data, info, box: { left: x0, top: y0, width: x1 - x0 + 1, height: y1 - y0 + 1 } };
 }
 
-async function render({ data, info, box }, recolor, target, outFile, toneLow) {
+async function render({ data, info, box }, recolor, target, outFile, toneLow, scale = 1) {
   const buf = Buffer.from(data); // copia
   if (recolor) {
     for (let i = 0; i < buf.length; i += 4) {
@@ -135,10 +135,13 @@ async function render({ data, info, box }, recolor, target, outFile, toneLow) {
       buf[i] = r; buf[i + 1] = g; buf[i + 2] = b;
     }
   }
-  const width = Math.min(box.width, MAX_WIDTH);
-  await sharp(buf, { raw: { width: info.width, height: info.height, channels: 4 } })
+  // `scale` > 1 amplía fuentes de poca resolución (con un enfoque leve para compensar).
+  const width = Math.min(Math.round(box.width * scale), MAX_WIDTH);
+  let img = sharp(buf, { raw: { width: info.width, height: info.height, channels: 4 } })
     .extract(box)
-    .resize({ width, kernel: 'lanczos3' })
+    .resize({ width, kernel: 'lanczos3' });
+  if (scale > 1) img = img.sharpen({ sigma: 0.7 });
+  await img
     .webp({ quality: 88, alphaQuality: 100, effort: 5 })
     .toFile(outFile);
 }
@@ -151,7 +154,7 @@ for (const [modelId, model] of Object.entries(spec)) {
   for (const cw of model.colorways) {
     const [r, g, b] = hex2rgb(cw.hex);
     const file = path.join(OUT, `${modelId}-${cw.id}.webp`);
-    await render(src, cw.original ? null : recolor, rgb2hsl(r, g, b), file, model.toneLow);
+    await render(src, cw.original ? null : recolor, rgb2hsl(r, g, b), file, model.toneLow, model.scale);
     made.push({ modelId, cw, file });
   }
   console.log(`${modelId}: ${model.colorways.length} colores`);
