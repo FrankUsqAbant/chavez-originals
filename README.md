@@ -23,23 +23,21 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
   (ver `scripts/cutout-hero.mjs`), guarda el PNG en `archive/hero-src/`, agrÃ©galo al JSON y corre `npm run hero`.
 - Fotos de origen de baja resoluciÃ³n (Urban Low, Air Glow Tech, Chunky Lavender) se ven mejor con fotos de estudio nuevas.
 
-## Giro 360° del hero
+## Ángulos y giro 360° de las zapatillas
 
-El hero ya trae el visor (arrastrar con mouse o dedo, flechas del teclado). **Se activa solo en los modelos que tengan una secuencia de fotos**; los demás muestran la foto fija. Con una sola foto por modelo no se puede girar de verdad: hacen falta fotos desde todos los ángulos.
+El hero muestra las zapatillas con un visor de ángulos (miniaturas Perfil / Frente / Atrás…, arrastre o deslizar, flechas del teclado). El ángulo se conserva al cambiar de color.
 
-**Cómo capturar (por modelo, ~10 minutos):**
-1. Fondo liso y claro (cartulina blanca), luz pareja y difusa (ventana o dos lámparas), sin sombras duras.
-2. Celular fijo en trípode, a la altura de la zapatilla, que quede centrada y entera en la imagen.
-3. Zapatilla sobre un plato giratorio (turntable). Empieza **de perfil mirando a la derecha** y gira una vuelta completa.
-4. Graba un video de 15–20 s girando despacio y parejo, o toma 24–36 fotos, una cada 10–15°.
-5. Guarda el video o las fotos (`01.jpg`, `02.jpg`…) en `archive/spin-src/<modelo>/` (modelos: `futbol-pro`, `urban-low`, `air-glow-tech`, `chunky-lavender`, `velocity-silver`).
-6. Una sola vez: `npm install -D @imgly/background-removal-node` (quitafondos local; si npm bloquea `sharp`, agrega `"overrides": { "sharp": "$sharp" }` a `package.json`). Con video también hace falta `ffmpeg`.
-7. `npm run spin -- urban-low` (opcional `--frames 36`). Genera el giro en todos los colores del modelo.
+**Cómo está armado (por modelo):**
+1. Las fotos van en `archive/spin-src/<modelo>/` con un `views.json` que define el orden, el nombre de cada ángulo y si hay que voltearla (`"flip": true`).
+   Modelos: `futbol-pro`, `urban-low`, `air-glow-tech`, `chunky-lavender`, `velocity-silver`.
+2. `npm run spin -- <modelo>` quita el fondo (en tu PC), rellena huecos, encuadra todas las vistas en el mismo lienzo y genera **todos los colores**. La primera vista (Perfil) también se guarda como foto principal del modelo (`archive/hero-src/`).
+3. `npm run hero` actualiza la foto principal de cada color que usan el catálogo y las fichas.
+4. Una sola vez: `npm install -D @imgly/background-removal-node` (ya instalado; `package.json` lleva `"overrides": { "sharp": "$sharp" }` para que npm no bloquee `sharp`).
 
-## Dirección y nitidez de las zapatillas
+**Reglas para las fotos:** mismo diseño del modelo en todas las vistas; la vista de perfil mirando a la derecha (si mira a la izquierda se voltea con `flip`, y el texto de la zapatilla queda en espejo); fondo claro y liso.
 
-- Todas miran a la derecha. En `hero-models.json`, `flip` las voltea y `rotate` nivela la suela. Al voltear, los textos de la zapatilla quedan en espejo.
-- `archive/hero-src-hd/` guarda versiones x4 hechas con IA local (Swin2SR) de las fotos pequeñas; `npm run hero` las usa si existen.
+**Giro 360° continuo (opcional):** con 24–36 fotos tomadas cada 10–15° sobre un plato giratorio (o un video de 15–20 s, requiere `ffmpeg`), sin `views.json`, el mismo comando `npm run spin -- <modelo>` genera un giro continuo y el visor pasa a arrastre fino.
+
 ## Estructura
 
 - PÃ¡gina: Inicio (hero) â†’ CatÃ¡logo â†’ Tienda. Las tallas se eligen en la ficha del producto.

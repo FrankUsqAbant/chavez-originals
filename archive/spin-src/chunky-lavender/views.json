@@ -1,0 +1,24 @@
+{
+  "views": [
+    {
+      "file": "01-perfil.jpg",
+      "label": "Perfil",
+      "flip": true
+    },
+    {
+      "file": "02-tres-cuartos.jpg",
+      "label": "3/4",
+      "flip": true
+    },
+    {
+      "file": "03-frente.jpg",
+      "label": "Frente",
+      "flip": true
+    },
+    {
+      "file": "04-atras.jpg",
+      "label": "Atrás",
+      "flip": true
+    }
+  ]
+}

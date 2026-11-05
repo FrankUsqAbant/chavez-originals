@@ -1,0 +1,20 @@
+{
+  "views": [
+    {
+      "file": "01-perfil.jpg",
+      "label": "Perfil"
+    },
+    {
+      "file": "02-frente.jpg",
+      "label": "Frente"
+    },
+    {
+      "file": "03-lado-opuesto.jpg",
+      "label": "Lado opuesto"
+    },
+    {
+      "file": "04-atras.jpg",
+      "label": "Atrás"
+    }
+  ]
+}

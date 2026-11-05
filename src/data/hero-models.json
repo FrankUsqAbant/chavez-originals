@@ -1,62 +1,143 @@
 {
   "futbol-pro": {
     "source": "futbol-pro.png",
-    "flip": true,
-    "rotate": -26,
     "kind": "accent",
     "colorways": [
-      { "id": "red", "name": "Rojo Furia", "hex": "#e51e2b", "original": true },
-      { "id": "neon-green", "name": "Verde Chavez", "hex": "#00ff66" },
-      { "id": "mint", "name": "Menta Glow", "hex": "#6ee7b7" },
-      { "id": "white", "name": "Blanco Lunar", "hex": "#f8fafc" },
-      { "id": "black", "name": "Negro Stealth", "hex": "#18181b" }
+      {
+        "id": "red",
+        "name": "Rojo Furia",
+        "hex": "#e51e2b",
+        "original": true
+      },
+      {
+        "id": "neon-green",
+        "name": "Verde Chavez",
+        "hex": "#00ff66"
+      },
+      {
+        "id": "mint",
+        "name": "Menta Glow",
+        "hex": "#6ee7b7"
+      },
+      {
+        "id": "white",
+        "name": "Blanco Lunar",
+        "hex": "#f8fafc"
+      },
+      {
+        "id": "black",
+        "name": "Negro Stealth",
+        "hex": "#18181b"
+      }
     ]
   },
   "urban-low": {
     "source": "urban-low.png",
     "kind": "body",
-    "cleanAlpha": true,
-    "scale": 1.4,
     "colorways": [
-      { "id": "urban-white", "name": "Blanco Original", "hex": "#f8fafc", "original": true },
-      { "id": "urban-emerald", "name": "Verde Glow", "hex": "#00ff66" },
-      { "id": "urban-silver", "name": "Plata Urbano", "hex": "#94a3b8" },
-      { "id": "urban-dark", "name": "Negro Obsidiana", "hex": "#18181b" }
+      {
+        "id": "urban-white",
+        "name": "Blanco Original",
+        "hex": "#f8fafc",
+        "original": true
+      },
+      {
+        "id": "urban-emerald",
+        "name": "Verde Glow",
+        "hex": "#00ff66"
+      },
+      {
+        "id": "urban-silver",
+        "name": "Plata Urbano",
+        "hex": "#94a3b8"
+      },
+      {
+        "id": "urban-dark",
+        "name": "Negro Obsidiana",
+        "hex": "#18181b"
+      }
     ]
   },
   "air-glow-tech": {
     "source": "air-glow-tech.png",
     "kind": "body",
-    "cleanAlpha": true,
     "colorways": [
-      { "id": "air-white", "name": "Blanco & Plata", "hex": "#e2e8f0", "original": true },
-      { "id": "air-emerald", "name": "Esmeralda Chavez", "hex": "#00ff66" },
-      { "id": "air-crimson", "name": "Carmesí Dynamic", "hex": "#ef4444" },
-      { "id": "air-stealth", "name": "Negro Monocromo", "hex": "#18181b" }
+      {
+        "id": "air-white",
+        "name": "Blanco & Plata",
+        "hex": "#e2e8f0",
+        "original": true
+      },
+      {
+        "id": "air-emerald",
+        "name": "Esmeralda Chavez",
+        "hex": "#00ff66"
+      },
+      {
+        "id": "air-crimson",
+        "name": "Carmesí Dynamic",
+        "hex": "#ef4444"
+      },
+      {
+        "id": "air-stealth",
+        "name": "Negro Monocromo",
+        "hex": "#18181b"
+      }
     ]
   },
   "chunky-lavender": {
     "source": "chunky-lavender.png",
     "kind": "body",
-    "cleanAlpha": true,
     "toneLow": 0.3,
     "colorways": [
-      { "id": "chunky-lav", "name": "Lavanda & Crema", "hex": "#d8b4e2", "original": true },
-      { "id": "chunky-mint", "name": "Menta Fresco", "hex": "#a7f3d0" },
-      { "id": "chunky-pure", "name": "Blanco Total", "hex": "#f8fafc" },
-      { "id": "chunky-smoke", "name": "Gris Grafito", "hex": "#71717a" }
+      {
+        "id": "chunky-lav",
+        "name": "Lavanda & Crema",
+        "hex": "#d8b4e2",
+        "original": true
+      },
+      {
+        "id": "chunky-mint",
+        "name": "Menta Fresco",
+        "hex": "#a7f3d0"
+      },
+      {
+        "id": "chunky-pure",
+        "name": "Blanco Total",
+        "hex": "#f8fafc"
+      },
+      {
+        "id": "chunky-smoke",
+        "name": "Gris Grafito",
+        "hex": "#71717a"
+      }
     ]
   },
   "velocity-silver": {
     "source": "velocity-silver.png",
-    "flip": true,
-    "rotate": -8,
     "kind": "body",
     "colorways": [
-      { "id": "velocity-silver", "name": "Plata Metálico", "hex": "#cbd5e1", "original": true },
-      { "id": "velocity-green", "name": "Verde Neón", "hex": "#00ff66" },
-      { "id": "velocity-blue", "name": "Azul Polar", "hex": "#38bdf8" },
-      { "id": "velocity-black", "name": "Negro Titanio", "hex": "#0f172a" }
+      {
+        "id": "velocity-silver",
+        "name": "Plata Metálico",
+        "hex": "#cbd5e1",
+        "original": true
+      },
+      {
+        "id": "velocity-green",
+        "name": "Verde Neón",
+        "hex": "#00ff66"
+      },
+      {
+        "id": "velocity-blue",
+        "name": "Azul Polar",
+        "hex": "#38bdf8"
+      },
+      {
+        "id": "velocity-black",
+        "name": "Negro Titanio",
+        "hex": "#0f172a"
+      }
     ]
   }
 }

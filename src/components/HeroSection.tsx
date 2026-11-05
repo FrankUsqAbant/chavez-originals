@@ -127,12 +127,13 @@ const ARROW_CLASS =
 export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onExploreStore }) => {
   const [modelIndex, setModelIndex] = useState(0);
   const [colorIndex, setColorIndex] = useState(0);
+  const [viewIndex, setViewIndex] = useState(0); // ángulo elegido; se conserva al cambiar de color
 
   const currentModel = HERO_MODELS[modelIndex];
   const colorways = COLORWAYS[currentModel.id];
   const currentColor = colorways[colorIndex] ?? colorways[0];
-  // Giro 360° con fotos reales, si el modelo tiene secuencia (ver `npm run spin`).
-  const spinFrames = useSpinFrames(currentModel.id, currentColor.id);
+  // Vistas (perfil, frente, atrás…) o giro 360° con fotos reales, si el modelo las tiene (ver `npm run spin`).
+  const spin = useSpinFrames(currentModel.id, currentColor.id);
 
   // Precarga: primero los colores del modelo activo; el resto, poco después de cargar la página.
   useEffect(() => {
@@ -149,6 +150,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
   const goToModel = (index: number) => {
     setModelIndex((index + HERO_MODELS.length) % HERO_MODELS.length);
     setColorIndex(0);
+    setViewIndex(0);
   };
 
   return (
@@ -237,10 +239,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
                 <ModelWatermark key={currentModel.id} text={currentModel.bgName} color={currentColor.hex} />
 
                 <div className="relative z-10 w-full h-full flex items-center justify-center px-6 pt-20 pb-4">
-                  {spinFrames ? (
+                  {spin ? (
                     <SpinViewer
-                      key={`${currentModel.id}-${currentColor.id}`}
-                      frames={spinFrames}
+                      frames={spin.frames}
+                      labels={spin.labels}
+                      index={viewIndex}
+                      onIndexChange={setViewIndex}
                       alt={`${currentModel.name}, color ${currentColor.name}`}
                     />
                   ) : (

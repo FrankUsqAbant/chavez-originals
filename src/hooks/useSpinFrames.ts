@@ -1,11 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 /**
- * Secuencias de giro 360° disponibles. Las genera `npm run spin` y quedan registradas en
- * public/assets/aistudio/spin/manifest.json:  { "<modelo>": { "frames": 24, "colors": ["red", ...] } }
- * Si un modelo no tiene secuencia, el hero muestra la foto fija.
+ * Vistas o giro disponibles por modelo. Las genera `npm run spin` y quedan registradas en
+ * public/assets/aistudio/spin/manifest.json:
+ *   { "<modelo>": { "frames": 4, "colors": ["red", ...], "labels": ["Perfil", "Frente", ...] } }
+ * Con `labels` son vistas sueltas (miniaturas con nombre); sin `labels`, una secuencia de giro 360°.
+ * Si un modelo no tiene entrada, el hero muestra la foto fija.
  */
-type Manifest = Record<string, { frames: number; colors: string[] }>;
+type Manifest = Record<string, { frames: number; colors: string[]; labels?: string[] }>;
+
+export interface SpinData {
+  frames: string[];
+  labels?: string[];
+}
 
 let manifestPromise: Promise<Manifest> | null = null;
 function loadManifest(): Promise<Manifest> {
@@ -18,8 +25,8 @@ function loadManifest(): Promise<Manifest> {
 export const spinFrameUrl = (modelId: string, colorId: string, index: number) =>
   `/assets/aistudio/spin/${modelId}/${colorId}/${String(index + 1).padStart(2, '0')}.webp`;
 
-/** URLs de los fotogramas de un modelo y color, o null si no hay giro disponible. */
-export function useSpinFrames(modelId: string, colorId: string): string[] | null {
+/** Imágenes de un modelo y color, o null si no hay vistas disponibles. */
+export function useSpinFrames(modelId: string, colorId: string): SpinData | null {
   const [manifest, setManifest] = useState<Manifest | null>(null);
 
   useEffect(() => {
@@ -31,6 +38,17 @@ export function useSpinFrames(modelId: string, colorId: string): string[] | null
   }, []);
 
   const entry = manifest?.[modelId];
-  if (!entry || !entry.colors.includes(colorId) || entry.frames < 2) return null;
-  return Array.from({ length: entry.frames }, (_, i) => spinFrameUrl(modelId, colorId, i));
+  const available = Boolean(entry && entry.colors.includes(colorId) && entry.frames >= 2);
+
+  // Memoizado: el visor precarga por identidad del arreglo, no debe cambiar en cada render.
+  return useMemo(
+    () =>
+      available && entry
+        ? {
+            frames: Array.from({ length: entry.frames }, (_, i) => spinFrameUrl(modelId, colorId, i)),
+            labels: entry.labels,
+          }
+        : null,
+    [available, entry, modelId, colorId],
+  );
 }

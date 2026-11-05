@@ -1,4 +1,4 @@
-node_modules/
+﻿node_modules/
 build/
 dist/
 coverage/
@@ -7,5 +7,8 @@ coverage/
 .env*
 !.env.example
 
-# Fotos/videos de origen del giro 360� (pesados): se generan los fotogramas con npm run spin
-archive/spin-src/
+# Carpeta de entrega de imágenes (originales pesados .jfif); las vistas curadas viven en archive/spin-src
+Zapatillas/
+# Caché de recortes (se regenera con npm run spin)
+archive/views-cut/
+
