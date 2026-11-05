@@ -27,7 +27,7 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
 
 ## Modelos de la demo
 
-Fútbol Pro 2026, Air Glow Tech y Chunky Lavender: los tres tienen precio, código, tallas y vistas. Urban Low y Velocity Silver se retiraron de la demo por no tener aún precio, código ni tallas confirmadas (sus fotos están en el historial de git).
+Fútbol Pro 2026, Air Glow Tech y Chunky Lavender: los tres tienen precio, código, tallas y vistas. El catálogo muestra 10 productos: esos 3 y 7 **variantes de color** (mismo zapato, precio y tallas del modelo base; los códigos de variante son de ejemplo) para que la demo se vea completa. Urban Low y Velocity Silver se retiraron de la demo por no tener aún precio, código ni tallas confirmadas (sus fotos están en el historial de git).
 
 ## Imágenes
 

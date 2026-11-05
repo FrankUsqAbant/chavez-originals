@@ -30,8 +30,8 @@ export interface Product {
   comboIncluded?: boolean;
 }
 
-// Un producto por modelo, en el mismo orden y con los mismos nombres que el hero.
-export const PRODUCTS: Product[] = [
+// Los 3 modelos de la demo (precio, código, tallas y vistas confirmados en este archivo).
+const BASE_PRODUCTS: Product[] = [
   {
     id: 'futbol-pro',
     name: 'Punto Original Fútbol Pro 2026',
@@ -84,6 +84,40 @@ export const PRODUCTS: Product[] = [
       'Silueta vanguardista con soporte anatómico',
     ],
   },
+];
+
+/**
+ * Variante de color de un modelo: el mismo zapato en otro color, con el precio, las tallas y las
+ * características del modelo base. El color elegido sale primero en la ficha.
+ * DEMO: los códigos de variante (sufijo) son de ejemplo.
+ */
+const colorVariant = (baseId: string, model: string, colorId: string, codeSuffix: string): Product => {
+  const base = BASE_PRODUCTS.find((p) => p.id === baseId)!;
+  const all = SHOES[model].colorways;
+  const color = all.find((c) => c.id === colorId)!;
+  return {
+    ...base,
+    id: `${base.id}-${colorId}`,
+    name: `${base.name} · ${color.name}`,
+    code: base.code ? `${base.code}-${codeSuffix}` : undefined,
+    image: shoeImage(model, colorId),
+    badge: 'NUEVO COLOR',
+    colors: colorsFor(model, [colorId, ...all.map((c) => c.id).filter((id) => id !== colorId)]),
+  };
+};
+
+// Catálogo de la demo: 3 modelos + 7 variantes de color (10 productos), intercalados para que no queden juntos.
+export const PRODUCTS: Product[] = [
+  BASE_PRODUCTS[0], // Fútbol Pro 2026
+  BASE_PRODUCTS[1], // Air Glow Tech
+  BASE_PRODUCTS[2], // Chunky Lavender
+  colorVariant('futbol-pro', 'futbol-pro', 'neon-green', 'VE'),
+  colorVariant('air-glow-tech', 'air-glow-tech', 'air-emerald', 'ES'),
+  colorVariant('chunky-lavender', 'chunky-lavender', 'chunky-mint', 'ME'),
+  colorVariant('futbol-pro', 'futbol-pro', 'white', 'BL'),
+  colorVariant('air-glow-tech', 'air-glow-tech', 'air-crimson', 'CA'),
+  colorVariant('chunky-lavender', 'chunky-lavender', 'chunky-smoke', 'GR'),
+  colorVariant('futbol-pro', 'futbol-pro', 'black', 'NE'),
 ];
 
 export const STORE_INFO = {

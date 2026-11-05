@@ -24,7 +24,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({ onSelectProductM
           {PRODUCTS.map((product) => (
             <article
               key={product.id}
-              className="group w-full md:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)] rounded-3xl bg-[#090f0c] border border-white/10 hover:border-emerald-500/40 p-6 flex flex-col transition-colors duration-300"
+              className="group w-full md:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)] xl:w-[calc((100%-6rem)/4)] rounded-3xl bg-[#090f0c] border border-white/10 hover:border-emerald-500/40 p-6 flex flex-col transition-colors duration-300"
             >
               <button
                 type="button"
@@ -51,7 +51,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({ onSelectProductM
               </button>
 
               <div className="pt-5 flex-1 space-y-1">
-                <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">{product.name}</h3>
+                <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">{product.name}</h3>
                 <div className="text-2xl font-black text-[#00ff66]">
                   {product.price !== undefined ? (
                     formatPeruvianCurrency(product.price)
