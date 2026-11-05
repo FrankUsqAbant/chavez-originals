@@ -1,3 +1,18 @@
+import heroSpec from './hero-models.json';
+
+type ShoeSpec = Record<string, { colorways: { id: string; name: string; hex: string }[] }>;
+const SHOES = heroSpec as ShoeSpec;
+
+/** Imagen sin fondo de un modelo en un color (generada con `npm run hero`). */
+const shoeImage = (model: string, colorId: string) => `/assets/aistudio/hero/${model}-${colorId}.webp`;
+
+/** Colores de un producto, con la imagen correspondiente a cada uno. Si se pasan ids, respeta ese orden. */
+const colorsFor = (model: string, ids?: string[]) => {
+  const all = SHOES[model].colorways;
+  const picked = ids ? ids.map((id) => all.find((c) => c.id === id)!) : all;
+  return picked.map((c) => ({ name: c.name, hex: c.hex, previewImage: shoeImage(model, c.id) }));
+};
+
 export interface Product {
   id: string;
   name: string;
@@ -19,17 +34,11 @@ export const PRODUCTS: Product[] = [
     code: 'EM0099-M9',
     category: 'futbol',
     price: 189.00,
-    image: '/assets/aistudio/showroom_cleat.webp',
+    image: shoeImage('futbol-pro', 'red'),
     badge: 'ALTA COMPETENCIA',
     description: 'Chimpún de alto rendimiento con tecnología de agarre dinámico y capellada microtexturizada para máxima precisión.',
     sizes: [38, 39, 40, 41, 42, 43, 44],
-    colors: [
-      { name: 'Rojo Furia', hex: '#e51e2b' },
-      { name: 'Verde Neón Chavez', hex: '#00ff66' },
-      { name: 'Menta Glow', hex: '#6ee7b7' },
-      { name: 'Blanco Lunar', hex: '#f8fafc' },
-      { name: 'Negro Stealth', hex: '#18181b' },
-    ],
+    colors: colorsFor('futbol-pro'),
     features: [
       'Tracción que te impulsa en cualquier terreno',
       'Tobillera anatómica Dynamic Fit',
@@ -43,14 +52,11 @@ export const PRODUCTS: Product[] = [
     code: 'CMB-CAMPO-01',
     category: 'combo',
     price: 189.00,
-    image: '/assets/aistudio/showroom_cleat.webp',
+    image: shoeImage('futbol-pro', 'neon-green'),
     badge: 'COMBO COMPLETO',
     description: 'Chimpún oficial Punto Original acompañado de mochila deportiva, canilleras protectoras y medias de compresión 3/4.',
     sizes: [38, 39, 40, 41, 42, 43, 44],
-    colors: [
-      { name: 'Rojo Fuego', hex: '#e51e2b' },
-      { name: 'Verde Eléctrico', hex: '#00ff66' },
-    ],
+    colors: colorsFor('futbol-pro', ['neon-green', 'red']),
     features: [
       '1x Chimpunes de alta competencia',
       '1x Mochila deportiva Punto Original reforzada',
@@ -64,15 +70,11 @@ export const PRODUCTS: Product[] = [
     code: 'URB-2026-CH',
     category: 'urbano',
     price: 169.00,
-    image: '/assets/aistudio/showroom_chunky_16x9.webp',
+    image: shoeImage('chunky-lavender', 'chunky-lav'),
     badge: 'LÍNEA STREETWEAR',
     description: 'Zapatilla urbana de plataforma chunky ultraligera con amortiguación de cámara de aire y tonos tierra.',
     sizes: [38, 39, 40, 41, 42, 43],
-    colors: [
-      { name: 'Lavanda & Crema', hex: '#d8b4e2' },
-      { name: 'Blanco Total', hex: '#ffffff' },
-      { name: 'Negro Street', hex: '#1e293b' },
-    ],
+    colors: colorsFor('chunky-lavender'),
     features: [
       'Tracción que te impulsa en pavimento urbano',
       'Resistencia ante uso diario intensivo',
@@ -86,15 +88,11 @@ export const PRODUCTS: Product[] = [
     code: 'URB-AIR-026',
     category: 'urbano',
     price: 179.00,
-    image: '/assets/aistudio/showroom_airglow_16x9.webp',
+    image: shoeImage('air-glow-tech', 'air-white'),
     badge: 'CÁPSULA AIR TECH',
     description: 'Cápsula de amortiguación translúcida verde esmeralda y suela esculpida para máximo confort durante el día.',
     sizes: [39, 40, 41, 42, 43, 44],
-    colors: [
-      { name: 'Plata & Esmeralda', hex: '#00ff66' },
-      { name: 'Carmesí Fuego', hex: '#ef4444' },
-      { name: 'Stealth Black', hex: '#18181b' },
-    ],
+    colors: colorsFor('air-glow-tech'),
     features: [
       'Cámara de amortiguación visible con soporte elástico',
       'Material sintético transpirable anti-desgarre',
@@ -108,14 +106,11 @@ export const PRODUCTS: Product[] = [
     code: 'STH-2026-BLK',
     category: 'urbano',
     price: 159.00,
-    image: '/assets/aistudio/showroom_stealth_sideprofile.webp',
+    image: shoeImage('stealth-runner', 'black'),
     badge: 'HIGH PERFORMANCE',
     description: 'Silueta aerodinámica monocromo con suela esculpida de polímero EVA y capellada transpirable.',
     sizes: [38, 39, 40, 41, 42, 43, 44],
-    colors: [
-      { name: 'Negro Stealth', hex: '#18181b' },
-      { name: 'Plata Lunar', hex: '#cbd5e1' },
-    ],
+    colors: colorsFor('stealth-runner'),
     features: [
       'Malla técnica transpirable de alta resistencia',
       'Suela amortiguada con agarre antideslizante',

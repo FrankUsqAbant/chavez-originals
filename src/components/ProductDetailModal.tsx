@@ -24,6 +24,7 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
     product.sizes.includes(40) ? 40 : product.sizes[0],
   );
   const [selectedColor, setSelectedColor] = useState(product.colors[0]?.name ?? '');
+  const activeImage = product.colors.find((c) => c.name === selectedColor)?.previewImage ?? product.image;
 
   const handleOrderWhatsApp = () => {
     const link = generateWhatsAppOrderLink({
@@ -61,11 +62,12 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
         </button>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="relative rounded-2xl bg-black/50 border border-white/10 p-6 flex items-center justify-center min-h-[300px]">
+          <div className="relative rounded-2xl border border-white/10 p-6 flex items-center justify-center min-h-[300px] bg-[radial-gradient(ellipse_at_50%_58%,#2a3d34_0%,#101a15_55%,#0a100d_100%)]">
             <img
-              src={product.image}
-              alt={product.name}
-              className="relative z-10 w-full max-h-72 object-contain rounded-xl"
+              key={activeImage}
+              src={activeImage}
+              alt={`${product.name}, color ${selectedColor}`}
+              className="relative z-10 w-full max-h-72 object-contain animate-in drop-shadow-[0_18px_22px_rgba(0,0,0,0.6)]"
             />
             {product.badge && (
               <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#00ff66] text-black font-extrabold text-xs tracking-wider uppercase">

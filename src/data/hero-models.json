@@ -46,6 +46,14 @@
       { "id": "chunky-smoke", "name": "Gris Grafito", "hex": "#71717a" }
     ]
   },
+  "stealth-runner": {
+    "source": "stealth-runner.png",
+    "kind": "body",
+    "scale": 1.3,
+    "colorways": [
+      { "id": "black", "name": "Negro Stealth", "hex": "#18181b", "original": true }
+    ]
+  },
   "velocity-silver": {
     "source": "velocity-silver.png",
     "kind": "body",

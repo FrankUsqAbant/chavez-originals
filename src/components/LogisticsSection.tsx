@@ -49,14 +49,19 @@ export const LogisticsSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Fachada y ubicación */}
           <div className="lg:col-span-5 rounded-3xl bg-[#0c1410] border border-white/10 p-6 sm:p-8 flex flex-col gap-6">
-            <div className="relative flex-1 min-h-64 rounded-2xl overflow-hidden bg-black/60">
+            <div className="relative flex-1 min-h-[22rem] rounded-2xl overflow-hidden bg-black/60">
               <img
                 loading="lazy"
                 decoding="async"
                 src="/assets/aistudio/Chaves_Originals_61e42aa8.webp"
                 alt="Fachada de la tienda Chavez Originals en Av. San Martín 736, Cajamarca"
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover object-top"
               />
+              <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/85 to-transparent" aria-hidden="true" />
+              <div className="absolute bottom-3 left-4 right-4 flex items-center gap-2 text-white">
+                <MapPin className="w-4 h-4 text-[#00ff66] shrink-0" aria-hidden="true" />
+                <span className="text-sm font-semibold">Av. San Martín 736, Cajamarca</span>
+              </div>
               <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/80 text-xs font-semibold text-white flex items-center gap-2">
                 <span
                   className={`w-2 h-2 rounded-full ${status.isOpen ? 'bg-[#00ff66] animate-pulse' : 'bg-gray-400'}`}

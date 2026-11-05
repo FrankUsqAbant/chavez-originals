@@ -29,15 +29,19 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({ onSelectProductM
               <button
                 type="button"
                 onClick={() => onSelectProductModal(product)}
-                className="relative w-full h-56 sm:h-64 rounded-2xl bg-black/50 overflow-hidden cursor-pointer"
+                className="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden cursor-pointer bg-[radial-gradient(ellipse_at_50%_58%,#2a3d34_0%,#101a15_55%,#0a100d_100%)]"
                 aria-label={`Ver detalles de ${product.name}`}
               >
+                <span
+                  className="absolute bottom-7 left-1/2 -translate-x-1/2 w-3/5 h-5 bg-[radial-gradient(closest-side,rgba(0,0,0,0.6),transparent)]"
+                  aria-hidden="true"
+                />
                 <img
                   loading="lazy"
                   decoding="async"
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                  className="relative w-full h-full object-contain p-6 pt-9 transition-transform duration-500 group-hover:scale-105"
                 />
                 {product.badge && (
                   <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 text-[#00ff66] text-xs font-semibold tracking-wide">

@@ -20,7 +20,8 @@ const DEFAULT = { width: 1200, quality: 80 };
 
 await mkdir(OUT, { recursive: true });
 // Las zapatillas del hero se generan aparte con `npm run hero` (una imagen por color).
-const HERO_SOURCES = /^(hero_model_|punto_cleat)/;
+// La fachada se procesa con `node scripts/build-facade.mjs`.
+const HERO_SOURCES = /^(hero_model_|punto_cleat|Chaves_Originals)/;
 const files = (await readdir(SRC)).filter((f) => /\.(png|jpe?g|jfif)$/i.test(f) && !HERO_SOURCES.test(f));
 
 let before = 0;
