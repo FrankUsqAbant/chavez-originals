@@ -1,5 +1,6 @@
 import React from 'react';
-import { PRODUCTS, Product } from '../data/storeData';
+import type { Product } from '../data/storeData';
+import { useProducts } from '../lib/products';
 import { formatPeruvianCurrency } from '../utils/store';
 import { ShoppingBag } from 'lucide-react';
 
@@ -7,7 +8,23 @@ interface CatalogSectionProps {
   onSelectProductModal: (product: Product) => void;
 }
 
+const CARD_WIDTH =
+  'w-full md:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)] xl:w-[calc((100%-6rem)/4)]';
+
+/** Tarjeta de relleno mientras llega el catálogo (misma medida que una real, para que nada se mueva). */
+const CardSkeleton: React.FC = () => (
+  <div className={`${CARD_WIDTH} rounded-3xl bg-[#090f0c] border border-white/10 p-6 flex flex-col animate-pulse`} aria-hidden="true">
+    <div className="w-full h-56 sm:h-64 rounded-2xl bg-white/[0.04]" />
+    <div className="pt-5 flex-1 space-y-3">
+      <div className="h-5 w-4/5 rounded bg-white/[0.06]" />
+      <div className="h-7 w-1/3 rounded bg-white/[0.06]" />
+    </div>
+    <div className="mt-5 h-11 rounded-full bg-white/[0.06]" />
+  </div>
+);
+
 export const CatalogSection: React.FC<CatalogSectionProps> = ({ onSelectProductModal }) => {
+  const { products, status } = useProducts();
   return (
     <section id="modulo-catalogo" className="bg-[#070b09] py-20 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
@@ -21,10 +38,14 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({ onSelectProductM
         </div>
 
         <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
-          {PRODUCTS.map((product) => (
+          {status === 'loading' && Array.from({ length: 10 }, (_, i) => <CardSkeleton key={i} />)}
+          {status !== 'loading' && products.length === 0 && (
+            <p className="py-16 text-gray-400 text-center">Pronto tendremos nuevos modelos. Escríbenos por WhatsApp para consultar disponibilidad.</p>
+          )}
+          {products.map((product) => (
             <article
               key={product.id}
-              className="group w-full md:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)] xl:w-[calc((100%-6rem)/4)] rounded-3xl bg-[#090f0c] border border-white/10 hover:border-emerald-500/40 p-6 flex flex-col transition-colors duration-300"
+              className={`group ${CARD_WIDTH} rounded-3xl bg-[#090f0c] border border-white/10 hover:border-emerald-500/40 p-6 flex flex-col transition-colors duration-300`}
             >
               <button
                 type="button"

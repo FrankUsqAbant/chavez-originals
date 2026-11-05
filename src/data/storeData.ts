@@ -4,7 +4,7 @@ type ShoeSpec = Record<string, { colorways: { id: string; name: string; hex: str
 const SHOES = heroSpec as ShoeSpec;
 
 /** Imagen de un modelo en un color: `01` es la vista de perfil (la primera de `npm run spin`) y `thumb` su miniatura. */
-const shoeImage = (model: string, colorId: string, file: '01' | 'thumb' = '01') =>
+export const shoeImage = (model: string, colorId: string, file: '01' | 'thumb' = '01') =>
   `/assets/aistudio/spin/${model}/${colorId}/${file}.webp`;
 
 /** Colores de un producto, con la imagen correspondiente a cada uno. Si se pasan ids, respeta ese orden. */
@@ -107,7 +107,9 @@ const colorVariant = (baseId: string, model: string, colorId: string, codeSuffix
   };
 };
 
-// Catálogo de la demo: 3 modelos + 7 variantes de color (10 productos), intercalados para que no queden juntos.
+// Catálogo incluido en el sitio: 3 modelos + 7 variantes de color (10 productos), intercalados.
+// Es el RESPALDO: el catálogo real se administra en Supabase (tabla `productos`, ver lib/products.ts) y esto solo
+// se muestra si la base de datos no responde. Los datos iniciales de la tabla salieron de esta lista.
 export const PRODUCTS: Product[] = [
   BASE_PRODUCTS[0], // Fútbol Pro 2026
   BASE_PRODUCTS[1], // Air Glow Tech

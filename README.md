@@ -18,7 +18,8 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
 ## Estructura
 
 - Página: Inicio (hero) → Catálogo → Tienda. Las tallas se eligen en la ficha del producto.
-- `src/data/storeData.ts`: productos y datos de la tienda (precios, tallas, contacto).
+- `src/data/storeData.ts`: datos de la tienda (contacto, horario) y el catálogo de RESPALDO (el catálogo real está en Supabase, ver "Administración de productos").
+- `src/lib/products.ts`: lee el catálogo de Supabase. `src/components/admin/`: panel de administración (se carga aparte).
 - `src/data/hero-models.json`: modelos y colores (los usan el hero, el catálogo y el generador de imágenes).
 - `src/data/spin-manifest.json` y `models-manifest.json`: registros que escriben `npm run spin` y `npm run model3d` (no se editan a mano).
 - `src/utils/store.ts`: enlaces de pedido por WhatsApp y horario de atención.
@@ -26,7 +27,7 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
 - `src/components/`: secciones y modales. `SpinViewer.tsx`: visor de ángulos.
 - `archive/spin-src/<modelo>/`: fotos de origen de cada modelo (fuera del build).
 
-## Modelos de la demo
+## Modelos de la demo (catálogo de respaldo)
 
 Fútbol Pro 2026, Air Glow Tech y Chunky Lavender: los tres tienen precio, código, tallas y vistas. El catálogo muestra 10 productos: esos 3 y 7 **variantes de color** (mismo zapato, precio y tallas del modelo base; los códigos de variante son de ejemplo) para que la demo se vea completa. Urban Low y Velocity Silver se retiraron de la demo por no tener aún precio, código ni tallas confirmadas (sus fotos están en el historial de git).
 
@@ -66,6 +67,28 @@ El hero ya trae el visor 3D (`Shoe3D.tsx`, basado en `<model-viewer>`): se gira 
 - **Archivo 3D de la fábrica** (diseño/CAD del modelo): si Punto Original lo tiene, es lo ideal.
 - **Servicios de imagen a 3D con IA** (Tripo, Meshy, Hunyuan3D, Rodin): se suben las vistas de `archive/spin-src/<modelo>/` y se descarga el `.glb`. Es lo más rápido para una demo; la calidad es media y la parte trasera la inventa la IA.
 
+## Administración de productos
+
+El candado junto al botón de WhatsApp abre el **panel de administración**: crear, editar, ocultar, reordenar, duplicar y eliminar productos (nombre, código, precio, etiqueta, descripción, tallas, características, colores, foto y combo). Los cambios se ven al instante en la tienda.
+
+**Seguridad.** El sitio es estático, así que el candado solo abre la pantalla de acceso: quien manda es la base de datos (Supabase).
+- Cualquiera puede *leer* los productos visibles. Para *crear, cambiar, borrar o subir fotos* hay que haber iniciado sesión con una cuenta que figure en la tabla `admins` (reglas RLS + función `es_admin()`). Se comprobó que una cuenta normal, un visitante o alguien con el código del sitio no pueden modificar nada.
+- La tabla `admins` y la función `hacer_admin()` no son accesibles desde internet.
+- Las fotos se guardan en el bucket público `productos` (solo el admin escribe; máx. 1 MB; solo imágenes). El panel las reduce a 900 px y las convierte a WebP antes de subirlas.
+- La sesión vive en la pestaña (se cierra al cerrarla). Los datos tienen validaciones también en el servidor (precio, longitudes, imagen obligatoria).
+
+**Crear la cuenta de administrador (una sola vez):**
+1. Supabase > Authentication > Users > **Add user** > *Create new user*: correo + contraseña larga, con **Auto Confirm User** marcado.
+2. Supabase > Authentication > Sign In / Providers: desactiva **Allow new users to sign up** (nadie más podrá registrarse).
+3. Supabase > SQL Editor: `select public.hacer_admin('tu-correo@ejemplo.com');`
+
+Para quitar a un admin: borrar su fila en la tabla `admins`. Para varios admins, repetir los pasos 1 y 3.
+
+**Qué cubre y qué no.**
+- Cubre todo el catálogo. Un producto puede usar las imágenes de un modelo que ya viene con el sitio (cambian con el color) o una foto propia (se ve igual en todos los colores).
+- No cubre el hero (los 3 modelos con ángulos y 3D) ni los textos legales: eso se cambia en el código. Un modelo nuevo con visor de ángulos requiere `npm run spin`.
+- Si Supabase no responde (por ejemplo, el plan gratuito pausa el proyecto tras 7 días sin actividad), la tienda muestra el catálogo de respaldo de `storeData.ts` y el panel no podrá guardar.
+
 ## Libro de Reclamaciones (Supabase)
 
 - Las hojas se guardan en el proyecto Supabase `chavez-originals` (tabla `reclamaciones`). El número de hoja (`REC-2026-0001`, `QUE-2026-0001`) lo asigna el servidor.
@@ -77,6 +100,7 @@ El hero ya trae el visor 3D (`Shoe3D.tsx`, basado en `<model-viewer>`): se gira 
 
 ## Pendiente de confirmar por el negocio
 
+- Crear la cuenta de administrador (ver "Administración de productos") y desactivar el registro público en Supabase.
 - RUC y correo en `storeData.ts` (marcados con `TODO`).
 - Las imágenes de producto son generadas con IA: confirmar que coinciden con los productos reales (logos, colores, diseño).
 - Los colores son recoloreados digitalmente, no fotos del producto real.

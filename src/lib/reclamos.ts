@@ -1,4 +1,5 @@
 import type { ClaimFormData, ClaimType } from '../utils/claims';
+import { restHeaders, supabaseConfig } from './supabaseConfig';
 
 /**
  * Envío de hojas de reclamación a Supabase (función `registrar_reclamo`).
@@ -20,24 +21,16 @@ export class ReclamoError extends Error {
   }
 }
 
-function config() {
-  const url = (import.meta.env.VITE_SUPABASE_URL as string | undefined)?.replace(/\/+$/, '');
-  const key = import.meta.env.VITE_SUPABASE_KEY as string | undefined;
-  return url && key ? { url, key } : null;
-}
-
-export const reclamosConfigurado = () => config() !== null;
+export const reclamosConfigurado = () => supabaseConfig() !== null;
 
 export async function enviarReclamo(
   type: ClaimType,
   data: ClaimFormData,
   trap = '',
 ): Promise<{ code: string; createdAt: string }> {
-  const cfg = config();
+  const cfg = supabaseConfig();
   if (!cfg) throw new ReclamoError('sin_config');
-
-  const headers: Record<string, string> = { 'Content-Type': 'application/json', apikey: cfg.key };
-  if (cfg.key.startsWith('eyJ')) headers.Authorization = `Bearer ${cfg.key}`; // clave anon clásica (JWT)
+  const headers = restHeaders(cfg.key);
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 15_000);
