@@ -12,3 +12,6 @@ Zapatillas/
 # Caché de recortes (se regenera con npm run spin)
 archive/views-cut/
 
+
+# Modelos 3D originales (pesados): se publican optimizados con npm run model3d
+archive/models-src/

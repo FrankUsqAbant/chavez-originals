@@ -3,6 +3,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import heroSpec from '../data/hero-models.json';
 import { SpinViewer } from './SpinViewer';
 import { useSpinFrames } from '../hooks/useSpinFrames';
+import { useModel3D } from '../hooks/useModel3D';
+import { Shoe3D } from './Shoe3D';
 
 interface HeroSectionProps {
   onExploreCatalog: () => void;
@@ -13,6 +15,8 @@ interface SneakerColorway {
   id: string;
   name: string;
   hex: string;
+  /** Color de la foto original (el modelo 3D no se tiñe). */
+  original?: boolean;
 }
 
 interface HeroModel {
@@ -114,12 +118,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
   const [modelIndex, setModelIndex] = useState(0);
   const [colorIndex, setColorIndex] = useState(0);
   const [viewIndex, setViewIndex] = useState(0); // ángulo elegido; se conserva al cambiar de color
+  const [mode, setMode] = useState<'3d' | 'fotos'>('3d');
+  const [failed3d, setFailed3d] = useState<Record<string, boolean>>({});
 
   const currentModel = HERO_MODELS[modelIndex];
   const colorways = COLORWAYS[currentModel.id];
   const currentColor = colorways[colorIndex] ?? colorways[0];
   // Vistas (perfil, frente, atrás…) o giro 360° con fotos reales, si el modelo las tiene (ver `npm run spin`).
   const spin = useSpinFrames(currentModel.id, currentColor.id);
+  // Modelo 3D (.glb) con giro libre, si el modelo lo tiene (ver `npm run model3d`).
+  const model3d = useModel3D(currentModel.id);
+  const has3d = Boolean(model3d) && !failed3d[currentModel.id];
+  const show3d = has3d && mode === '3d';
 
   // Precarga: primero los colores del modelo activo; el resto, poco después de cargar la página.
   useEffect(() => {
@@ -225,7 +235,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
                 <ModelWatermark key={currentModel.id} text={currentModel.bgName} color={currentColor.hex} />
 
                 <div className="relative z-10 w-full h-full flex items-center justify-center px-6 pt-20 pb-4">
-                  {spin ? (
+                  {show3d && model3d ? (
+                    <Shoe3D
+                      key={currentModel.id}
+                      src={model3d}
+                      poster={heroImage(currentModel.id, currentColor.id)}
+                      alt={`${currentModel.name}, modelo 3D`}
+                      tint={currentColor.original ? null : currentColor.hex}
+                      onError={() => setFailed3d((f) => ({ ...f, [currentModel.id]: true }))}
+                    />
+                  ) : spin ? (
                     <SpinViewer
                       frames={spin.frames}
                       labels={spin.labels}
@@ -257,6 +276,28 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
+
+            {has3d && (
+              <div
+                className="mt-3 inline-flex rounded-full bg-white/[0.04] border border-white/10 p-1 text-xs z-10"
+                role="group"
+                aria-label="Tipo de vista"
+              >
+                {([['3d', '3D 360°'], ['fotos', 'Fotos']] as const).map(([id, label]) => (
+                  <button
+                    key={id}
+                    type="button"
+                    aria-pressed={mode === id}
+                    onClick={() => setMode(id)}
+                    className={`px-3.5 py-1 rounded-full font-semibold transition-colors cursor-pointer ${
+                      mode === id ? 'bg-[#00ff66] text-black' : 'text-gray-300 hover:text-white'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div className="mt-4 flex flex-col sm:flex-row items-center gap-3 z-10">
               <div
