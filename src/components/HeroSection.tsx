@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import heroSpec from '../data/hero-models.json';
 
 interface HeroSectionProps {
   onExploreCatalog: () => void;
@@ -9,8 +10,7 @@ interface HeroSectionProps {
 interface SneakerColorway {
   id: string;
   name: string;
-  colorHex: string;
-  shoeStyle: string;
+  hex: string;
 }
 
 interface HeroModel {
@@ -20,9 +20,16 @@ interface HeroModel {
   bgName: string;
   kicker: string;
   description: string;
-  image: string;
-  colorways: SneakerColorway[];
 }
+
+/** Colores de cada modelo: viven en hero-models.json, que también usa scripts/build-hero-assets.mjs. */
+const COLORWAYS = Object.fromEntries(
+  Object.entries(heroSpec).map(([id, m]) => [id, m.colorways as SneakerColorway[]]),
+) as Record<string, SneakerColorway[]>;
+
+/** Una imagen real por modelo y color (generadas con `npm run hero`). */
+const heroImage = (modelId: string, colorId: string) =>
+  `/assets/aistudio/hero/${modelId}-${colorId}.webp`;
 
 const HERO_MODELS: HeroModel[] = [
   {
@@ -32,14 +39,6 @@ const HERO_MODELS: HeroModel[] = [
     bgName: 'FÚTBOL PRO',
     kicker: 'ALTA COMPETENCIA · MODELO OFICIAL 2026',
     description: 'Chimpún de alta competencia con tecnología de tracción dinámica para césped y losa, capellada microtexturizada y tobillera de ajuste anatómico.',
-    image: '/assets/aistudio/punto_cleat_isolated.webp',
-    colorways: [
-      { id: 'red', name: 'Rojo Furia', colorHex: '#e51e2b', shoeStyle: 'filter-none' },
-      { id: 'neon-green', name: 'Verde Chavez', colorHex: '#00ff66', shoeStyle: 'hue-rotate-[95deg] saturate-[1.65]' },
-      { id: 'mint', name: 'Menta Glow', colorHex: '#6ee7b7', shoeStyle: 'hue-rotate-[135deg] saturate-[1.3] brightness-110' },
-      { id: 'white', name: 'Blanco Lunar', colorHex: '#f8fafc', shoeStyle: 'grayscale brightness-[1.6] contrast-[1.1]' },
-      { id: 'black', name: 'Negro Stealth', colorHex: '#18181b', shoeStyle: 'grayscale brightness-[0.45] contrast-[1.3]' },
-    ],
   },
   {
     id: 'urban-low',
@@ -48,13 +47,6 @@ const HERO_MODELS: HeroModel[] = [
     bgName: 'URBAN LOW',
     kicker: 'LÍNEA STREETWEAR · MINIMALISTA',
     description: 'Silueta urbana de perfil bajo y líneas limpias. Cuero sintético reforzado de alta durabilidad con suela cosida antideslizante para el día a día.',
-    image: '/assets/aistudio/hero_model_urban_low.webp',
-    colorways: [
-      { id: 'urban-white', name: 'Blanco Original', colorHex: '#f8fafc', shoeStyle: 'filter-none' },
-      { id: 'urban-emerald', name: 'Verde Glow', colorHex: '#00ff66', shoeStyle: 'hue-rotate-[90deg] saturate-[1.5]' },
-      { id: 'urban-silver', name: 'Plata Urbano', colorHex: '#94a3b8', shoeStyle: 'grayscale contrast-125' },
-      { id: 'urban-dark', name: 'Negro Obsidiana', colorHex: '#18181b', shoeStyle: 'brightness-50 contrast-125' },
-    ],
   },
   {
     id: 'air-glow-tech',
@@ -63,13 +55,6 @@ const HERO_MODELS: HeroModel[] = [
     bgName: 'AIR GLOW',
     kicker: 'CÁPSULA AIR TECH · AMORTIGUACIÓN',
     description: 'Amortiguación reactiva con cámara de aire visible y refuerzos aerodinámicos. Absorción superior de impacto pensada para máxima energía.',
-    image: '/assets/aistudio/hero_model_air_glow_tech.webp',
-    colorways: [
-      { id: 'air-white', name: 'Blanco & Plata', colorHex: '#e2e8f0', shoeStyle: 'filter-none' },
-      { id: 'air-emerald', name: 'Esmeralda Chavez', colorHex: '#00ff66', shoeStyle: 'hue-rotate-[85deg] saturate-[1.5]' },
-      { id: 'air-crimson', name: 'Carmesí Dynamic', colorHex: '#ef4444', shoeStyle: 'hue-rotate-[240deg] saturate-[1.4]' },
-      { id: 'air-stealth', name: 'Negro Monocromo', colorHex: '#18181b', shoeStyle: 'grayscale brightness-60 contrast-130' },
-    ],
   },
   {
     id: 'chunky-lavender',
@@ -78,13 +63,6 @@ const HERO_MODELS: HeroModel[] = [
     bgName: 'CHUNKY',
     kicker: 'LÍNEA STREETWEAR · PLATAFORMA EVA',
     description: 'Diseño audaz con plataforma chunky ultraligera de polímero EVA. Estructura anatómica que ofrece altura, comodidad y presencia imponente.',
-    image: '/assets/aistudio/hero_model_chunky_lavender.webp',
-    colorways: [
-      { id: 'chunky-lav', name: 'Lavanda & Crema', colorHex: '#d8b4e2', shoeStyle: 'filter-none' },
-      { id: 'chunky-mint', name: 'Menta Fresco', colorHex: '#a7f3d0', shoeStyle: 'hue-rotate-[110deg] saturate-[1.3]' },
-      { id: 'chunky-pure', name: 'Blanco Total', colorHex: '#f8fafc', shoeStyle: 'brightness-110 contrast-105' },
-      { id: 'chunky-smoke', name: 'Gris Grafito', colorHex: '#475569', shoeStyle: 'grayscale brightness-75 contrast-120' },
-    ],
   },
   {
     id: 'velocity-silver',
@@ -93,15 +71,59 @@ const HERO_MODELS: HeroModel[] = [
     bgName: 'VELOCITY',
     kicker: 'LÍNEA SPORT ACTIVE · VELOCIDAD',
     description: 'Zapatilla multideportiva ultraligera con malla transpirable antidesgarro y suela de tracción multidireccional para respuesta inmediata.',
-    image: '/assets/aistudio/hero_model_velocity_silver.webp',
-    colorways: [
-      { id: 'velocity-silver', name: 'Plata Metálico', colorHex: '#cbd5e1', shoeStyle: 'filter-none' },
-      { id: 'velocity-green', name: 'Verde Neón', colorHex: '#00ff66', shoeStyle: 'hue-rotate-[90deg] saturate-[1.6]' },
-      { id: 'velocity-blue', name: 'Azul Polar', colorHex: '#38bdf8', shoeStyle: 'hue-rotate-[180deg] saturate-[1.3]' },
-      { id: 'velocity-black', name: 'Negro Titanio', colorHex: '#0f172a', shoeStyle: 'grayscale brightness-50 contrast-130' },
-    ],
   },
 ];
+
+/* ------------------------- Nombre del modelo al fondo ------------------------- */
+
+const isDark = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  const lum = (0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
+  return lum < 0.3;
+};
+
+const WATERMARK_WIDTH = 900;
+
+/**
+ * Nombre del modelo en letras grandes detrás de la zapatilla.
+ * Se ajusta al ancho del escenario (nunca se corta) y toma el tono del color elegido:
+ * relleno suave + contorno definido, para que se lea sin competir con el producto.
+ */
+const ModelWatermark: React.FC<{ text: string; color: string }> = ({ text, color }) => {
+  const fontSize = Math.min(250, WATERMARK_WIDTH / (text.length * 0.7));
+  const tint = isDark(color) ? '#ffffff' : color;
+
+  return (
+    <svg
+      viewBox="0 0 1000 340"
+      className="absolute left-1/2 top-[3%] w-[112%] -translate-x-1/2 pointer-events-none select-none z-0 animate-in"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <text
+        x="500"
+        y={170 + fontSize * 0.35}
+        textAnchor="middle"
+        textLength={WATERMARK_WIDTH}
+        lengthAdjust="spacingAndGlyphs"
+        fontSize={fontSize}
+        fontWeight={800}
+        fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
+        fill={tint}
+        fillOpacity={0.1}
+        stroke={tint}
+        strokeOpacity={0.34}
+        strokeWidth={2}
+        strokeLinejoin="round"
+        style={{ transition: 'fill 300ms ease, stroke 300ms ease' }}
+      >
+        {text}
+      </text>
+    </svg>
+  );
+};
+
+/* ---------------------------------- Hero ---------------------------------- */
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onExploreCatalog,
@@ -116,33 +138,31 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const startAngleRef = useRef(0);
 
   const currentModel = HERO_MODELS[modelIndex];
-  const currentColor = currentModel.colorways[colorIndex] || currentModel.colorways[0];
+  const colorways = COLORWAYS[currentModel.id];
+  const currentColor = colorways[colorIndex] ?? colorways[0];
 
-  // Navigate to Next model (manual user trigger only)
-  const handleNext = () => {
-    setModelIndex((prev) => (prev + 1) % HERO_MODELS.length);
+  // Precarga: primero los colores del modelo activo; el resto, poco después de cargar la página.
+  useEffect(() => {
+    const load = (modelId: string) =>
+      COLORWAYS[modelId].forEach((c) => {
+        const img = new Image();
+        img.src = heroImage(modelId, c.id);
+      });
+    load(currentModel.id);
+    const t = window.setTimeout(() => HERO_MODELS.forEach((m) => load(m.id)), 1500);
+    return () => window.clearTimeout(t);
+  }, [currentModel.id]);
+
+  const goToModel = (index: number) => {
+    setModelIndex((index + HERO_MODELS.length) % HERO_MODELS.length);
     setColorIndex(0);
     setRotationAngle(0);
   };
 
-  // Navigate to Previous model (manual user trigger only)
-  const handlePrev = () => {
-    setModelIndex((prev) => (prev - 1 + HERO_MODELS.length) % HERO_MODELS.length);
-    setColorIndex(0);
-    setRotationAngle(0);
-  };
-
-  // Select a specific model tab
-  const handleSelectModel = (index: number) => {
-    setModelIndex(index);
-    setColorIndex(0);
-    setRotationAngle(0);
-  };
-
-  // Select a specific colorway
-  const handleSelectColor = (index: number) => {
-    setColorIndex(index);
-  };
+  const handleNext = () => goToModel(modelIndex + 1);
+  const handlePrev = () => goToModel(modelIndex - 1);
+  const handleSelectModel = (index: number) => goToModel(index);
+  const handleSelectColor = (index: number) => setColorIndex(index);
 
   // Drag interaction for 360° interactive rotation
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -154,8 +174,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging) return;
     const deltaX = e.clientX - startXRef.current;
-    const newAngle = (startAngleRef.current + deltaX * 0.8) % 360;
-    setRotationAngle(newAngle);
+    setRotationAngle((startAngleRef.current + deltaX * 0.8) % 360);
   };
 
   const handleMouseUp = () => {
@@ -171,8 +190,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging) return;
     const deltaX = e.touches[0].clientX - startXRef.current;
-    const newAngle = (startAngleRef.current + deltaX * 0.8) % 360;
-    setRotationAngle(newAngle);
+    setRotationAngle((startAngleRef.current + deltaX * 0.8) % 360);
   };
 
   const handleTouchEnd = () => {
@@ -190,10 +208,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          
+
           {/* Left Column: Clean, confident typography with dynamic model awareness */}
           <div className="lg:col-span-5 space-y-6 z-10 text-left">
-            
+
             {/* Dynamic model kicker */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[#00ff66] text-xs font-semibold">
               <span className="w-2 h-2 rounded-full bg-[#00ff66] animate-pulse" />
@@ -233,9 +251,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* Right Column: 5 Models Exhibition Showcase with Background Model Name Watermark */}
+          {/* Right Column: modelos con nombre al fondo y color seleccionable */}
           <div className="lg:col-span-7 relative flex flex-col items-center justify-center">
-            
+
             {/* Top 5 Model Switcher Tabs (Manual) */}
             <div className="w-full flex items-center justify-center gap-2 mb-4 overflow-x-auto pb-1 scrollbar-none">
               {HERO_MODELS.map((m, idx) => {
@@ -245,6 +263,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     key={m.id}
                     type="button"
                     onClick={() => handleSelectModel(idx)}
+                    aria-pressed={isSelected}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 cursor-pointer whitespace-nowrap ${
                       isSelected
                         ? 'bg-emerald-500/20 border border-[#00ff66] text-[#00ff66]'
@@ -257,10 +276,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               })}
             </div>
 
-            {/* Main Stage with Left and Right Navigation Arrows and Background Name Watermark */}
+            {/* Main Stage with Left and Right Navigation Arrows */}
             <div className="relative w-full max-w-[520px] flex items-center justify-center">
-              
-              {/* Refined Prev Arrow Button */}
+
               <button
                 type="button"
                 onClick={handlePrev}
@@ -273,21 +291,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
               {/* Showcase Stage & Rotatable Sneaker */}
               <div className="relative w-full aspect-square max-w-[440px] flex items-center justify-center">
-                
-                {/* 1. MODEL NAME WATERMARK BEHIND THE SNEAKER (Parte de atrás del modelo sin quitar protagonismo) */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden">
-                  <span
-                    key={currentModel.bgName}
-                    className="text-[64px] sm:text-[90px] lg:text-[104px] font-black uppercase tracking-tight text-white/[0.045] leading-none text-center select-none whitespace-nowrap transition-all duration-500 ease-out"
-                    style={{
-                      fontFamily: 'system-ui, -apple-system, sans-serif',
-                      letterSpacing: '-0.04em',
-                      textShadow: '0 0 80px rgba(0, 255, 102, 0.05)',
-                    }}
-                  >
-                    {currentModel.bgName}
-                  </span>
-                </div>
+
+                {/* 1. Nombre del modelo detrás de la zapatilla */}
+                <ModelWatermark key={currentModel.id} text={currentModel.bgName} color={currentColor.hex} />
 
                 {/* 2. Soft studio lighting behind shoe */}
                 <div className="absolute inset-8 rounded-full bg-radial from-emerald-500/10 via-transparent to-transparent blur-2xl pointer-events-none z-0" />
@@ -304,24 +310,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
                   className="relative z-10 cursor-grab active:cursor-grabbing select-none w-full h-full flex items-center justify-center"
-                  style={{
-                    perspective: '1000px',
-                  }}
+                  style={{ perspective: '1000px' }}
                 >
                   <div
-                    key={`${currentModel.id}-${currentColor.id}`}
-                    className="relative w-full h-full flex items-center justify-center p-6 transition-transform duration-100 ease-out animate-in fade-in zoom-in-95 duration-300"
+                    className="relative w-full h-full flex items-center justify-center px-6 pt-20 pb-4 transition-transform duration-100 ease-out"
                     style={{
                       transform: `rotateY(${rotationAngle}deg) rotateZ(-3deg)`,
                       transformStyle: 'preserve-3d',
                     }}
                   >
                     <img
-                      src={currentModel.image}
-                      alt={currentModel.name}
+                      key={`${currentModel.id}-${currentColor.id}`}
+                      src={heroImage(currentModel.id, currentColor.id)}
+                      alt={`${currentModel.name}, color ${currentColor.name}`}
                       fetchPriority="high"
                       decoding="async"
-                      className={`max-w-[92%] max-h-[92%] object-contain pointer-events-none select-none ${currentColor.shoeStyle} transition-all duration-300 drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]`}
+                      className="max-w-[92%] max-h-[92%] object-contain pointer-events-none select-none animate-in drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]"
                       draggable={false}
                     />
                   </div>
@@ -331,7 +335,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-52 h-3.5 rounded-[100%] bg-black/70 blur-md pointer-events-none z-0" />
               </div>
 
-              {/* Refined Next Arrow Button */}
               <button
                 type="button"
                 onClick={handleNext}
@@ -345,20 +348,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             {/* Clean Colorway Picker with Active Color Name */}
             <div className="mt-4 flex flex-col sm:flex-row items-center gap-3 z-10">
-              <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-sm">
-                {currentModel.colorways.map((c, idx) => {
+              <div
+                className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-sm"
+                role="group"
+                aria-label="Color de la zapatilla"
+              >
+                {colorways.map((c, idx) => {
                   const isActive = colorIndex === idx;
                   return (
                     <button
                       key={c.id}
                       type="button"
                       onClick={() => handleSelectColor(idx)}
-                      className={`w-5 h-5 rounded-full transition-all duration-200 cursor-pointer ${
+                      aria-pressed={isActive}
+                      className={`w-5 h-5 rounded-full border border-white/20 transition-all duration-200 cursor-pointer ${
                         isActive
                           ? 'ring-2 ring-[#00ff66] ring-offset-2 ring-offset-[#070b09] scale-110'
-                          : 'opacity-50 hover:opacity-100'
+                          : 'opacity-60 hover:opacity-100'
                       }`}
-                      style={{ backgroundColor: c.colorHex }}
+                      style={{ backgroundColor: c.hex }}
                       aria-label={`Color ${c.name}`}
                       title={c.name}
                     />
@@ -366,7 +374,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 })}
               </div>
 
-              {/* Active Color Name Badge */}
               <span className="text-xs font-semibold text-gray-300 px-3 py-1 rounded-full bg-white/5 border border-white/5">
                 {currentColor.name}
               </span>
@@ -401,5 +408,3 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     </section>
   );
 };
-
-

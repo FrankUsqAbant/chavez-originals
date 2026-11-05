@@ -12,6 +12,15 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
 | `npm run lint` | Chequeo de tipos |
 | `npm test` | Tests de la lógica de negocio |
 | `npm run images` | Convierte imágenes de `archive/originals` a WebP en `public/assets/aistudio` |
+| `npm run hero` | Genera una imagen por modelo y color del hero en `public/assets/aistudio/hero` (agrega `-- --sheet` para una hoja de revisión en `archive/work`) |
+
+## Zapatillas del hero
+
+- Cada color es una imagen real (recoloreada con `scripts/build-hero-assets.mjs`), no un filtro CSS.
+- Modelos y colores se definen en `src/data/hero-models.json`; el script y el componente lo comparten.
+- Las fuentes son recortes con fondo transparente en `archive/hero-src/`. Para sumar un modelo: recorta la foto
+  (ver `scripts/cutout-hero.mjs`), guarda el PNG en `archive/hero-src/`, agrégalo al JSON y corre `npm run hero`.
+- Fotos de origen de baja resolución (Urban Low, Air Glow Tech, Chunky Lavender) se ven mejor con fotos de estudio nuevas.
 
 ## Estructura
 
