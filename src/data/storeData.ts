@@ -115,23 +115,6 @@ export const PRODUCTS: Product[] = [
       'Respuesta inmediata en cada paso',
     ],
   },
-  {
-    id: 'stealth-runner',
-    name: 'Punto Original Stealth Runner',
-    code: 'STH-2026-BLK',
-    price: 159.0,
-    image: shoeImage('stealth-runner', 'black'),
-    badge: 'HIGH PERFORMANCE',
-    description: 'Silueta aerodinámica monocromo con suela esculpida de polímero EVA y capellada transpirable.',
-    sizes: [38, 39, 40, 41, 42, 43, 44],
-    colors: colorsFor('stealth-runner'),
-    features: [
-      'Malla técnica transpirable de alta resistencia',
-      'Suela amortiguada con agarre antideslizante',
-      'Diseño ultra ligero para máximo rendimiento',
-      'Plantilla acolchada anti-fatiga',
-    ],
-  },
 ];
 
 export const STORE_INFO = {

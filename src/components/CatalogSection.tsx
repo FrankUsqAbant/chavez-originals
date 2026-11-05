@@ -20,11 +20,11 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({ onSelectProductM
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
           {PRODUCTS.map((product) => (
             <article
               key={product.id}
-              className="group rounded-3xl bg-[#090f0c] border border-white/10 hover:border-emerald-500/40 p-6 flex flex-col transition-colors duration-300"
+              className="group w-full md:w-[calc((100%-2rem)/2)] lg:w-[calc((100%-4rem)/3)] rounded-3xl bg-[#090f0c] border border-white/10 hover:border-emerald-500/40 p-6 flex flex-col transition-colors duration-300"
             >
               <button
                 type="button"
