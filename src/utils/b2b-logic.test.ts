@@ -37,6 +37,13 @@ describe('generateWhatsAppOrderLink', () => {
     expect(url.startsWith('https://wa.me/51918902447?text=')).toBe(true);
     expect(decodeURIComponent(url)).not.toContain('Talla');
   });
+
+  it('omite el código cuando el producto no lo tiene', () => {
+    const url = generateWhatsAppOrderLink({ phone: '918902447', modelName: 'Punto Original Urban Low', size: 41 });
+    const text = decodeURIComponent(url);
+    expect(text).toContain('Punto Original Urban Low');
+    expect(text).not.toContain('Cód');
+  });
 });
 
 describe('claims', () => {

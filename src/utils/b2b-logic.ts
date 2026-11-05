@@ -9,7 +9,7 @@ export function formatPeruvianCurrency(amount: number): string {
 
 export interface WhatsAppOrderParams {
   phone: string; // e.g., '918902447'
-  modelCode: string;
+  modelCode?: string;
   modelName: string;
   size?: number | string;
   color?: string;
@@ -24,7 +24,7 @@ export function generateWhatsAppOrderLink(params: WhatsAppOrderParams): string {
   const lines = [
     `⚡ *NUEVO PEDIDO - CHAVEZ ORIGINALS*`,
     `--------------------------------------`,
-    `👟 *Producto:* ${params.modelName} (Cód: ${params.modelCode})`,
+    `👟 *Producto:* ${params.modelName}${params.modelCode ? ` (Cód: ${params.modelCode})` : ''}`,
     params.color ? `🎨 *Color:* ${params.color}` : '',
     params.size ? `📏 *Talla:* ${params.size}` : '',
     params.comboIncluded ? `🎁 *Promoción:* Combo Gratis (Mochila + Canilleras + Medias 3/4)` : '',

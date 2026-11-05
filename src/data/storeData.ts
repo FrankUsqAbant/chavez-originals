@@ -16,24 +16,28 @@ const colorsFor = (model: string, ids?: string[]) => {
 export interface Product {
   id: string;
   name: string;
-  code: string;
-  category: 'futbol' | 'urbano' | 'combo';
-  price: number;
+  /** Código interno. Opcional: si falta, el pedido de WhatsApp no lo incluye. */
+  code?: string;
+  /** Precio en soles. Si falta, la tienda muestra "Consultar precio". */
+  price?: number;
   image: string;
   badge?: string;
   description: string;
   sizes: number[];
   colors: { name: string; hex: string; previewImage?: string }[];
   features: string[];
+  /** El pedido de WhatsApp menciona la promoción de mochila + canilleras + medias. */
+  comboIncluded?: boolean;
 }
 
+// Un producto por modelo, en el mismo orden y con los mismos nombres que el hero.
+// TODO: confirmar precios, tallas y características de Urban Low y Velocity Silver (sin precio todavía).
 export const PRODUCTS: Product[] = [
   {
-    id: 'chavez-futbol-em0099',
+    id: 'futbol-pro',
     name: 'Punto Original Fútbol Pro 2026',
     code: 'EM0099-M9',
-    category: 'futbol',
-    price: 189.00,
+    price: 189.0,
     image: shoeImage('futbol-pro', 'red'),
     badge: 'ALTA COMPETENCIA',
     description: 'Chimpún de alto rendimiento con tecnología de agarre dinámico y capellada microtexturizada para máxima precisión.',
@@ -45,31 +49,45 @@ export const PRODUCTS: Product[] = [
       'Capellada micro-nervada para golpeo preciso',
       'Incluye gratis: Mochila + Canilleras + Medias 3/4',
     ],
+    comboIncluded: true,
   },
   {
-    id: 'combo-campo-pro',
-    name: 'Combo Campo: Chimpún + Accesorios',
-    code: 'CMB-CAMPO-01',
-    category: 'combo',
-    price: 189.00,
-    image: shoeImage('futbol-pro', 'neon-green'),
-    badge: 'COMBO COMPLETO',
-    description: 'Chimpún oficial Punto Original acompañado de mochila deportiva, canilleras protectoras y medias de compresión 3/4.',
+    id: 'urban-low',
+    name: 'Punto Original Urban Low',
+    image: shoeImage('urban-low', 'urban-white'),
+    badge: 'LÍNEA STREETWEAR',
+    description: 'Silueta urbana de perfil bajo y líneas limpias. Cuero sintético reforzado de alta durabilidad con suela cosida antideslizante para el día a día.',
     sizes: [38, 39, 40, 41, 42, 43, 44],
-    colors: colorsFor('futbol-pro', ['neon-green', 'red']),
+    colors: colorsFor('urban-low'),
     features: [
-      '1x Chimpunes de alta competencia',
-      '1x Mochila deportiva Punto Original reforzada',
-      '1x Par de Canilleras ergonómicas de alto impacto',
-      '1x Par de Medias 3/4 de alto rendimiento',
+      'Perfil bajo y líneas limpias',
+      'Cuero sintético reforzado de alta durabilidad',
+      'Suela cosida antideslizante',
+      'Ideal para el día a día',
     ],
   },
   {
-    id: 'urbana-chavez-street',
-    name: 'Punto Original Urban Chunky',
+    id: 'air-glow-tech',
+    name: 'Punto Original Air Glow Tech',
+    code: 'URB-AIR-026',
+    price: 179.0,
+    image: shoeImage('air-glow-tech', 'air-white'),
+    badge: 'CÁPSULA AIR TECH',
+    description: 'Cápsula de amortiguación translúcida verde esmeralda y suela esculpida para máximo confort durante el día.',
+    sizes: [39, 40, 41, 42, 43, 44],
+    colors: colorsFor('air-glow-tech'),
+    features: [
+      'Cámara de amortiguación visible con soporte elástico',
+      'Material sintético transpirable anti-desgarro',
+      'Plantilla ortopédica ergonómica memory foam',
+      'Ideal para uso casual, universidad y entrenamiento ligero',
+    ],
+  },
+  {
+    id: 'chunky-lavender',
+    name: 'Punto Original Chunky Lavender',
     code: 'URB-2026-CH',
-    category: 'urbano',
-    price: 169.00,
+    price: 169.0,
     image: shoeImage('chunky-lavender', 'chunky-lav'),
     badge: 'LÍNEA STREETWEAR',
     description: 'Zapatilla urbana de plataforma chunky ultraligera con amortiguación de cámara de aire y tonos tierra.',
@@ -83,29 +101,25 @@ export const PRODUCTS: Product[] = [
     ],
   },
   {
-    id: 'urbana-chavez-air-glow',
-    name: 'Punto Original Air Glow',
-    code: 'URB-AIR-026',
-    category: 'urbano',
-    price: 179.00,
-    image: shoeImage('air-glow-tech', 'air-white'),
-    badge: 'CÁPSULA AIR TECH',
-    description: 'Cápsula de amortiguación translúcida verde esmeralda y suela esculpida para máximo confort durante el día.',
-    sizes: [39, 40, 41, 42, 43, 44],
-    colors: colorsFor('air-glow-tech'),
+    id: 'velocity-silver',
+    name: 'Punto Original Velocity Silver',
+    image: shoeImage('velocity-silver', 'velocity-silver'),
+    badge: 'SPORT ACTIVE',
+    description: 'Zapatilla multideportiva ultraligera con malla transpirable antidesgarro y suela de tracción multidireccional para respuesta inmediata.',
+    sizes: [38, 39, 40, 41, 42, 43, 44],
+    colors: colorsFor('velocity-silver'),
     features: [
-      'Cámara de amortiguación visible con soporte elástico',
-      'Material sintético transpirable anti-desgarre',
-      'Plantilla ortopédica ergonómica memory foam',
-      'Ideal para uso casual, universidad y entrenamiento ligero',
+      'Malla transpirable antidesgarro',
+      'Suela de tracción multidireccional',
+      'Ultraligera y multideportiva',
+      'Respuesta inmediata en cada paso',
     ],
   },
   {
-    id: 'urbana-stealth-runner',
+    id: 'stealth-runner',
     name: 'Punto Original Stealth Runner',
     code: 'STH-2026-BLK',
-    category: 'urbano',
-    price: 159.00,
+    price: 159.0,
     image: shoeImage('stealth-runner', 'black'),
     badge: 'HIGH PERFORMANCE',
     description: 'Silueta aerodinámica monocromo con suela esculpida de polímero EVA y capellada transpirable.',

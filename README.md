@@ -34,7 +34,9 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
 
 ## Pendiente de confirmar por el negocio
 
-- RUC, premios, patrocinio, correo y Facebook en `storeData.ts` (marcados con `TODO`).
+- RUC y correo en `storeData.ts` (marcados con `TODO`).
+- Precios, tallas y características de Urban Low y Velocity Silver (hoy muestran "Consultar precio" con tallas 38–44 supuestas).
 - Guardado real del Libro de Reclamaciones (hoy se envÃ­a por WhatsApp y se guarda una copia en el navegador).
 - Fotos reales por color: los colores del hero son recoloreados digitalmente, no fotos del producto real.
+
 

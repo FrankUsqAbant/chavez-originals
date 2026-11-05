@@ -33,7 +33,7 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
       modelName: product.name,
       size: selectedSize,
       color: selectedColor || undefined,
-      comboIncluded: product.category === 'combo',
+      comboIncluded: product.comboIncluded,
       notes: 'Solicito confirmación de disponibilidad para compra directa o envío a provincia.',
     });
     window.open(link, '_blank', 'noopener,noreferrer');
@@ -78,9 +78,11 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
 
           <div className="space-y-4">
             <div>
-              <div className="text-xs font-mono text-[#00ff66] uppercase tracking-wider">
-                CÓDIGO: {product.code}
-              </div>
+              {product.code && (
+                <div className="text-xs font-mono text-[#00ff66] uppercase tracking-wider">
+                  CÓDIGO: {product.code}
+                </div>
+              )}
               <h3
                 id="product-modal-title"
                 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white mt-1"
@@ -156,9 +158,9 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
 
             <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-4">
               <div>
-                <span className="text-xs text-gray-400 block">Precio Oficial</span>
+                <span className="text-xs text-gray-400 block">Precio</span>
                 <span className="text-2xl sm:text-3xl font-black text-[#00ff66]">
-                  {formatPeruvianCurrency(product.price)}
+                  {product.price !== undefined ? formatPeruvianCurrency(product.price) : 'Consultar'}
                 </span>
               </div>
 
