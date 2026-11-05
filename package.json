@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "chavez-originals",
   "private": true,
   "version": "1.0.0",
@@ -11,7 +11,8 @@
     "lint": "tsc --noEmit",
     "test": "vitest run",
     "images": "node scripts/optimize-images.mjs",
-    "hero": "node scripts/build-hero-assets.mjs"
+    "hero": "node scripts/build-hero-assets.mjs",
+    "spin": "node scripts/build-spin-assets.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -32,3 +33,4 @@
     "vitest": "^5.1.0"
   }
 }
+

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import heroSpec from '../data/hero-models.json';
+import { SpinViewer } from './SpinViewer';
+import { useSpinFrames } from '../hooks/useSpinFrames';
 
 interface HeroSectionProps {
   onExploreCatalog: () => void;
@@ -129,6 +131,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
   const currentModel = HERO_MODELS[modelIndex];
   const colorways = COLORWAYS[currentModel.id];
   const currentColor = colorways[colorIndex] ?? colorways[0];
+  // Giro 360° con fotos reales, si el modelo tiene secuencia (ver `npm run spin`).
+  const spinFrames = useSpinFrames(currentModel.id, currentColor.id);
 
   // Precarga: primero los colores del modelo activo; el resto, poco después de cargar la página.
   useEffect(() => {
@@ -233,15 +237,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
                 <ModelWatermark key={currentModel.id} text={currentModel.bgName} color={currentColor.hex} />
 
                 <div className="relative z-10 w-full h-full flex items-center justify-center px-6 pt-20 pb-4">
-                  <img
-                    key={`${currentModel.id}-${currentColor.id}`}
-                    src={heroImage(currentModel.id, currentColor.id)}
-                    alt={`${currentModel.name}, color ${currentColor.name}`}
-                    fetchPriority="high"
-                    decoding="async"
-                    className="max-w-[92%] max-h-[92%] object-contain -rotate-3 select-none animate-in drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]"
-                    draggable={false}
-                  />
+                  {spinFrames ? (
+                    <SpinViewer
+                      key={`${currentModel.id}-${currentColor.id}`}
+                      frames={spinFrames}
+                      alt={`${currentModel.name}, color ${currentColor.name}`}
+                    />
+                  ) : (
+                    <img
+                      key={`${currentModel.id}-${currentColor.id}`}
+                      src={heroImage(currentModel.id, currentColor.id)}
+                      alt={`${currentModel.name}, color ${currentColor.name}`}
+                      fetchPriority="high"
+                      decoding="async"
+                      className="max-w-[92%] max-h-[92%] object-contain -rotate-3 select-none animate-in drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]"
+                      draggable={false}
+                    />
+                  )}
                 </div>
               </div>
 

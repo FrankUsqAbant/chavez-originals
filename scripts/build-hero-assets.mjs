@@ -3,100 +3,31 @@
 //   spec    : src/data/hero-models.json
 //   salida  : public/assets/aistudio/hero/<modelo>-<color>.webp
 // Uso: npm run hero   (agrega --sheet para generar archive/work/hero-sheet.jpg de revisión)
-import { mkdirSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
+import { hex2rgb, rgb2hsl, recolorAccent, recolorBody } from './lib/recolor.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const SRC = path.join(root, 'archive', 'hero-src');
 const OUT = path.join(root, 'public', 'assets', 'aistudio', 'hero');
 const spec = JSON.parse(readFileSync(path.join(root, 'src', 'data', 'hero-models.json'), 'utf8'));
-const MAX_WIDTH = 1000;
-
-/* ------------------------------ color helpers ------------------------------ */
-const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
-const smooth = (e0, e1, x) => {
-  const t = clamp((x - e0) / (e1 - e0));
-  return t * t * (3 - 2 * t);
-};
-const hex2rgb = (hex) => {
-  const n = parseInt(hex.slice(1), 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-};
-function rgb2hsl(r, g, b) {
-  r /= 255; g /= 255; b /= 255;
-  const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
-  const l = (mx + mn) / 2;
-  const d = mx - mn;
-  let h = 0, s = 0;
-  if (d > 0) {
-    s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
-    if (mx === r) h = (g - b) / d + (g < b ? 6 : 0);
-    else if (mx === g) h = (b - r) / d + 2;
-    else h = (r - g) / d + 4;
-    h /= 6;
-  }
-  return [h, s, l];
-}
-function hsl2rgb(h, s, l) {
-  if (s === 0) { const v = Math.round(l * 255); return [v, v, v]; }
-  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-  const p = 2 * l - q;
-  const f = (t) => {
-    if (t < 0) t += 1;
-    if (t > 1) t -= 1;
-    if (t < 1 / 6) return p + (q - p) * 6 * t;
-    if (t < 1 / 2) return q;
-    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-    return p;
-  };
-  return [f(h + 1 / 3), f(h), f(h - 1 / 3)].map((v) => Math.round(clamp(v) * 255));
-}
-const mix = (a, b, w) => [0, 1, 2].map((i) => Math.round(a[i] + (b[i] - a[i]) * w));
-
-/* ------------------------------ recolor modes ------------------------------ */
-// "body": zapatos blancos/plata/crema. Se recolorea todo lo neutro (poco saturado)
-// y se respetan los acentos saturados (azul marino, verde, morado...).
-function recolorBody(px, [th, ts, tl], toneLow = 0.5) {
-  const [, s, l] = rgb2hsl(...px);
-  const w = 1 - smooth(0.2, 0.42, s);
-  if (w < 0.01) return px;
-  // u: posición del píxel dentro del rango tonal real del zapato (sombra 0 → brillo 1).
-  // Estirar ese rango es lo que conserva el volumen al cambiar de color.
-  // toneLow: lightness de las sombras del modelo (más bajo en fotos más oscuras).
-  const u = clamp((l - toneLow) / (1 - toneLow), 0, 1);
-  let nl, ns;
-  if (tl < 0.3) { nl = tl * 0.6 + 0.3 * Math.pow(u, 1.5); ns = Math.min(ts, 0.25); }         // oscuros
-  else if (tl > 0.88) { nl = 0.55 + 0.42 * Math.pow(l, 1.4); ns = 0.04; }                  // blanco
-  else {                                                                                     // color
-    // Los colores claros (pasteles) necesitan un piso de luminosidad más alto para no verse saturados.
-    const floor = 0.4 + 0.4 * smooth(0.55, 0.8, tl);
-    nl = tl * (floor + (1.1 - floor) * Math.pow(u, 1.2));
-    nl += (1 - nl) * 0.3 * smooth(0.85, 1, u);                                               // brillo especular
-    ns = ts * (1 - 0.35 * smooth(0.75, 1, nl));
-  }
-  return mix(px, hsl2rgb(th, ns, nl), w);
-}
-
-// "accent": el color del modelo está en las partes rojas (chimpún rojo y negro).
-function recolorAccent(px, [th, ts, tl]) {
-  const [h, s, l] = rgb2hsl(...px);
-  const redDist = Math.min(h, 1 - h);
-  const w = smooth(0.12, 0.38, s) * (1 - smooth(0.1, 0.17, redDist));
-  if (w < 0.01) return px;
-  let ns, nl;
-  if (tl > 0.88) { ns = 0.05; nl = clamp(0.45 + l * 0.95, 0, 0.97); }
-  else if (tl < 0.3) { ns = 0.06; nl = l * 0.28 + 0.02; }
-  else { ns = clamp(s * (ts / 0.8), 0, 1); nl = clamp(l * (tl / 0.5), 0, 0.95); }
-  return mix(px, hsl2rgb(th, ns, nl), w);
-}
+const HD = path.join(root, 'archive', 'hero-src-hd'); // versiones x4 con IA (si existen, se usan en vez de la fuente)
+const MAX_WIDTH = 1100; // ancho máximo de salida (cubre pantallas de alta densidad)
+const PRE_WIDTH = 1400; // las fuentes HD se reducen a este ancho antes de procesar
 
 /* --------------------------------- pipeline -------------------------------- */
-async function loadSource(file, cleanAlpha = false) {
-  const { data, info } = await sharp(path.join(SRC, file))
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
+async function loadSource(file, cleanAlpha = false, { flip = false, rotate = 0 } = {}) {
+  // flip: espejo horizontal (para que todas las zapatillas miren al mismo lado).
+  // rotate: grados (horario +) para nivelar la suela; el fondo queda transparente.
+  const hdFile = path.join(HD, `${path.parse(file).name}.webp`);
+  const hd = existsSync(hdFile);
+  const input = hd ? hdFile : path.join(SRC, file);
+  let img = sharp(input).ensureAlpha();
+  if (hd && (await sharp(input).metadata()).width > PRE_WIDTH) img = img.resize({ width: PRE_WIDTH, kernel: 'lanczos3' });
+  if (flip) img = img.flop();
+  if (rotate) img = img.rotate(rotate, { background: { r: 0, g: 0, b: 0, alpha: 0 } });
+  const { data, info } = await img.raw().toBuffer({ resolveWithObject: true });
   if (cleanAlpha) {
     // Apertura morfológica del alfa: borra hilos y restos finos (rayos de luz, pelusa) y suaviza el borde.
     const mask = await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
@@ -123,10 +54,10 @@ async function loadSource(file, cleanAlpha = false) {
   const pad = Math.round(Math.max(x1 - x0, y1 - y0) * 0.02);
   x0 = Math.max(0, x0 - pad); y0 = Math.max(0, y0 - pad);
   x1 = Math.min(info.width - 1, x1 + pad); y1 = Math.min(info.height - 1, y1 + pad);
-  return { data, info, box: { left: x0, top: y0, width: x1 - x0 + 1, height: y1 - y0 + 1 } };
+  return { data, info, hd, box: { left: x0, top: y0, width: x1 - x0 + 1, height: y1 - y0 + 1 } };
 }
 
-async function render({ data, info, box }, recolor, target, outFile, toneLow, scale = 1) {
+async function render({ data, info, box, hd }, recolor, target, outFile, toneLow, scale = 1) {
   const buf = Buffer.from(data); // copia
   if (recolor) {
     for (let i = 0; i < buf.length; i += 4) {
@@ -140,7 +71,7 @@ async function render({ data, info, box }, recolor, target, outFile, toneLow, sc
   let img = sharp(buf, { raw: { width: info.width, height: info.height, channels: 4 } })
     .extract(box)
     .resize({ width, kernel: 'lanczos3' });
-  if (scale > 1) img = img.sharpen({ sigma: 0.7 });
+  if (scale > 1 && !hd) img = img.sharpen({ sigma: 0.7 }); // las fuentes HD ya traen detalle real
   await img
     .webp({ quality: 88, alphaQuality: 100, effort: 5 })
     .toFile(outFile);
@@ -149,7 +80,7 @@ async function render({ data, info, box }, recolor, target, outFile, toneLow, sc
 mkdirSync(OUT, { recursive: true });
 const made = [];
 for (const [modelId, model] of Object.entries(spec)) {
-  const src = await loadSource(model.source, model.cleanAlpha);
+  const src = await loadSource(model.source, model.cleanAlpha, { flip: model.flip, rotate: model.rotate });
   const recolor = model.kind === 'accent' ? recolorAccent : recolorBody;
   for (const cw of model.colorways) {
     const [r, g, b] = hex2rgb(cw.hex);

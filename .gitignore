@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Fotos/videos de origen del giro 360° (pesados): se generan los fotogramas con npm run spin
+archive/spin-src/
