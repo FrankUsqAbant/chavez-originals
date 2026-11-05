@@ -1,0 +1,6 @@
+{
+  "name": "Chavez Originals - Distribuidor Exclusivo de Calzado",
+  "description": "Distribuidor exclusivo de calzado deportivo de alta competencia y línea urbana Punto Original. Venta mayorista B2B y venta al detalle B2C en el norte de Perú.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

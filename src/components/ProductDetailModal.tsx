@@ -1,0 +1,162 @@
+import React, { useState } from 'react';
+import { Product, STORE_INFO } from '../data/storeData';
+import { formatPeruvianCurrency, generateWhatsAppOrderLink } from '../utils/b2b-logic';
+import { X, Check, ShoppingBag, ShieldCheck, Truck, RotateCw, Sparkles } from 'lucide-react';
+
+interface ProductDetailModalProps {
+  product: Product | null;
+  onClose: () => void;
+}
+
+export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
+  product,
+  onClose,
+}) => {
+  if (!product) return null;
+
+  const [selectedSize, setSelectedSize] = useState<number>(product.sizes[0]);
+  const [selectedColor, setSelectedColor] = useState(product.colors[0]?.name || 'Estándar');
+
+  const handleOrderWhatsApp = () => {
+    const link = generateWhatsAppOrderLink({
+      phone: STORE_INFO.whatsapp,
+      modelCode: product.code,
+      modelName: product.name,
+      size: selectedSize,
+      color: selectedColor,
+      comboIncluded: product.category === 'combo',
+      notes: 'Solicito confirmación de disponibilidad para compra directa o envío a provincia.',
+    });
+    window.open(link, '_blank');
+  };
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="product-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+    >
+      <div
+        className="relative w-full max-w-3xl rounded-3xl bg-[#0c1410] border border-emerald-500/30 shadow-2xl p-6 sm:p-8 overflow-y-auto max-h-[90vh] text-white"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors cursor-pointer"
+          aria-label="Cerrar ventana de producto"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          {/* Product Image Showcase */}
+          <div className="relative rounded-2xl bg-black/50 border border-white/10 p-6 flex items-center justify-center min-h-[300px]">
+            <div className="absolute inset-0 bg-[#00ff66]/10 rounded-2xl blur-xl" />
+            <img
+              src={product.image}
+              alt={product.name}
+              className="relative z-10 w-full max-h-72 object-contain rounded-xl drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)]"
+            />
+            {product.badge && (
+              <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#00ff66] text-black font-extrabold text-[10px] tracking-wider uppercase">
+                {product.badge}
+              </span>
+            )}
+          </div>
+
+          {/* Product Info */}
+          <div className="space-y-4">
+            <div>
+              <div className="text-xs font-mono text-[#00ff66] uppercase tracking-wider">
+                CÓDIGO: {product.code}
+              </div>
+              <h3 id="product-modal-title" className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white mt-1">
+                {product.name}
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-300 mt-2 leading-relaxed">
+                {product.description}
+              </p>
+            </div>
+
+            {/* Colors */}
+            {product.colors && product.colors.length > 0 && (
+              <div>
+                <label className="text-xs font-bold text-gray-400 block mb-1.5">
+                  Colorway: <span className="text-white">{selectedColor}</span>
+                </label>
+                <div className="flex items-center gap-2">
+                  {product.colors.map((c) => (
+                    <button
+                      key={c.name}
+                      onClick={() => setSelectedColor(c.name)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                        selectedColor === c.name
+                          ? 'border-[#00ff66] bg-[#00ff66]/15 text-[#00ff66]'
+                          : 'border-white/15 bg-white/5 text-gray-300 hover:bg-white/10'
+                      }`}
+                    >
+                      {c.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Sizes */}
+            <div>
+              <label className="text-xs font-bold text-gray-400 block mb-1.5">
+                Seleccionar Talla (PE/EUR): <span className="text-[#00ff66] font-bold">{selectedSize}</span>
+              </label>
+              <div className="grid grid-cols-7 gap-1.5">
+                {product.sizes.map((sz) => (
+                  <button
+                    key={sz}
+                    onClick={() => setSelectedSize(sz)}
+                    className={`py-2 rounded-lg font-bold text-xs transition-all cursor-pointer ${
+                      selectedSize === sz
+                        ? 'bg-[#00ff66] text-black font-black shadow-[0_0_10px_rgba(0,255,102,0.6)]'
+                        : 'bg-white/5 hover:bg-white/10 text-gray-300 border border-white/10'
+                    }`}
+                  >
+                    {sz}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Features List */}
+            <div className="space-y-1.5 text-xs text-gray-300 pt-1">
+              {product.features.map((feat, idx) => (
+                <div key={idx} className="flex items-center gap-2">
+                  <Check className="w-3.5 h-3.5 text-[#00ff66] flex-shrink-0" />
+                  <span>{feat}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Pricing & CTA */}
+            <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-4">
+              <div>
+                <span className="text-[11px] text-gray-400 block">Precio Oficial</span>
+                <span className="text-2xl sm:text-3xl font-black text-[#00ff66]">
+                  {formatPeruvianCurrency(product.price)}
+                </span>
+              </div>
+
+              <button
+                onClick={handleOrderWhatsApp}
+                className="flex-1 py-3.5 px-6 rounded-2xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-black text-sm tracking-wide uppercase shadow-[0_0_20px_rgba(0,255,102,0.5)] transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <ShoppingBag className="w-4 h-4 fill-current" />
+                <span>Pedir por WhatsApp</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
