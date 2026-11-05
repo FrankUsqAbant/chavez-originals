@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Rotate3d } from 'lucide-react';
+import { whenIdle } from '../lib/idle';
 
 interface SpinViewerProps {
   /** Imágenes en orden. El primero es la vista de perfil. */
@@ -24,7 +25,7 @@ export const SpinViewer: React.FC<SpinViewerProps> = ({ frames, labels, index, o
   const pxPerStep = discrete ? 70 : 10; // vistas sueltas: un paso grande; giro continuo: un paso fino
   const current = Math.min(index, n - 1);
 
-  // Precarga de todas las imágenes
+  // Precarga de todas las imágenes, en tiempo libre (la vista actual ya se está mostrando)
   useEffect(() => {
     setReady(false);
     let cancelled = false;
@@ -33,13 +34,16 @@ export const SpinViewer: React.FC<SpinViewerProps> = ({ frames, labels, index, o
       pending -= 1;
       if (!cancelled && pending === 0) setReady(true);
     };
-    frames.forEach((src) => {
-      const img = new Image();
-      img.onload = img.onerror = done;
-      img.src = src;
-    });
+    const cancelIdle = whenIdle(() =>
+      frames.forEach((src) => {
+        const img = new Image();
+        img.onload = img.onerror = done;
+        img.src = src;
+      }),
+    );
     return () => {
       cancelled = true;
+      cancelIdle();
     };
   }, [frames]);
 

@@ -8,7 +8,7 @@
 //      y de las fichas (…/<color>/01.webp).
 //   B) GIRO: 24–36 fotos (o un video, requiere ffmpeg) tomadas girando la zapatilla una vuelta completa.
 //
-// Salida: public/assets/aistudio/spin/<modelo>/<color>/NN.webp  +  manifest.json (todos los colores del modelo).
+// Salida: public/assets/aistudio/spin/<modelo>/<color>/NN.webp  +  src/data/spin-manifest.json (registro de vistas y colores).
 // Requiere @imgly/background-removal-node (quita el fondo en tu PC; nada se sube a internet).
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -82,6 +82,10 @@ async function writeColorSets(frames, W, H, { box = null, width = 900 } = {}) {
       }
       let img = sharp(buf, { raw: { width: W, height: H, channels: 4 } });
       if (box) img = img.extract(box);
+      // Miniatura (480 px) de la primera vista para las tarjetas del catálogo
+      if (i === 0) {
+        await img.clone().resize({ width: 480, kernel: 'lanczos3' }).webp({ quality: 78, alphaQuality: 85, effort: 6 }).toFile(path.join(dir, 'thumb.webp'));
+      }
       await img
         .resize({ width, kernel: 'lanczos3' })
         .webp({ quality: 80, alphaQuality: 90, effort: 6 })
@@ -92,7 +96,7 @@ async function writeColorSets(frames, W, H, { box = null, width = 900 } = {}) {
 }
 
 function updateManifest(entry) {
-  const manifestPath = path.join(outRoot, 'manifest.json');
+  const manifestPath = path.join(root, 'src', 'data', 'spin-manifest.json');
   const manifest = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, 'utf8')) : {};
   manifest[model] = { ...entry, colors: spec[model].colorways.map((c) => c.id) };
   mkdirSync(outRoot, { recursive: true });

@@ -3,7 +3,7 @@ import {
   formatPeruvianCurrency,
   generateWhatsAppOrderLink,
   getStoreStatus,
-} from './b2b-logic';
+} from './store';
 import { buildClaimMessage, provisionalCode, type ClaimRecord } from './claims';
 
 describe('formatPeruvianCurrency', () => {

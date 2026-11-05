@@ -1,6 +1,6 @@
 import React from 'react';
 import { PRODUCTS, Product } from '../data/storeData';
-import { formatPeruvianCurrency } from '../utils/b2b-logic';
+import { formatPeruvianCurrency } from '../utils/store';
 import { ShoppingBag } from 'lucide-react';
 
 interface CatalogSectionProps {
@@ -52,13 +52,7 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({ onSelectProductM
 
               <div className="pt-5 flex-1 space-y-1">
                 <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">{product.name}</h3>
-                <div className="text-2xl font-black text-[#00ff66]">
-                  {product.price !== undefined ? (
-                    formatPeruvianCurrency(product.price)
-                  ) : (
-                    <span className="text-lg font-bold text-gray-300">Consultar precio</span>
-                  )}
-                </div>
+                <div className="text-2xl font-black text-[#00ff66]">{formatPeruvianCurrency(product.price)}</div>
               </div>
 
               <button

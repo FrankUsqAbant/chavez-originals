@@ -5,7 +5,7 @@
 // Ejemplo: npm run model3d -- futbol-pro C:\descargas\zapatilla.glb
 // Hace: elimina duplicados, une vértices, reduce polígonos (máx. ~80 000 triángulos) y comprime las
 // texturas a WebP de 1024 px. Objetivo: menos de ~3 MB para que cargue rápido en el celular.
-// Salida: public/assets/aistudio/models/<modelo>.glb  +  manifest.json
+// Salida: public/assets/aistudio/models/<modelo>.glb  +  src/data/models-manifest.json
 import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
@@ -51,7 +51,7 @@ const srcDir = path.join(root, 'archive', 'models-src');
 mkdirSync(srcDir, { recursive: true });
 copyFileSync(input, path.join(srcDir, `${model}.glb`));
 
-const manifestPath = path.join(outDir, 'manifest.json');
+const manifestPath = path.join(root, 'src', 'data', 'models-manifest.json');
 const manifest = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, 'utf8')) : {};
 manifest[model] = `${model}.glb`;
 writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n');

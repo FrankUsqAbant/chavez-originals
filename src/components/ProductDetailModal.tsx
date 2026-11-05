@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Product, STORE_INFO } from '../data/storeData';
-import { formatPeruvianCurrency, generateWhatsAppOrderLink } from '../utils/b2b-logic';
+import { formatPeruvianCurrency, generateWhatsAppOrderLink } from '../utils/store';
 import { useModal } from '../hooks/useModal';
 import { X, Check, ShoppingBag } from 'lucide-react';
 
@@ -78,11 +78,9 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
 
           <div className="space-y-4">
             <div>
-              {product.code && (
-                <div className="text-xs font-mono text-[#00ff66] uppercase tracking-wider">
-                  CÓDIGO: {product.code}
-                </div>
-              )}
+              <div className="text-xs font-mono text-[#00ff66] uppercase tracking-wider">
+                CÓDIGO: {product.code}
+              </div>
               <h3
                 id="product-modal-title"
                 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white mt-1"
@@ -160,7 +158,7 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
               <div>
                 <span className="text-xs text-gray-400 block">Precio</span>
                 <span className="text-2xl sm:text-3xl font-black text-[#00ff66]">
-                  {product.price !== undefined ? formatPeruvianCurrency(product.price) : 'Consultar'}
+                  {formatPeruvianCurrency(product.price)}
                 </span>
               </div>
 

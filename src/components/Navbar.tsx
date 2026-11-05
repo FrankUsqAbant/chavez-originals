@@ -31,10 +31,24 @@ export const Navbar: React.FC<NavbarProps> = ({
     };
 
     setup();
-    window.addEventListener('resize', setup);
+    // Solo se reconstruye si cambia el ancho o el alto cambia bastante (no por la barra de direcciones del móvil)
+    let timer = 0;
+    let lastW = window.innerWidth;
+    let lastH = window.innerHeight;
+    const onResize = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (window.innerWidth === lastW && Math.abs(window.innerHeight - lastH) < 120) return;
+        lastW = window.innerWidth;
+        lastH = window.innerHeight;
+        setup();
+      }, 200);
+    };
+    window.addEventListener('resize', onResize);
     return () => {
       observer?.disconnect();
-      window.removeEventListener('resize', setup);
+      window.clearTimeout(timer);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
 

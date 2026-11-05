@@ -1,6 +1,6 @@
 import React from 'react';
 import { STORE_INFO } from '../data/storeData';
-import { generateWhatsAppOrderLink } from '../utils/b2b-logic';
+import { generateWhatsAppOrderLink } from '../utils/store';
 import { useStoreStatus } from '../hooks/useStoreStatus';
 import { MapPin, Store, Clock, Phone, MessageCircle, ExternalLink, Truck } from 'lucide-react';
 

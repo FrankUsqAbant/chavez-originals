@@ -20,7 +20,8 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
 - Página: Inicio (hero) → Catálogo → Tienda. Las tallas se eligen en la ficha del producto.
 - `src/data/storeData.ts`: productos y datos de la tienda (precios, tallas, contacto).
 - `src/data/hero-models.json`: modelos y colores (los usan el hero, el catálogo y el generador de imágenes).
-- `src/utils/b2b-logic.ts`: enlaces de pedido por WhatsApp y horario de atención.
+- `src/data/spin-manifest.json` y `models-manifest.json`: registros que escriben `npm run spin` y `npm run model3d` (no se editan a mano).
+- `src/utils/store.ts`: enlaces de pedido por WhatsApp y horario de atención.
 - `src/lib/smoothScroll.ts`: scroll con inercia (Lenis). `src/lib/reclamos.ts`: envío del Libro de Reclamaciones.
 - `src/components/`: secciones y modales. `SpinViewer.tsx`: visor de ángulos.
 - `archive/spin-src/<modelo>/`: fotos de origen de cada modelo (fuera del build).
@@ -32,8 +33,8 @@ Fútbol Pro 2026, Air Glow Tech y Chunky Lavender: los tres tienen precio, códi
 ## Imágenes
 
 - Todo lo que se sirve está en `public/assets/aistudio/`: la fachada (`Chaves_Originals_*.webp`) y las vistas `spin/<modelo>/<color>/NN.webp` (WebP, 900 px de ancho, ~40 KB c/u).
-- La vista `01` (perfil) es también la foto del catálogo y de las fichas, para no duplicar imágenes.
-- Las vistas se cargan solo para el modelo y color que se está viendo.
+- La vista `01` (perfil) es también la foto de las fichas, para no duplicar imágenes; las tarjetas del catálogo usan `thumb.webp` (480 px, ~15 KB).
+- Se carga solo el modelo y color que se está viendo; los demás ángulos y colores se precargan en el tiempo libre del navegador.
 
 ## Ángulos y giro 360° de las zapatillas
 

@@ -3,8 +3,9 @@ import heroSpec from './hero-models.json';
 type ShoeSpec = Record<string, { colorways: { id: string; name: string; hex: string }[] }>;
 const SHOES = heroSpec as ShoeSpec;
 
-/** Vista de perfil (sin fondo) de un modelo en un color: la primera de las vistas de `npm run spin`. */
-const shoeImage = (model: string, colorId: string) => `/assets/aistudio/spin/${model}/${colorId}/01.webp`;
+/** Imagen de un modelo en un color: `01` es la vista de perfil (la primera de `npm run spin`) y `thumb` su miniatura. */
+const shoeImage = (model: string, colorId: string, file: '01' | 'thumb' = '01') =>
+  `/assets/aistudio/spin/${model}/${colorId}/${file}.webp`;
 
 /** Colores de un producto, con la imagen correspondiente a cada uno. Si se pasan ids, respeta ese orden. */
 const colorsFor = (model: string, ids?: string[]) => {
@@ -16,10 +17,10 @@ const colorsFor = (model: string, ids?: string[]) => {
 export interface Product {
   id: string;
   name: string;
-  /** Código interno. Opcional: si falta, el pedido de WhatsApp no lo incluye. */
-  code?: string;
-  /** Precio en soles. Si falta, la tienda muestra "Consultar precio". */
-  price?: number;
+  code: string;
+  /** Precio en soles. */
+  price: number;
+  /** Miniatura de la tarjeta del catálogo (la ficha usa `colors[].previewImage`). */
   image: string;
   badge?: string;
   description: string;
@@ -37,7 +38,7 @@ const BASE_PRODUCTS: Product[] = [
     name: 'Punto Original Fútbol Pro 2026',
     code: 'EM0099-M9',
     price: 189.0,
-    image: shoeImage('futbol-pro', 'red'),
+    image: shoeImage('futbol-pro', 'red', 'thumb'),
     badge: 'ALTA COMPETENCIA',
     description: 'Chimpún de alto rendimiento con tecnología de agarre dinámico y capellada microtexturizada para máxima precisión.',
     sizes: [38, 39, 40, 41, 42, 43, 44],
@@ -55,7 +56,7 @@ const BASE_PRODUCTS: Product[] = [
     name: 'Punto Original Air Glow Tech',
     code: 'URB-AIR-026',
     price: 179.0,
-    image: shoeImage('air-glow-tech', 'air-white'),
+    image: shoeImage('air-glow-tech', 'air-white', 'thumb'),
     badge: 'CÁPSULA AIR TECH',
     description: 'Cápsula de amortiguación translúcida verde esmeralda y suela esculpida para máximo confort durante el día.',
     sizes: [39, 40, 41, 42, 43, 44],
@@ -72,7 +73,7 @@ const BASE_PRODUCTS: Product[] = [
     name: 'Punto Original Chunky Lavender',
     code: 'URB-2026-CH',
     price: 169.0,
-    image: shoeImage('chunky-lavender', 'chunky-lav'),
+    image: shoeImage('chunky-lavender', 'chunky-lav', 'thumb'),
     badge: 'LÍNEA STREETWEAR',
     description: 'Zapatilla urbana de plataforma chunky ultraligera con amortiguación de cámara de aire y tonos tierra.',
     sizes: [38, 39, 40, 41, 42, 43],
@@ -99,8 +100,8 @@ const colorVariant = (baseId: string, model: string, colorId: string, codeSuffix
     ...base,
     id: `${base.id}-${colorId}`,
     name: `${base.name} · ${color.name}`,
-    code: base.code ? `${base.code}-${codeSuffix}` : undefined,
-    image: shoeImage(model, colorId),
+    code: `${base.code}-${codeSuffix}`,
+    image: shoeImage(model, colorId, 'thumb'),
     badge: 'NUEVO COLOR',
     colors: colorsFor(model, [colorId, ...all.map((c) => c.id).filter((id) => id !== colorId)]),
   };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getStoreStatus, type StoreStatus } from '../utils/b2b-logic';
+import { getStoreStatus, type StoreStatus } from '../utils/store';
 
 /** Estado de atención de la tienda (hora de Lima), actualizado cada minuto. */
 export function useStoreStatus(): StoreStatus {

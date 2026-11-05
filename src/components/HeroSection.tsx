@@ -3,7 +3,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import heroSpec from '../data/hero-models.json';
 import { SpinViewer } from './SpinViewer';
 import { useSpinFrames } from '../hooks/useSpinFrames';
-import { useModel3D } from '../hooks/useModel3D';
+import { model3dUrl } from '../lib/model3d';
+import { whenIdle } from '../lib/idle';
 import { Shoe3D } from './Shoe3D';
 
 interface HeroSectionProps {
@@ -127,21 +128,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
   // Vistas (perfil, frente, atrás…) o giro 360° con fotos reales, si el modelo las tiene (ver `npm run spin`).
   const spin = useSpinFrames(currentModel.id, currentColor.id);
   // Modelo 3D (.glb) con giro libre, si el modelo lo tiene (ver `npm run model3d`).
-  const model3d = useModel3D(currentModel.id);
+  const model3d = model3dUrl(currentModel.id);
   const has3d = Boolean(model3d) && !failed3d[currentModel.id];
   const show3d = has3d && mode === '3d';
 
-  // Precarga: primero los colores del modelo activo; el resto, poco después de cargar la página.
-  useEffect(() => {
-    const load = (modelId: string) =>
-      COLORWAYS[modelId].forEach((c) => {
-        const img = new Image();
-        img.src = heroImage(modelId, c.id);
-      });
-    load(currentModel.id);
-    const t = window.setTimeout(() => HERO_MODELS.forEach((m) => load(m.id)), 1500);
-    return () => window.clearTimeout(t);
-  }, [currentModel.id]);
+  // Precarga los demás colores del modelo activo (en tiempo libre) para que el cambio de color sea instantáneo.
+  useEffect(
+    () =>
+      whenIdle(() =>
+        COLORWAYS[currentModel.id].forEach((c) => {
+          const img = new Image();
+          img.src = heroImage(currentModel.id, c.id);
+        }),
+      ),
+    [currentModel.id],
+  );
 
   const goToModel = (index: number) => {
     setModelIndex((index + HERO_MODELS.length) % HERO_MODELS.length);
