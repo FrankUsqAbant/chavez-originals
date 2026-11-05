@@ -230,6 +230,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
               </button>
 
               <div className="relative w-full aspect-square max-w-[440px] flex items-center justify-center">
+                {/* Escenario: disco de luz y sombra de piso para separar el producto del fondo */}
+                <div
+                  aria-hidden="true"
+                  className="absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 w-[88%] aspect-square rounded-full border border-white/10 bg-[radial-gradient(circle_at_50%_28%,rgba(110,231,183,0.22),rgba(16,185,129,0.08)_55%,rgba(16,185,129,0.02)_72%)]"
+                />
+                <div
+                  aria-hidden="true"
+                  className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[68%] h-7 bg-[radial-gradient(closest-side,rgba(0,0,0,0.8),transparent)]"
+                />
+
                 <ModelWatermark key={currentModel.id} text={currentModel.bgName} color={currentColor.hex} />
 
                 <div className="relative z-10 w-full h-full flex items-center justify-center px-6 pt-20 pb-4">
