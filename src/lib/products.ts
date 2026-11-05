@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 import { PRODUCTS as FALLBACK_PRODUCTS, shoeImage, type Product } from '../data/storeData';
 import heroModels from '../data/hero-models.json';
-import { restHeaders, supabaseConfig } from './supabaseConfig';
+import { CATALOG_CHANNEL, restHeaders, supabaseConfig } from './supabaseConfig';
 
 /**
  * Catálogo desde Supabase (tabla `productos`). Cualquiera puede leer los productos activos; solo el
@@ -83,12 +83,6 @@ const set = (next: CatalogState) => {
   listeners.forEach((l) => l());
 };
 
-/** El panel de administración publica aquí la lista que acaba de guardar, para que la tienda se actualice al instante. */
-export function setCatalogFromRows(rows: ProductRow[]) {
-  const active = rows.filter((r) => r.activo).sort((a, b) => a.orden - b.orden);
-  set({ products: active.map(rowToProduct).filter((p) => p.image), status: 'ready' });
-}
-
 let inFlight: Promise<void> | null = null;
 
 /** Vuelve a leer el catálogo (el panel de administración lo llama después de cada cambio). */
@@ -123,6 +117,12 @@ const subscribe = (listener: () => void) => {
   if (!started) {
     started = true;
     void refreshProducts();
+    // Si el administrador guarda un cambio en su pestaña, esta tienda se actualiza sola
+    try {
+      new BroadcastChannel(CATALOG_CHANNEL).onmessage = () => void refreshProducts();
+    } catch {
+      /* navegador sin BroadcastChannel: se verá el cambio al recargar */
+    }
   }
   return () => listeners.delete(listener);
 };

@@ -19,7 +19,8 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
 
 - Página: Inicio (hero) → Catálogo → Tienda. Las tallas se eligen en la ficha del producto.
 - `src/data/storeData.ts`: datos de la tienda (contacto, horario) y el catálogo de RESPALDO (el catálogo real está en Supabase, ver "Administración de productos").
-- `src/lib/products.ts`: lee el catálogo de Supabase. `src/components/admin/`: panel de administración (se carga aparte).
+- `src/lib/products.ts`: lee el catálogo de Supabase. `admin.html` + `src/admin/`: panel de administración, una página aparte en `/admin` (no carga nada de la tienda).
+- Hosting: `/admin` es el archivo `admin.html`. En Vercel funciona con `vercel.json` (`cleanUrls`); Netlify, Cloudflare Pages y GitHub Pages lo sirven sin configuración. En desarrollo y en `npm run preview` lo sirve `vite.config.ts`.
 - `src/data/hero-models.json`: modelos y colores (los usan el hero, el catálogo y el generador de imágenes).
 - `src/data/spin-manifest.json` y `models-manifest.json`: registros que escriben `npm run spin` y `npm run model3d` (no se editan a mano).
 - `src/utils/store.ts`: enlaces de pedido por WhatsApp y horario de atención.
@@ -69,13 +70,13 @@ El hero ya trae el visor 3D (`Shoe3D.tsx`, basado en `<model-viewer>`): se gira 
 
 ## Administración de productos
 
-El candado junto al botón de WhatsApp abre el **panel de administración**: crear, editar, ocultar, reordenar, duplicar y eliminar productos (nombre, código, precio, etiqueta, descripción, tallas, características, colores, foto y combo). Los cambios se ven al instante en la tienda.
+El candado junto al botón de WhatsApp abre el **panel de administración** en una **pestaña nueva** (página propia en `/admin`, con barra lateral, resumen, búsqueda y filtros): crear, editar, ocultar, reordenar, duplicar y eliminar productos (nombre, código, precio, etiqueta, descripción, tallas, características, colores, foto y combo). Los cambios se ven al instante; si la tienda está abierta en otra pestaña, se actualiza sola.
 
 **Seguridad.** El sitio es estático, así que el candado solo abre la pantalla de acceso: quien manda es la base de datos (Supabase).
 - Cualquiera puede *leer* los productos visibles. Para *crear, cambiar, borrar o subir fotos* hay que haber iniciado sesión con una cuenta que figure en la tabla `admins` (reglas RLS + función `es_admin()`). Se comprobó que una cuenta normal, un visitante o alguien con el código del sitio no pueden modificar nada.
 - La tabla `admins` y la función `hacer_admin()` no son accesibles desde internet.
 - Las fotos se guardan en el bucket público `productos` (solo el admin escribe; máx. 1 MB; solo imágenes). El panel las reduce a 900 px y las convierte a WebP antes de subirlas.
-- La sesión vive en la pestaña (se cierra al cerrarla). Los datos tienen validaciones también en el servidor (precio, longitudes, imagen obligatoria).
+- La sesión se comparte entre las pestañas del panel y se cierra con “Cerrar sesión” o tras 60 minutos sin actividad. Los datos tienen validaciones también en el servidor (precio, longitudes, imagen obligatoria).
 
 **Cuenta de administrador.** Ya existe (usquizafranquer@gmail.com). Se creó con una contraseña **temporal** que se entregó aparte (no se guarda en el código): mientras siga siendo la temporal, la base de datos no le da ningún permiso de escritura y el panel obliga a elegir una nueva en el primer ingreso. Después se puede cambiar cuando se quiera con el botón "Cambiar contraseña" del panel (pide la actual, exige 10+ caracteres con letras y números, y cierra las demás sesiones).
 
@@ -101,7 +102,7 @@ Para quitar a un admin: borrar su fila en la tabla `admins`. Recomendado: en Sup
 
 ## Pendiente de confirmar por el negocio
 
-- Que el administrador cambie la contraseña temporal en su primer ingreso, y desactivar el registro público en Supabase (Authentication > Sign In / Providers).
+- Desactivar el registro público en Supabase (Authentication > Sign In / Providers > Allow new users to sign up).
 - RUC y correo en `storeData.ts` (marcados con `TODO`).
 - Las imágenes de producto son generadas con IA: confirmar que coinciden con los productos reales (logos, colores, diseño).
 - Los colores son recoloreados digitalmente, no fotos del producto real.

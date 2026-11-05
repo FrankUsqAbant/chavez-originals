@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { lazy, Suspense, useState } from 'react';
+import { useState } from 'react';
 import { scrollToSection } from './lib/smoothScroll';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
@@ -15,12 +15,8 @@ import { LibroReclamacionesModal } from './components/LibroReclamacionesModal';
 import { Product, STORE_INFO } from './data/storeData';
 import { MessageCircle } from 'lucide-react';
 
-// El panel de administración se descarga solo cuando alguien pulsa el botón del candado.
-const AdminPanel = lazy(() => import('./components/admin/AdminPanel'));
-
 export default function App() {
   const [isLibroOpen, setIsLibroOpen] = useState(false);
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const handleNavigateSection = scrollToSection;
@@ -28,7 +24,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#070b09] text-white flex flex-col font-sans selection:bg-[#00ff66] selection:text-black">
       {/* Top Navbar */}
-      <Navbar onNavigateSection={handleNavigateSection} onOpenAdmin={() => setIsAdminOpen(true)} adminOpen={isAdminOpen} />
+      <Navbar onNavigateSection={handleNavigateSection} />
 
       <main className="flex-1">
         {/* MÓDULO 01: Hero & Showcase 360° */}
@@ -73,19 +69,6 @@ export default function App() {
         product={selectedProduct}
         onClose={() => setSelectedProduct(null)}
       />
-
-      {/* Panel de administración de productos (solo la cuenta de administrador puede modificar datos) */}
-      {isAdminOpen && (
-        <Suspense
-          fallback={
-            <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 text-gray-300 text-sm" role="status">
-              Cargando panel…
-            </div>
-          }
-        >
-          <AdminPanel onClose={() => setIsAdminOpen(false)} />
-        </Suspense>
-      )}
 
       {/* Libro de Reclamaciones Virtual Modal */}
       <LibroReclamacionesModal

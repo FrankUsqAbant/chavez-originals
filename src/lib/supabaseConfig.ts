@@ -16,5 +16,8 @@ export function restHeaders(key: string): Record<string, string> {
   return headers;
 }
 
-/** Clave con la que el panel de administración guarda su sesión (en sessionStorage: se cierra al cerrar la pestaña). */
+/** Clave con la que el panel de administración guarda su sesión (localStorage, compartida entre pestañas). */
 export const ADMIN_STORAGE_KEY = 'chavez-admin-auth';
+
+/** Canal por el que el panel avisa a la tienda abierta en otra pestaña que el catálogo cambió. */
+export const CATALOG_CHANNEL = 'chavez-catalogo';
