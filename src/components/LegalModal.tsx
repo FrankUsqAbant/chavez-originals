@@ -19,7 +19,7 @@ const DOCS: Record<LegalDocId, { title: string; body: string[] }> = {
     title: 'Política de Privacidad',
     body: [
       'Los datos de contacto que nos proporcionas son confidenciales y se utilizan únicamente para procesar tu pedido, coordinar envíos con agencias de transporte y atender reclamos.',
-      'Este sitio no almacena tus datos en servidores propios: los pedidos se envían por WhatsApp y las hojas de reclamación se envían a la tienda por el canal que elijas.',
+      'Los pedidos se envían por WhatsApp. Si presentas una hoja de reclamación, sus datos se guardan en un servicio de base de datos con acceso restringido al titular del negocio, y se usan solo para atender tu reclamo y cumplir la normativa de protección al consumidor.',
       `Para consultas sobre tus datos escribe a ${STORE_INFO.email}.`,
     ],
   },

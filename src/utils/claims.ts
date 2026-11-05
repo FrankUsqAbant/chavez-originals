@@ -1,5 +1,3 @@
-import { formatClaimTicketCode } from './b2b-logic';
-
 export type ClaimType = 'RECLAMO' | 'QUEJA';
 
 export interface ClaimFormData {
@@ -16,45 +14,21 @@ export interface ClaimFormData {
   consumerRequest: string;
 }
 
-export interface StoredClaim {
+export interface ClaimRecord {
   code: string;
   type: ClaimType;
   createdAt: string;
   data: ClaimFormData;
+  /** true si la hoja ya quedó guardada en el servidor (con número oficial). */
+  saved: boolean;
 }
 
-const STORAGE_KEY = 'chavez:claims:v1';
-const MAX_STORED = 200;
-
-export function loadClaims(): StoredClaim[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+/** Número provisional cuando no se pudo guardar en línea. No se parece al oficial (REC-/QUE-). */
+export function provisionalCode(now = new Date(), random: () => number = Math.random): string {
+  return `PROV-${now.getFullYear()}-${random().toString(36).slice(2, 8).toUpperCase()}`;
 }
 
-/** Correlativo anual simple, local a este navegador (no es un registro oficial). */
-export function nextClaimSequence(claims: StoredClaim[], type: ClaimType): number {
-  const prefix = formatClaimTicketCode(type, 0).slice(0, 8); // p. ej. "REC-2026-"
-  return claims.filter((c) => c.code.startsWith(prefix)).length + 1;
-}
-
-export function registerClaim(type: ClaimType, data: ClaimFormData, now = new Date()): StoredClaim {
-  const claims = loadClaims();
-  const code = formatClaimTicketCode(type, nextClaimSequence(claims, type));
-  const claim: StoredClaim = { code, type, createdAt: now.toISOString(), data };
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...claims, claim].slice(-MAX_STORED)));
-  } catch {
-    // Sin almacenamiento disponible: el envío por WhatsApp sigue funcionando.
-  }
-  return claim;
-}
-
-export function buildClaimMessage(claim: StoredClaim, legalName: string, ruc: string): string {
+export function buildClaimMessage(claim: ClaimRecord, legalName: string, ruc: string): string {
   const d = claim.data;
   const date = new Date(claim.createdAt).toLocaleString('es-PE', {
     dateStyle: 'long',
@@ -65,7 +39,9 @@ export function buildClaimMessage(claim: StoredClaim, legalName: string, ruc: st
     `📖 *HOJA DE RECLAMACIÓN VIRTUAL*`,
     `${legalName} (RUC ${ruc})`,
     `--------------------------------------`,
-    `*N° de hoja:* ${claim.code}`,
+    claim.saved
+      ? `*N° de hoja:* ${claim.code}`
+      : `*N° provisional:* ${claim.code} (pendiente de registro en la tienda)`,
     `*Fecha:* ${date}`,
     `*Tipo:* ${claim.type}`,
     ``,

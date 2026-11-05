@@ -3,11 +3,12 @@ import { STORE_INFO } from '../data/storeData';
 import { useModal } from '../hooks/useModal';
 import {
   buildClaimMessage,
-  registerClaim,
+  provisionalCode,
   type ClaimFormData,
+  type ClaimRecord,
   type ClaimType,
-  type StoredClaim,
 } from '../utils/claims';
+import { enviarReclamo, ReclamoError } from '../lib/reclamos';
 import { X, BookOpen, CheckCircle, Send, Mail, MessageCircle } from 'lucide-react';
 
 interface LibroReclamacionesModalProps {
@@ -63,16 +64,42 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [claimType, setClaimType] = useState<ClaimType>('RECLAMO');
   const [form, setForm] = useState<ClaimFormData>(EMPTY_FORM);
   const [agreed, setAgreed] = useState(false);
-  const [submitted, setSubmitted] = useState<StoredClaim | null>(null);
+  const [submitted, setSubmitted] = useState<ClaimRecord | null>(null);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [trap, setTrap] = useState('');
 
   const set = <K extends keyof ClaimFormData>(key: K) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!agreed) return;
-    setSubmitted(registerClaim(claimType, form));
+    if (!agreed || sending) return;
+    setError(null);
+    setSending(true);
+    try {
+      const { code, createdAt } = await enviarReclamo(claimType, form, trap);
+      setSubmitted({ code, type: claimType, createdAt, data: form, saved: true });
+    } catch (err) {
+      const tipo = err instanceof ReclamoError ? err.tipo : 'red';
+      if (tipo === 'limite') {
+        setError('Has enviado varias hojas seguidas. Espera una hora o escríbenos por WhatsApp.');
+      } else if (tipo === 'datos') {
+        setError('Revisa los datos: algún campo está vacío, es muy corto o tiene un formato inválido.');
+      } else {
+        // Sin conexión o servicio caído: la hoja no se pierde, se entrega por WhatsApp o correo.
+        setSubmitted({
+          code: provisionalCode(),
+          type: claimType,
+          createdAt: new Date().toISOString(),
+          data: form,
+          saved: false,
+        });
+      }
+    } finally {
+      setSending(false);
+    }
   };
 
   const claimMessage = submitted
@@ -113,15 +140,24 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
             <div>
               <span className="text-xs font-mono uppercase text-[#00ff66] tracking-widest block">
-                Hoja generada · falta enviarla
+                {submitted.saved ? 'Hoja registrada' : 'Hoja generada · falta enviarla'}
               </span>
               <h3 id="reclamaciones-title" className="text-2xl font-black text-white uppercase mt-1">
                 Hoja N° {submitted.code}
               </h3>
               <p className="text-sm text-gray-300 mt-2 max-w-md mx-auto">
-                Tu {submitted.type.toLowerCase()} queda presentado cuando envías esta hoja a la tienda.
-                Usa uno de los botones y conserva el número de hoja. La respuesta se brinda dentro del
-                plazo que establece la normativa de protección al consumidor.
+                {submitted.saved ? (
+                  <>
+                    Tu {submitted.type.toLowerCase()} quedó registrado. Conserva este número de hoja. La
+                    respuesta se brinda dentro del plazo que establece la normativa de protección al
+                    consumidor. Si quieres, envía una copia a la tienda.
+                  </>
+                ) : (
+                  <>
+                    No pudimos registrar tu hoja en línea. Tu {submitted.type.toLowerCase()} queda presentado
+                    cuando la envías a la tienda: usa uno de los botones y conserva este número provisional.
+                  </>
+                )}
               </p>
             </div>
 
@@ -148,14 +184,14 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#00ff66] text-black font-extrabold text-xs uppercase tracking-wide hover:bg-[#1aff75] transition-all"
               >
                 <MessageCircle className="w-4 h-4 fill-current" aria-hidden="true" />
-                Enviar por WhatsApp
+                {submitted.saved ? 'Enviar copia por WhatsApp' : 'Enviar por WhatsApp'}
               </a>
               <a
                 href={mailUrl}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 text-white font-bold text-xs uppercase tracking-wide hover:bg-white/20 border border-white/15 transition-all"
               >
                 <Mail className="w-4 h-4" aria-hidden="true" />
-                Enviar por correo
+                {submitted.saved ? 'Enviar copia por correo' : 'Enviar por correo'}
               </a>
               <button
                 type="button"
@@ -218,7 +254,7 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 <Field label="Nombre completo" required>
                   {(id) => (
                     <input id={id} type="text" required autoComplete="name" value={form.fullName}
-                      onChange={set('fullName')} placeholder="Ej. Juan Carlos Pérez" className={inputCls} />
+                      onChange={set('fullName')} minLength={3} maxLength={120} placeholder="Ej. Juan Carlos Pérez" className={inputCls} />
                   )}
                 </Field>
 
@@ -235,7 +271,7 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                   <Field label="N° documento" required className="col-span-2">
                     {(id) => (
                       <input id={id} type="text" required inputMode="numeric" value={form.docNumber}
-                        onChange={set('docNumber')} placeholder="8 dígitos" className={inputCls} />
+                        onChange={set('docNumber')} minLength={5} maxLength={20} placeholder="8 dígitos" className={inputCls} />
                     )}
                   </Field>
                 </div>
@@ -243,19 +279,19 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 <Field label="Teléfono / WhatsApp" required>
                   {(id) => (
                     <input id={id} type="tel" required autoComplete="tel" value={form.phone}
-                      onChange={set('phone')} placeholder="987654321" className={inputCls} />
+                      onChange={set('phone')} minLength={6} maxLength={20} placeholder="987654321" className={inputCls} />
                   )}
                 </Field>
                 <Field label="Correo electrónico" required>
                   {(id) => (
                     <input id={id} type="email" required autoComplete="email" value={form.email}
-                      onChange={set('email')} placeholder="correo@ejemplo.com" className={inputCls} />
+                      onChange={set('email')} maxLength={160} placeholder="correo@ejemplo.com" className={inputCls} />
                   )}
                 </Field>
                 <Field label="Domicilio (dirección, ciudad)" className="sm:col-span-2">
                   {(id) => (
                     <input id={id} type="text" autoComplete="street-address" value={form.address}
-                      onChange={set('address')} placeholder="Ej. Jr. Comercio 123, Cajamarca" className={inputCls} />
+                      onChange={set('address')} maxLength={200} placeholder="Ej. Jr. Comercio 123, Cajamarca" className={inputCls} />
                   )}
                 </Field>
               </div>
@@ -277,13 +313,13 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 <Field label="Monto reclamado (S/.)">
                   {(id) => (
                     <input id={id} type="text" inputMode="decimal" value={form.amount}
-                      onChange={set('amount')} placeholder="Ej. 189.00" className={inputCls} />
+                      onChange={set('amount')} maxLength={40} placeholder="Ej. 189.00" className={inputCls} />
                   )}
                 </Field>
                 <Field label="Descripción del producto / servicio" className="sm:col-span-2">
                   {(id) => (
                     <input id={id} type="text" value={form.goodDescription}
-                      onChange={set('goodDescription')}
+                      onChange={set('goodDescription')} maxLength={300}
                       placeholder="Ej. Chimpún Punto Original EM0099-M9 talla 41" className={inputCls} />
                   )}
                 </Field>
@@ -298,19 +334,33 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 <Field label={`Detalle del ${claimType.toLowerCase()}`} required>
                   {(id) => (
                     <textarea id={id} required rows={3} value={form.claimDetail}
-                      onChange={set('claimDetail')}
+                      onChange={set('claimDetail')} minLength={10} maxLength={3000}
                       placeholder="Describa con precisión los hechos ocurridos..." className={inputCls} />
                   )}
                 </Field>
                 <Field label="Pedido concreto del consumidor" required>
                   {(id) => (
                     <textarea id={id} required rows={2} value={form.consumerRequest}
-                      onChange={set('consumerRequest')}
+                      onChange={set('consumerRequest')} minLength={5} maxLength={1500}
                       placeholder="Qué solución solicita (cambio de talla, revisión, reposición...)" className={inputCls} />
                   )}
                 </Field>
               </div>
             </section>
+
+            {/* Campo trampa para bots: invisible para las personas */}
+            <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+              <label>
+                Sitio web
+                <input type="text" tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} />
+              </label>
+            </div>
+
+            {error && (
+              <p role="alert" className="text-xs text-red-300 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
+                {error}
+              </p>
+            )}
 
             <div className="flex items-start gap-2.5 text-xs text-gray-300">
               <input
@@ -337,10 +387,11 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               </button>
               <button
                 type="submit"
-                className="px-6 py-2.5 rounded-xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-extrabold text-xs uppercase tracking-wide transition-all flex items-center gap-2 cursor-pointer"
+                disabled={sending}
+                className="px-6 py-2.5 rounded-xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-extrabold text-xs uppercase tracking-wide transition-all flex items-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-wait"
               >
                 <Send className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Generar hoja de reclamación</span>
+                <span>{sending ? 'Enviando…' : 'Generar hoja de reclamación'}</span>
               </button>
             </div>
           </form>

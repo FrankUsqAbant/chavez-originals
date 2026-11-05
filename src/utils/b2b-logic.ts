@@ -37,13 +37,6 @@ export function generateWhatsAppOrderLink(params: WhatsAppOrderParams): string {
   return `https://wa.me/${internationalPhone}?text=${encodeURIComponent(lines.join('\n'))}`;
 }
 
-export function formatClaimTicketCode(type: 'RECLAMO' | 'QUEJA', sequence: number): string {
-  const prefix = type === 'RECLAMO' ? 'REC' : 'QUE';
-  const padded = String(sequence).padStart(4, '0');
-  const year = new Date().getFullYear();
-  return `${prefix}-${year}-${padded}`;
-}
-
 /* -------------------------------------------------------------------------- */
 /* Horario de atención (zona horaria de Lima)                                  */
 /* -------------------------------------------------------------------------- */

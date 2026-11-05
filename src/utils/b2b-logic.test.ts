@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
-  formatClaimTicketCode,
   formatPeruvianCurrency,
   generateWhatsAppOrderLink,
   getStoreStatus,
 } from './b2b-logic';
-import { buildClaimMessage, nextClaimSequence, type StoredClaim } from './claims';
+import { buildClaimMessage, provisionalCode, type ClaimRecord } from './claims';
 
 describe('formatPeruvianCurrency', () => {
   it('formatea en soles', () => {
@@ -47,47 +46,44 @@ describe('generateWhatsAppOrderLink', () => {
 });
 
 describe('claims', () => {
-  it('formatClaimTicketCode genera códigos estándar', () => {
-    expect(formatClaimTicketCode('RECLAMO', 42)).toMatch(/^REC-\d{4}-0042$/);
-    expect(formatClaimTicketCode('QUEJA', 7)).toMatch(/^QUE-\d{4}-0007$/);
+  it('provisionalCode no se parece a un número oficial', () => {
+    const code = provisionalCode(new Date('2026-11-05T12:00:00Z'), () => 0.123456789);
+    expect(code).toMatch(/^PROV-2026-[0-9A-Z]{1,6}$/);
+    expect(code).not.toMatch(/^(REC|QUE)-/);
   });
 
-  it('nextClaimSequence es correlativo por tipo', () => {
-    const base = { type: 'RECLAMO' as const, createdAt: '', data: {} as StoredClaim['data'] };
-    const claims: StoredClaim[] = [
-      { ...base, code: formatClaimTicketCode('RECLAMO', 1) },
-      { ...base, code: formatClaimTicketCode('RECLAMO', 2) },
-      { ...base, type: 'QUEJA', code: formatClaimTicketCode('QUEJA', 1) },
-    ];
-    expect(nextClaimSequence(claims, 'RECLAMO')).toBe(3);
-    expect(nextClaimSequence(claims, 'QUEJA')).toBe(2);
-    expect(nextClaimSequence([], 'RECLAMO')).toBe(1);
-  });
+  const baseClaim: ClaimRecord = {
+    code: 'REC-2026-0001',
+    type: 'RECLAMO',
+    createdAt: '2026-11-05T15:00:00.000Z',
+    saved: true,
+    data: {
+      fullName: 'Ana Quispe',
+      docType: 'DNI',
+      docNumber: '12345678',
+      phone: '987654321',
+      email: 'ana@example.com',
+      address: '',
+      goodType: 'PRODUCTO',
+      amount: '189.00',
+      goodDescription: 'Chimpún talla 41',
+      claimDetail: 'Llegó con la suela despegada',
+      consumerRequest: 'Cambio de producto',
+    },
+  };
 
   it('buildClaimMessage incluye los datos clave', () => {
-    const claim: StoredClaim = {
-      code: 'REC-2026-0001',
-      type: 'RECLAMO',
-      createdAt: '2026-11-05T15:00:00.000Z',
-      data: {
-        fullName: 'Ana Quispe',
-        docType: 'DNI',
-        docNumber: '12345678',
-        phone: '987654321',
-        email: 'ana@example.com',
-        address: '',
-        goodType: 'PRODUCTO',
-        amount: '189.00',
-        goodDescription: 'Chimpún talla 41',
-        claimDetail: 'Llegó con la suela despegada',
-        consumerRequest: 'Cambio de producto',
-      },
-    };
-    const msg = buildClaimMessage(claim, 'CHAVEZ ORIGINALS E.I.R.L.', '20000000000');
-    expect(msg).toContain('REC-2026-0001');
+    const msg = buildClaimMessage(baseClaim, 'CHAVEZ ORIGINALS E.I.R.L.', '20000000000');
+    expect(msg).toContain('N° de hoja:* REC-2026-0001');
     expect(msg).toContain('Ana Quispe');
     expect(msg).toContain('Cambio de producto');
     expect(msg).not.toContain('Domicilio');
+  });
+
+  it('buildClaimMessage marca el número como provisional si no se guardó en línea', () => {
+    const msg = buildClaimMessage({ ...baseClaim, code: 'PROV-2026-ABC123', saved: false }, 'X', '1');
+    expect(msg).toContain('N° provisional');
+    expect(msg).toContain('PROV-2026-ABC123');
   });
 });
 
