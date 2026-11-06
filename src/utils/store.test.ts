@@ -9,8 +9,8 @@ import { buildClaimMessage, provisionalCode, type ClaimRecord } from './claims';
 describe('formatPeruvianCurrency', () => {
   it('formatea en soles', () => {
     const f = formatPeruvianCurrency(189);
-    expect(f.startsWith('S/.')).toBe(true);
-    expect(f).toContain('189');
+    expect(f).toBe('S/ 189');
+    expect(formatPeruvianCurrency(189.5)).toBe('S/ 189.50');
   });
 });
 

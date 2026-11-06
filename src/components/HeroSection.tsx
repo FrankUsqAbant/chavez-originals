@@ -172,7 +172,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
               Zapatillas y chimpunes originales Punto Original. Elige tu modelo y tu talla, y pídelo directo por WhatsApp.
             </p>
 
-            <div className="animate-rise hidden lg:flex mt-9 gap-3" style={{ animationDelay: '380ms' }}>
+            <div className="animate-rise hidden md:flex justify-center lg:justify-start mt-7 lg:mt-9 gap-3" style={{ animationDelay: '380ms' }}>
               <button
                 type="button"
                 onClick={onExploreCatalog}
@@ -225,7 +225,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
               ))}
             </div>
 
-            <div className="relative w-full max-w-[720px] mx-auto aspect-[6/5]">
+            <div className="relative w-full max-w-[720px] md:max-w-[min(720px,calc((100svh-420px)*1.2))] lg:max-w-[min(720px,calc((100svh-250px)*1.2))] mx-auto aspect-[6/5]">
               <Showroom />
               {model3d ? (
                 <div className="absolute inset-x-[10%] top-[8%] bottom-[18%]">
@@ -295,7 +295,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
           </div>
 
           {/* Botones en celular (debajo del producto) */}
-          <div className="lg:hidden flex gap-3">
+          <div className="md:hidden flex gap-3">
             <button
               type="button"
               onClick={onExploreCatalog}
@@ -314,7 +314,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
         </div>
 
         {/* Franja de marcas */}
-        <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-5 pb-7 pr-16 lg:pr-0 text-[10px] sm:text-[11.5px] uppercase tracking-[0.18em] text-white/35">
+        <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-5 pb-7 text-[10px] sm:text-[11.5px] uppercase tracking-[0.18em] text-white/35">
           <span className="hidden sm:inline">Distribuidor exclusivo</span>
           <b className="text-white/70 italic font-bold tracking-[0.08em] text-xs sm:text-sm">PUNTO</b>
           <span className="w-px h-3.5 bg-white/15" aria-hidden="true" />

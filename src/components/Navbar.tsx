@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { ChavezLogo } from './ChavezLogo';
 import { STORE_INFO } from '../data/storeData';
-import { ADMIN_STORAGE_KEY } from '../lib/supabaseConfig';
-import { Lock, MessageCircle, Menu, X } from 'lucide-react';
+import { MessageCircle, Menu, X } from 'lucide-react';
 
 interface NavbarProps {
   onNavigateSection: (sectionId: string) => void;
@@ -58,25 +57,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     setMobileMenuOpen(false);
     onNavigateSection(sectionId);
   };
-
-  // Punto verde si hay una sesión de administrador abierta en este navegador (solo indicador visual)
-  const [adminSession, setAdminSession] = useState(false);
-  React.useEffect(() => {
-    const check = () => {
-      try {
-        setAdminSession(window.localStorage.getItem(ADMIN_STORAGE_KEY) !== null);
-      } catch {
-        setAdminSession(false);
-      }
-    };
-    check();
-    window.addEventListener('storage', check);
-    window.addEventListener('focus', check);
-    return () => {
-      window.removeEventListener('storage', check);
-      window.removeEventListener('focus', check);
-    };
-  }, []);
 
   // Transparente sobre el hero; con fondo apenas se baja un poco
   const [scrolled, setScrolled] = useState(false);
@@ -144,17 +124,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Zone 3: Direct WhatsApp Action */}
         <div className="hidden sm:flex items-center gap-3 shrink-0">
           <a
-            href="/admin"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative p-2.5 rounded-xl border border-white/10 bg-white/[0.04] text-gray-400 hover:text-[#00ff66] hover:border-[#00ff66]/40 transition-colors cursor-pointer"
-            aria-label="Acceso de administrador (se abre en una pestaña nueva)"
-            title="Administrador"
-          >
-            <Lock className="w-4 h-4" aria-hidden="true" />
-            {adminSession && <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#00ff66] border-2 border-[#070b09]" aria-hidden="true" />}
-          </a>
-          <a
             href={`https://wa.me/51${STORE_INFO.whatsapp}?text=${encodeURIComponent('Hola Chavez Originals, deseo consultar sobre el calzado en exhibición.')}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -199,17 +168,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             );
           })}
-
-          <a
-            href="/admin"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMobileMenuOpen(false)}
-            className="w-full text-left px-4 py-2.5 mt-2 border-t border-white/10 text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors cursor-pointer flex items-center gap-2"
-          >
-            <Lock className="w-4 h-4" aria-hidden="true" />
-            <span>Administrador</span>
-          </a>
         </div>
       )}
     </header>
