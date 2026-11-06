@@ -17,7 +17,10 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
 
 ## Estructura
 
-- Página: Inicio (hero) → Catálogo → Tienda. Las tallas se eligen en la ficha del producto.
+- Página: Inicio (hero) → Catálogo → Nosotros → Mayoristas → Tienda. Las tallas se eligen en la ficha del producto.
+- Nosotros (`NosotrosSection.tsx`): distribuidor exclusivo de Punto Original y oficial de VELCAN, Premio Nacional Innovación Empresarial y auspicio de la Copa Perú 2026 (fotos en `public/assets/nosotros/`, originales en `archive/nosotros/`).
+- Mayoristas (`MayoristasSection.tsx`): venta por mayor y reparto a provincias (lista `DELIVERY_PROVINCES` en `storeData.ts`).
+- Redes sociales: `SOCIAL_LINKS` en `storeData.ts`. Una red sin enlace no se muestra; para activar Facebook, TikTok o YouTube basta con pegar su URL.
 - `src/data/storeData.ts`: datos de la tienda (contacto, horario) y el catálogo de RESPALDO (el catálogo real está en Supabase, ver "Administración de productos").
 - `src/lib/products.ts`: lee el catálogo de Supabase. `admin.html` + `src/admin/`: panel de administración, una página aparte en `/admin` (no carga nada de la tienda).
 - Hosting: `/admin` es el archivo `admin.html`. En Vercel funciona con `vercel.json` (`cleanUrls`); Netlify, Cloudflare Pages y GitHub Pages lo sirven sin configuración. En desarrollo y en `npm run preview` lo sirve `vite.config.ts`.
@@ -25,7 +28,7 @@ Sitio web de **Chavez Originals** (calzado deportivo y urbano, Cajamarca). React
 - `src/data/spin-manifest.json` y `models-manifest.json`: registros que escriben `npm run spin` y `npm run model3d` (no se editan a mano).
 - `src/utils/store.ts`: enlaces de pedido por WhatsApp y horario de atención.
 - `src/lib/smoothScroll.ts`: scroll con inercia (Lenis). `src/lib/reclamos.ts`: envío del Libro de Reclamaciones.
-- `src/components/`: secciones y modales. `SpinViewer.tsx`: visor de ángulos.
+- `src/components/`: secciones y modales. `HeroSection.tsx`: el hero "Showroom" (zapatilla sobre un podio con aro neón); sus modelos y precios están en `src/data/heroModels.ts`. Diseño de referencia en Figma: https://www.figma.com/design/8sgTAjjMAI7GkfUKQw5r1y
 - `archive/spin-src/<modelo>/`: fotos de origen de cada modelo (fuera del build).
 
 ## Modelos de la demo (catálogo de respaldo)
@@ -40,7 +43,7 @@ Fútbol Pro 2026, Air Glow Tech y Chunky Lavender: los tres tienen precio, códi
 
 ## Ángulos y giro 360° de las zapatillas
 
-El hero muestra las zapatillas con un visor de ángulos (miniaturas Perfil / Frente / Atrás…, arrastre o deslizar, flechas del teclado). El ángulo se conserva al cambiar de color.
+El hero ("El impulso de tu pasión") muestra la zapatilla en una vitrina: luz de estudio, podio negro y aro verde neón, como en los afiches de la marca. Movimiento delicado: flota despacio, se inclina un poco con el mouse, y los ángulos (miniaturas) y modelos cambian con fundidos lentos. Nada depende del scroll; con "reducir movimiento" en el sistema no hay animaciones. La barra superior es transparente sobre el hero y toma fondo al bajar.
 
 **Cómo está armado (por modelo):**
 1. Las fotos van en `archive/spin-src/<modelo>/` con un `views.json` que define el orden, el nombre de cada ángulo y si hay que voltearla (`"flip": true`).
@@ -56,7 +59,7 @@ El hero muestra las zapatillas con un visor de ángulos (miniaturas Perfil / Fre
 
 ## Modelos 3D (giro libre con el mouse)
 
-El hero ya trae el visor 3D (`Shoe3D.tsx`, basado en `<model-viewer>`): se gira en todas las direcciones con el mouse o el dedo (incluso desde abajo), con giro automático al inicio y sin zoom con la rueda (para no bloquear el scroll). **Se activa solo en los modelos que tengan un `.glb`** y aparece un selector "3D 360° / Fotos". Los colores tiñen el modelo. Si un modelo 3D falla, el hero vuelve a las fotos sin romper el sitio.
+El hero ya trae el visor 3D (`Shoe3D.tsx`, basado en `<model-viewer>`): se gira en todas las direcciones con el mouse o el dedo (incluso desde abajo), con giro automático al inicio y sin zoom con la rueda (para no bloquear el scroll). **Se activa solo en los modelos que tengan un `.glb`**: ese modelo se muestra en 3D en lugar del giro por scroll. Si un modelo 3D falla, el hero vuelve a las fotos sin romper el sitio.
 
 **Hoy ningún modelo tiene `.glb`**: un giro libre necesita un modelo 3D, no se puede hacer con fotos sueltas. Para activarlo en un modelo:
 1. Conseguir el `.glb` de la zapatilla (ver opciones abajo).

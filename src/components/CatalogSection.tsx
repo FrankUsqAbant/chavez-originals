@@ -2,7 +2,7 @@ import React from 'react';
 import type { Product } from '../data/storeData';
 import { useProducts } from '../lib/products';
 import { formatPeruvianCurrency } from '../utils/store';
-import { ShoppingBag } from 'lucide-react';
+import { Gift, ShoppingBag } from 'lucide-react';
 
 interface CatalogSectionProps {
   onSelectProductModal: (product: Product) => void;
@@ -34,6 +34,14 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({ onSelectProductM
           </h2>
           <p className="text-gray-400 text-sm sm:text-base">
             Elige tu modelo, selecciona la talla y pide directo por WhatsApp.
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-2xl border border-[#00ff66]/30 bg-[#00ff66]/[0.06] px-5 py-4">
+          <Gift className="w-6 h-6 text-[#00ff66] shrink-0" aria-hidden="true" />
+          <p className="text-sm text-gray-200">
+            <strong className="text-white">¡Gratis con tu chimpún de fútbol!</strong> Mochila deportiva + canilleras +
+            medias 3/4.
           </p>
         </div>
 
