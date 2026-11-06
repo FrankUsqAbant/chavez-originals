@@ -4,7 +4,9 @@
  */
 
 export function formatPeruvianCurrency(amount: number): string {
-  return `S/. ${amount.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  // "S/ 189" para montos enteros y "S/ 189.50" cuando hay céntimos (mismo formato en toda la página)
+  const decimals = Number.isInteger(amount) ? 0 : 2;
+  return `S/ ${amount.toLocaleString('es-PE', { minimumFractionDigits: decimals, maximumFractionDigits: 2 })}`;
 }
 
 export interface WhatsAppOrderParams {

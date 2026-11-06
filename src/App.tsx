@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { scrollToSection } from './lib/smoothScroll';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
@@ -11,6 +11,7 @@ import { CatalogSection } from './components/CatalogSection';
 import { NosotrosSection } from './components/NosotrosSection';
 import { MayoristasSection } from './components/MayoristasSection';
 import { LogisticsSection } from './components/LogisticsSection';
+import { ReviewsSection } from './components/ReviewsSection';
 import { FooterSection } from './components/FooterSection';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { LibroReclamacionesModal } from './components/LibroReclamacionesModal';
@@ -19,7 +20,17 @@ import { MessageCircle } from 'lucide-react';
 
 export default function App() {
   const [isLibroOpen, setIsLibroOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selected, setSelected] = useState<{ product: Product; color?: string; colors?: string[] } | null>(null);
+
+  // El botón flotante de WhatsApp es solo para celular (en pantallas grandes está en la barra superior) y
+  // aparece cuando el hero queda atrás, para no tapar sus botones.
+  const [pastHero, setPastHero] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setPastHero(window.scrollY > window.innerHeight * 0.85);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const handleNavigateSection = scrollToSection;
 
@@ -37,8 +48,11 @@ export default function App() {
 
         {/* Catálogo Completo 2026 */}
         <CatalogSection
-          onSelectProductModal={(product) => setSelectedProduct(product)}
+          onSelectProductModal={(product, color, colors) => setSelected({ product, color, colors })}
         />
+
+        {/* Opiniones de clientes (solo se publican las reales) */}
+        <ReviewsSection />
 
         {/* Nosotros: marcas que distribuimos, premio y Copa Perú */}
         <NosotrosSection />
@@ -53,29 +67,31 @@ export default function App() {
       {/* MÓDULO FINAL: Footer Oficial */}
       <FooterSection onOpenLibroReclamaciones={() => setIsLibroOpen(true)} />
 
-      {/* Floating Action WhatsApp Button */}
-      <aside aria-label="Contacto flotante" className="fixed bottom-6 right-6 z-40">
+      {/* WhatsApp flotante (solo celular) */}
+      <aside
+        aria-label="Contacto flotante"
+        className={`sm:hidden fixed bottom-5 right-5 z-40 transition-[opacity,translate] duration-300 ${
+          pastHero ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none'
+        }`}
+      >
         <a
           href={`https://wa.me/51${STORE_INFO.whatsapp}?text=${encodeURIComponent('Hola Chavez Originals, deseo cotizar calzado deportivo y urbano.')}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#00ff66] text-black hover:scale-110 active:scale-95 transition-all duration-300"
-          aria-label="Contactar por WhatsApp directamente"
+          tabIndex={pastHero ? 0 : -1}
+          className="flex items-center justify-center w-14 h-14 rounded-full bg-[#00ff66] text-black shadow-[0_8px_24px_rgba(0,0,0,0.45)] active:scale-95 transition-transform"
+          aria-label="Escribir por WhatsApp"
         >
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-[#070b09] animate-pulse" />
-          <MessageCircle className="w-7 h-7 fill-current" />
-          
-          {/* Tooltip on hover */}
-          <span className="absolute right-16 px-3 py-1.5 rounded-xl bg-black/90 border border-emerald-500/30 text-white text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg">
-            ¡Escríbenos al {STORE_INFO.whatsapp}!
-          </span>
+          <MessageCircle className="w-7 h-7 fill-current" aria-hidden="true" />
         </a>
       </aside>
 
       {/* Product Detail Modal */}
       <ProductDetailModal
-        product={selectedProduct}
-        onClose={() => setSelectedProduct(null)}
+        product={selected?.product ?? null}
+        initialColor={selected?.color}
+        colorNames={selected?.colors}
+        onClose={() => setSelected(null)}
       />
 
       {/* Libro de Reclamaciones Virtual Modal */}

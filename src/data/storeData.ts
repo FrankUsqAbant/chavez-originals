@@ -160,3 +160,39 @@ export const DELIVERY_PROVINCES = [
   'Cajabamba',
   'Huamachuco',
 ];
+
+/**
+ * Opiniones de clientes.
+ * DEMO: estas opiniones son INVENTADAS para presentar el diseño al cliente (`ejemplo: true`). Se ven en local
+ * (npm run dev) y en un build con VITE_DEMO_RESENAS=true, pero NO en la página publicada normal. Antes de
+ * publicar, reemplázalas por opiniones reales (con permiso del cliente) y quita `ejemplo`.
+ */
+export const REVIEWS: { name: string; place: string; text: string; product?: string; ejemplo?: boolean }[] = [
+  {
+    name: 'Luis M.',
+    place: 'Cajamarca',
+    text: 'Pedí mis chimpunes por WhatsApp en la mañana y en la tarde ya los estaba probando en la tienda. Originales, cómodos desde el primer partido y encima me llevé la mochila y las canilleras.',
+    product: 'Fútbol Pro 2026',
+    ejemplo: true,
+  },
+  {
+    name: 'Rosa C.',
+    place: 'Chota',
+    text: 'Me mandaron la talla por agencia y llegó en dos días, bien empacada. Me ayudaron a elegir la talla midiendo el pie.',
+    product: 'Air Glow Tech',
+    ejemplo: true,
+  },
+  {
+    name: 'Carlos R.',
+    place: 'Cutervo · tienda mayorista',
+    text: 'Trabajo con ellos hace un año: el camión llega puntual y los modelos se venden solos. Buena atención para negocios.',
+    ejemplo: true,
+  },
+  {
+    name: 'Milagros T.',
+    place: 'Cajamarca',
+    text: 'Las Chunky son lindísimas y súper livianas. La atención en la tienda de la San Martín, de diez.',
+    product: 'Chunky Lavender',
+    ejemplo: true,
+  },
+];

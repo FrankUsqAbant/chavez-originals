@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChavezLogo } from './ChavezLogo';
 import { LegalModal, type LegalDocId } from './LegalModal';
 import { SOCIAL_LINKS, STORE_INFO } from '../data/storeData';
-import { MapPin, MessageCircle, Mail, Instagram, Facebook, Youtube, Music2, BookOpen } from 'lucide-react';
+import { ADMIN_STORAGE_KEY } from '../lib/supabaseConfig';
+import { MapPin, MessageCircle, Mail, Instagram, Facebook, Youtube, Music2, BookOpen, Lock } from 'lucide-react';
 
 const SOCIAL_ICONS = { instagram: Instagram, facebook: Facebook, tiktok: Music2, youtube: Youtube };
 
@@ -22,6 +23,25 @@ const linkClass = 'text-gray-400 hover:text-[#00ff66] transition-colors';
 
 export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenLibroReclamaciones }) => {
   const [legalDoc, setLegalDoc] = useState<LegalDocId | null>(null);
+
+  // Punto verde si hay una sesión de administrador abierta en este navegador (solo indicador visual)
+  const [adminSession, setAdminSession] = useState(false);
+  useEffect(() => {
+    const check = () => {
+      try {
+        setAdminSession(window.localStorage.getItem(ADMIN_STORAGE_KEY) !== null);
+      } catch {
+        setAdminSession(false);
+      }
+    };
+    check();
+    window.addEventListener('storage', check);
+    window.addEventListener('focus', check);
+    return () => {
+      window.removeEventListener('storage', check);
+      window.removeEventListener('focus', check);
+    };
+  }, []);
 
   return (
     <>
@@ -113,9 +133,22 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenLibroReclama
           </div>
 
           <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-            <p>
-              © 2026 {STORE_INFO.legalName} · RUC {STORE_INFO.ruc}
-            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+              <p>
+                © 2026 {STORE_INFO.legalName} · RUC {STORE_INFO.ruc}
+              </p>
+              <a
+                href="/admin"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative inline-flex items-center gap-1.5 text-gray-600 hover:text-gray-300 transition-colors"
+                aria-label="Acceso de administrador (se abre en una pestaña nueva)"
+              >
+                <Lock className="w-3 h-3" aria-hidden="true" />
+                Administrador
+                {adminSession && <span className="w-1.5 h-1.5 rounded-full bg-[#00ff66]" aria-hidden="true" />}
+              </a>
+            </div>
             <ul className="flex flex-wrap items-center justify-center gap-2" aria-label="Medios de pago">
               {PAYMENTS.map((p) => (
                 <li key={p} className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-gray-400">

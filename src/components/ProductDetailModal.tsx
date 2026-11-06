@@ -2,28 +2,58 @@ import React, { useState } from 'react';
 import { Product, STORE_INFO } from '../data/storeData';
 import { formatPeruvianCurrency, generateWhatsAppOrderLink } from '../utils/store';
 import { useModal } from '../hooks/useModal';
-import { X, Check, ShoppingBag } from 'lucide-react';
+import { X, Check, ShoppingBag, Ruler, ShieldCheck } from 'lucide-react';
 
 interface ProductDetailModalProps {
   product: Product | null;
+  /** Color elegido en la tarjeta del catálogo. */
+  initialColor?: string;
+  /** Colores que se ofrecen (los de la tarjeta del catálogo). Sin lista, se muestran todos. */
+  colorNames?: string[];
   onClose: () => void;
 }
 
-/** Contenedor: monta el contenido solo con producto, así el estado se reinicia en cada apertura. */
-export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClose }) => {
-  if (!product) return null;
-  return <ProductDetailContent key={product.id} product={product} onClose={onClose} />;
+/**
+ * Largo del pie (cm) por talla peruana/europea. Tabla estándar REFERENCIAL: si la marca entrega su tabla
+ * oficial, se reemplaza aquí.
+ */
+const FOOT_CM: Record<number, number> = {
+  35: 22.0, 36: 22.7, 37: 23.3, 38: 24.0, 39: 24.7, 40: 25.3, 41: 26.0, 42: 26.7, 43: 27.3, 44: 28.0, 45: 28.7, 46: 29.3,
 };
 
-const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> = ({
+/** Contenedor: monta el contenido solo con producto, así el estado se reinicia en cada apertura. */
+export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, initialColor, colorNames, onClose }) => {
+  if (!product) return null;
+  const offered = colorNames?.length ? product.colors.filter((c) => colorNames.includes(c.name)) : [];
+  if (offered.length) {
+    // Mismo orden que las bolitas de la tarjeta
+    offered.sort((a, b) => colorNames!.indexOf(a.name) - colorNames!.indexOf(b.name));
+    product = { ...product, colors: offered };
+  }
+  return (
+    <ProductDetailContent
+      key={`${product.id}-${initialColor ?? ''}`}
+      product={product}
+      initialColor={initialColor}
+      onClose={onClose}
+    />
+  );
+};
+
+const ProductDetailContent: React.FC<{ product: Product; initialColor?: string; onClose: () => void }> = ({
   product,
+  initialColor,
   onClose,
 }) => {
   const dialogRef = useModal<HTMLDivElement>(true, onClose);
   const [selectedSize, setSelectedSize] = useState<number>(
     product.sizes.includes(40) ? 40 : product.sizes[0],
   );
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]?.name ?? '');
+  const [selectedColor, setSelectedColor] = useState(
+    product.colors.find((c) => c.name === initialColor)?.name ?? product.colors[0]?.name ?? '',
+  );
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
+  const guideSizes = product.sizes.filter((sz) => FOOT_CM[sz]);
   const activeImage = product.colors.find((c) => c.name === selectedColor)?.previewImage ?? product.image;
 
   const handleOrderWhatsApp = () => {
@@ -78,8 +108,12 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
 
           <div className="space-y-4">
             <div>
-              <div className="text-xs font-mono text-[#00ff66] uppercase tracking-wider">
-                CÓDIGO: {product.code}
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+                <span className="font-mono text-[#00ff66] uppercase tracking-wider">CÓDIGO: {product.code}</span>
+                <span className="inline-flex items-center gap-1 text-gray-400">
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#00ff66]" aria-hidden="true" />
+                  Original garantizado
+                </span>
               </div>
               <h3
                 id="product-modal-title"
@@ -123,8 +157,25 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
             )}
 
             <fieldset>
-              <legend className="text-xs font-bold text-gray-400 mb-1.5">
-                Talla (PE/EUR): <span className="text-[#00ff66] font-bold">{selectedSize}</span>
+              <legend className="w-full mb-1.5 flex items-center justify-between gap-3 text-xs font-bold text-gray-400">
+                <span>
+                  Talla (PE/EUR): <span className="text-[#00ff66] font-bold">{selectedSize}</span>
+                  {FOOT_CM[selectedSize] && (
+                    <span className="ml-1.5 font-normal text-gray-500">· pie de {FOOT_CM[selectedSize].toFixed(1)} cm aprox.</span>
+                  )}
+                </span>
+                {guideSizes.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setSizeGuideOpen((o) => !o)}
+                    aria-expanded={sizeGuideOpen}
+                    aria-controls="guia-tallas"
+                    className="shrink-0 whitespace-nowrap inline-flex items-center gap-1 font-semibold text-gray-300 hover:text-[#00ff66] underline underline-offset-4 decoration-white/20 cursor-pointer"
+                  >
+                    <Ruler className="w-3.5 h-3.5" aria-hidden="true" />
+                    Guía de tallas
+                  </button>
+                )}
               </legend>
               <div className="grid grid-cols-7 gap-1.5">
                 {product.sizes.map((sz) => (
@@ -143,6 +194,36 @@ const ProductDetailContent: React.FC<{ product: Product; onClose: () => void }> 
                   </button>
                 ))}
               </div>
+              {sizeGuideOpen && (
+                <div id="guia-tallas" className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 space-y-2 animate-in">
+                  <table className="w-full text-xs text-center">
+                    <caption className="sr-only">Largo del pie en centímetros por talla</caption>
+                    <tbody>
+                      <tr>
+                        <th scope="row" className="text-left font-semibold text-gray-400 py-1 pr-2">Talla</th>
+                        {guideSizes.map((sz) => (
+                          <td key={sz} className={`py-1 font-bold ${sz === selectedSize ? 'text-[#00ff66]' : 'text-white'}`}>
+                            {sz}
+                          </td>
+                        ))}
+                      </tr>
+                      <tr>
+                        <th scope="row" className="text-left font-semibold text-gray-400 py-1 pr-2">Pie (cm)</th>
+                        {guideSizes.map((sz) => (
+                          <td key={sz} className={`py-1 ${sz === selectedSize ? 'text-[#00ff66]' : 'text-gray-300'}`}>
+                            {FOOT_CM[sz].toFixed(1)}
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p className="text-[11px] leading-relaxed text-gray-400">
+                    <strong className="text-gray-200">Cómo medir:</strong> apoya el talón en la pared sobre una hoja, marca la
+                    punta del dedo más largo y mide en cm. Si estás entre dos tallas, elige la mayor. Medidas referenciales:
+                    ante la duda, escríbenos por WhatsApp.
+                  </p>
+                </div>
+              )}
             </fieldset>
 
             <ul className="space-y-1.5 text-xs text-gray-300 pt-1">
