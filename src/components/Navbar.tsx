@@ -15,7 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [activeSection, setActiveSection] = useState<string>('modulo-hero');
 
   React.useEffect(() => {
-    const ids = ['modulo-hero', 'modulo-catalogo', 'modulo-tienda'];
+    const ids = ['modulo-hero', 'modulo-catalogo', 'modulo-nosotros', 'modulo-mayoristas', 'modulo-tienda'];
     const LINE = 160; // sección activa = la que cruza esta línea desde el borde superior
     let observer: IntersectionObserver | null = null;
 
@@ -78,14 +78,31 @@ export const Navbar: React.FC<NavbarProps> = ({
     };
   }, []);
 
+  // Transparente sobre el hero; con fondo apenas se baja un poco
+  const [scrolled, setScrolled] = useState(false);
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const navItems = [
     { id: 'modulo-hero', label: 'Inicio' },
     { id: 'modulo-catalogo', label: 'Catálogo' },
+    { id: 'modulo-nosotros', label: 'Nosotros' },
+    { id: 'modulo-mayoristas', label: 'Mayoristas' },
     { id: 'modulo-tienda', label: 'Nuestra Tienda' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#070b09] border-b border-emerald-500/15">
+    <header
+      className={`sticky top-0 z-50 w-full border-b transition-[background-color,border-color,backdrop-filter] duration-500 ${
+        scrolled || mobileMenuOpen
+          ? 'bg-[#070b09]/85 backdrop-blur-md border-white/[0.06]'
+          : 'bg-transparent border-transparent'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between gap-8">
         
         {/* Zone 1: Logo */}

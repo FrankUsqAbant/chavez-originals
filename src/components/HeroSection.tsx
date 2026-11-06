@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import heroSpec from '../data/hero-models.json';
-import { SpinViewer } from './SpinViewer';
+import React, { useEffect, useRef, useState } from 'react';
+import { COLORWAYS, HERO_MODELS } from '../data/heroModels';
 import { useSpinFrames } from '../hooks/useSpinFrames';
-import { model3dUrl } from '../lib/model3d';
 import { whenIdle } from '../lib/idle';
+import { model3dUrl } from '../lib/model3d';
 import { Shoe3D } from './Shoe3D';
 
 interface HeroSectionProps {
@@ -12,327 +10,320 @@ interface HeroSectionProps {
   onExploreStore: () => void;
 }
 
-interface SneakerColorway {
-  id: string;
-  name: string;
-  hex: string;
-  /** Color de la foto original (el modelo 3D no se tiñe). */
-  original?: boolean;
-}
+const TRUST = ['Envíos a todo el Perú', 'Garantía de fábrica', 'Yape · Plin · Tarjetas'];
 
-interface HeroModel {
-  id: string;
-  name: string;
-  modelTag: string;
-  bgName: string;
-  description: string;
-}
-
-/** Colores de cada modelo: viven en hero-models.json, que también usa scripts/build-hero-assets.mjs. */
-const COLORWAYS = Object.fromEntries(
-  Object.entries(heroSpec).map(([id, m]) => [id, m.colorways as SneakerColorway[]]),
-) as Record<string, SneakerColorway[]>;
-
-/** Vista de perfil de cada modelo y color (la primera vista generada con `npm run spin`). */
-const heroImage = (modelId: string, colorId: string) =>
-  `/assets/aistudio/spin/${modelId}/${colorId}/01.webp`;
-
-const HERO_MODELS: HeroModel[] = [
-  {
-    id: 'futbol-pro',
-    name: 'Punto Original Fútbol Pro 2026',
-    modelTag: 'Fútbol Pro 2026',
-    bgName: 'FÚTBOL PRO',
-    description: 'Chimpún de alta competencia con tecnología de tracción dinámica para césped y losa, capellada microtexturizada y tobillera de ajuste anatómico.',
-  },
-  {
-    id: 'air-glow-tech',
-    name: 'Punto Original Air Glow Tech',
-    modelTag: 'Air Glow Tech',
-    bgName: 'AIR GLOW',
-    description: 'Amortiguación reactiva con cámara de aire visible y refuerzos aerodinámicos. Absorción superior de impacto pensada para máxima energía.',
-  },
-  {
-    id: 'chunky-lavender',
-    name: 'Punto Original Chunky Lavender',
-    modelTag: 'Chunky Lavender',
-    bgName: 'CHUNKY',
-    description: 'Diseño audaz con plataforma chunky ultraligera de polímero EVA. Estructura anatómica que ofrece altura, comodidad y presencia imponente.',
-  },
-];
-
-/* ------------------------- Nombre del modelo al fondo ------------------------- */
-
-const isDark = (hex: string) => {
-  const n = parseInt(hex.slice(1), 16);
-  const lum = (0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
-  return lum < 0.3;
-};
-
-const WATERMARK_WIDTH = 900;
+/** Curva lenta para todos los cambios del hero: arranca rápido y se posa con suavidad. */
+const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
 /**
- * Nombre del modelo en letras grandes detrás de la zapatilla.
- * Se ajusta al ancho del escenario (nunca se corta) y toma el tono del color elegido:
- * relleno suave + contorno definido, para que se lea sin competir con el producto.
+ * Escenario "vitrina" (el lenguaje de los afiches de la marca): cono de luz de estudio, podio negro y aro
+ * verde neón. Coordenadas en un lienzo de 720 × 600; el producto se apoya en el centro del podio (y = 498).
  */
-const ModelWatermark: React.FC<{ text: string; color: string }> = ({ text, color }) => {
-  const fontSize = Math.min(250, WATERMARK_WIDTH / (text.length * 0.7));
-  const tint = isDark(color) ? '#ffffff' : color;
+const Showroom: React.FC = () => (
+  <svg viewBox="0 0 720 600" className="absolute inset-0 w-full h-full" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="sr-cone" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#dcffeb" stopOpacity="0.13" />
+        <stop offset="1" stopColor="#dcffeb" stopOpacity="0" />
+      </linearGradient>
+      <radialGradient id="sr-top" cx="0.5" cy="0.35" r="0.6">
+        <stop offset="0" stopColor="#2c332f" />
+        <stop offset="0.6" stopColor="#141816" />
+        <stop offset="1" stopColor="#0a0c0b" />
+      </radialGradient>
+      <linearGradient id="sr-side" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#101412" />
+        <stop offset="1" stopColor="#050706" />
+      </linearGradient>
+      <radialGradient id="sr-glow" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stopColor="#00ff66" stopOpacity="0.3" />
+        <stop offset="1" stopColor="#00ff66" stopOpacity="0" />
+      </radialGradient>
+      <filter id="sr-blur" x="-20%" y="-50%" width="140%" height="200%">
+        <feGaussianBlur stdDeviation="6" />
+      </filter>
+    </defs>
+    {/* Cono de luz: se desplaza apenas con el mouse (variable --mx) */}
+    <g style={{ transform: 'translateX(calc(var(--mx, 0) * 14px))', transition: 'transform 1.2s cubic-bezier(0.22,1,0.36,1)' }}>
+      <polygon points="310,0 410,0 576,516 144,516" fill="url(#sr-cone)" />
+    </g>
+    <ellipse cx="360" cy="558" rx="260" ry="36" fill="url(#sr-glow)" />
+    <path d="M 151 498 L 151 528 A 209 33 0 0 0 569 528 L 569 498 Z" fill="url(#sr-side)" />
+    <ellipse cx="360" cy="498" rx="209" ry="33" fill="url(#sr-top)" />
+    {/* Aro neón: el halo respira con la flotación de la zapatilla */}
+    <ellipse cx="360" cy="501" rx="216" ry="35" fill="none" stroke="#00ff66" strokeWidth="10" filter="url(#sr-blur)" className="animate-ring-glow" />
+    <ellipse cx="360" cy="501" rx="216" ry="35" fill="none" stroke="#00ff66" strokeWidth="2" />
+    {/* Sombra de contacto: se achica cuando la zapatilla sube */}
+    <ellipse cx="360" cy="489" rx="122" ry="11" fill="#000" fillOpacity="0.7" filter="url(#sr-blur)" className="animate-float-shadow origin-center [transform-box:fill-box]" />
+  </svg>
+);
 
-  return (
-    <svg
-      viewBox="0 0 1000 340"
-      className="absolute left-1/2 top-[3%] w-[112%] -translate-x-1/2 pointer-events-none select-none z-0 animate-in"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <text
-        x="500"
-        y={170 + fontSize * 0.35}
-        textAnchor="middle"
-        textLength={WATERMARK_WIDTH}
-        lengthAdjust="spacingAndGlyphs"
-        fontSize={fontSize}
-        fontWeight={800}
-        fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
-        fill={tint}
-        fillOpacity={0.1}
-        stroke={tint}
-        strokeOpacity={0.34}
-        strokeWidth={2}
-        strokeLinejoin="round"
-        style={{ transition: 'fill 300ms ease, stroke 300ms ease' }}
-      >
-        {text}
-      </text>
-    </svg>
-  );
-};
-
-/* ---------------------------------- Hero ---------------------------------- */
-
-const ARROW_CLASS =
-  'absolute z-30 w-11 h-11 rounded-full bg-black/60 hover:bg-emerald-500/20 border border-white/15 hover:border-[#00ff66]/50 text-gray-300 hover:text-[#00ff66] flex items-center justify-center transition-colors duration-200 active:scale-95 cursor-pointer';
-
+/**
+ * Hero "Showroom": texto a la izquierda; a la derecha la zapatilla sobre un podio con aro neón, bajo una luz de
+ * estudio. Movimiento delicado: flota despacio, se inclina un poco con el mouse (solo con mouse y sin "reducir
+ * movimiento") y los ángulos y modelos cambian con fundidos lentos. Nada depende del scroll.
+ */
 export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onExploreStore }) => {
   const [modelIndex, setModelIndex] = useState(0);
-  const [colorIndex, setColorIndex] = useState(0);
-  const [viewIndex, setViewIndex] = useState(0); // ángulo elegido; se conserva al cambiar de color
-  const [mode, setMode] = useState<'3d' | 'fotos'>('3d');
+  const [view, setView] = useState(0);
   const [failed3d, setFailed3d] = useState<Record<string, boolean>>({});
+  const sectionRef = useRef<HTMLElement>(null);
+  const tiltRef = useRef<HTMLDivElement>(null);
 
-  const currentModel = HERO_MODELS[modelIndex];
-  const colorways = COLORWAYS[currentModel.id];
-  const currentColor = colorways[colorIndex] ?? colorways[0];
-  // Vistas (perfil, frente, atrás…) o giro 360° con fotos reales, si el modelo las tiene (ver `npm run spin`).
-  const spin = useSpinFrames(currentModel.id, currentColor.id);
-  // Modelo 3D (.glb) con giro libre, si el modelo lo tiene (ver `npm run model3d`).
-  const model3d = model3dUrl(currentModel.id);
-  const has3d = Boolean(model3d) && !failed3d[currentModel.id];
-  const show3d = has3d && mode === '3d';
+  const model = HERO_MODELS[modelIndex];
+  const color = COLORWAYS[model.id][0];
+  const spin = useSpinFrames(model.id, color.id);
+  const frames = spin?.frames ?? [`/assets/aistudio/spin/${model.id}/${color.id}/01.webp`];
+  const labels = spin?.labels ?? ['Perfil'];
+  const current = Math.min(view, frames.length - 1);
+  const model3d = failed3d[model.id] ? null : model3dUrl(model.id);
 
-  // Precarga los demás colores del modelo activo (en tiempo libre) para que el cambio de color sea instantáneo.
+  // Precarga los ángulos del modelo activo y las fotos de perfil de los otros modelos (en tiempo libre)
   useEffect(
     () =>
-      whenIdle(() =>
-        COLORWAYS[currentModel.id].forEach((c) => {
+      whenIdle(() => {
+        const urls = [...frames, ...HERO_MODELS.map((m) => `/assets/aistudio/spin/${m.id}/${COLORWAYS[m.id][0].id}/01.webp`)];
+        urls.forEach((src) => {
           const img = new Image();
-          img.src = heroImage(currentModel.id, c.id);
-        }),
-      ),
-    [currentModel.id],
+          img.src = src;
+        });
+      }),
+    [frames],
   );
 
-  const goToModel = (index: number) => {
-    setModelIndex((index + HERO_MODELS.length) % HERO_MODELS.length);
-    setColorIndex(0);
-    setViewIndex(0);
+  // Inclinación suave y luz que sigue al mouse (interpoladas, sin saltos). Solo con mouse y sin "reducir movimiento".
+  useEffect(() => {
+    const el = tiltRef.current;
+    const section = sectionRef.current;
+    if (!el || !section) return;
+    if (!window.matchMedia('(pointer: fine)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let tx = 0;
+    let ty = 0;
+    let x = 0;
+    let y = 0;
+    let frame = 0;
+    const tick = () => {
+      x += (tx - x) * 0.06;
+      y += (ty - y) * 0.06;
+      el.style.transform = `perspective(1200px) rotateY(${(x * 6).toFixed(2)}deg) rotateX(${(-y * 4).toFixed(2)}deg) translate3d(${(x * 8).toFixed(1)}px, ${(y * 5).toFixed(1)}px, 0)`;
+      section.style.setProperty('--mx', x.toFixed(3));
+      frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.001 ? requestAnimationFrame(tick) : 0;
+    };
+    const onMove = (e: PointerEvent) => {
+      tx = (e.clientX / window.innerWidth) * 2 - 1;
+      ty = (e.clientY / window.innerHeight) * 2 - 1;
+      if (!frame) frame = requestAnimationFrame(tick);
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  const selectModel = (i: number) => {
+    setModelIndex(i);
+    setView(0);
   };
 
   return (
     <section
+      ref={sectionRef}
       id="modulo-hero"
-      className="relative min-h-[85vh] flex items-center bg-[#070b09] overflow-hidden py-12 lg:py-20 scroll-mt-20"
+      className="relative -mt-[73px] pt-[73px] overflow-clip scroll-mt-20 bg-[#050806]"
     >
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[550px] h-[550px] rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.12),transparent)] pointer-events-none" />
+      {/* Fondo con profundidad: luz de estudio desde arriba, resplandor sobre el piso y piso apenas visible */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_70%_40%_at_50%_42%,rgba(214,255,230,0.12),transparent_70%),radial-gradient(ellipse_80%_22%_at_50%_78%,rgba(0,255,102,0.09),transparent_70%),linear-gradient(180deg,#0b110e_0%,#070a08_55%,#040605_100%)] lg:bg-[radial-gradient(ellipse_38%_55%_at_70%_0%,rgba(214,255,230,0.15),transparent_70%),radial-gradient(ellipse_55%_38%_at_70%_80%,rgba(0,255,102,0.09),transparent_70%),linear-gradient(180deg,#0b110e_0%,#070a08_55%,#040605_100%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="hidden lg:block absolute inset-x-0 bottom-0 h-[34%] pointer-events-none border-t border-white/[0.05] bg-[linear-gradient(180deg,rgba(255,255,255,0.025),transparent)]"
+      />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-8 min-h-[calc(100svh-73px)] flex flex-col">
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 items-center gap-6 lg:gap-8 pt-8 pb-6 lg:py-10">
           {/* Texto */}
-          <div className="lg:col-span-5 space-y-6 z-10 text-left">
-
-            <h1 className="text-4xl sm:text-5xl lg:text-[50px] font-extrabold tracking-tight text-white leading-[1.12]">
-              El impulso para tu negocio y tu <span className="text-[#00ff66]">pasión</span>.
-            </h1>
-
-            <p className="text-base sm:text-lg text-gray-400 font-normal leading-relaxed">
-              {currentModel.description}
+          <div className="lg:col-span-5 text-center lg:text-left">
+            <p
+              className="animate-rise inline-flex items-center gap-3 text-[11px] sm:text-xs uppercase tracking-[0.16em] text-white/55"
+              style={{ animationDelay: '80ms' }}
+            >
+              <span className="hidden lg:block w-6 h-px bg-[#00ff66]" aria-hidden="true" />
+              Cajamarca · Av. San Martín 736
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <h1
+              className="animate-rise mt-5 lg:mt-6 text-[2.6rem] sm:text-6xl lg:text-[4rem] leading-[1.04] tracking-[-0.035em] text-[#f4f6f5]"
+              style={{ animationDelay: '180ms' }}
+            >
+              <span className="font-light text-[#f4f6f5]/70">El impulso</span>
+              <br />
+              <span className="font-bold">
+                de tu <span className="text-[#00ff66]">pasión.</span>
+              </span>
+            </h1>
+
+            <p
+              className="animate-rise mt-5 lg:mt-6 text-[15px] sm:text-[17px] leading-relaxed text-white/58 max-w-md mx-auto lg:mx-0"
+              style={{ animationDelay: '280ms' }}
+            >
+              Zapatillas y chimpunes originales Punto Original. Elige tu modelo y tu talla, y pídelo directo por WhatsApp.
+            </p>
+
+            <div className="animate-rise hidden lg:flex mt-9 gap-3" style={{ animationDelay: '380ms' }}>
               <button
                 type="button"
                 onClick={onExploreCatalog}
-                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#00ff66] hover:bg-[#1aff75] text-black font-bold text-sm tracking-wide transition-colors duration-200 active:scale-95 cursor-pointer"
+                className="px-7 py-3.5 rounded-full bg-[#00ff66] hover:bg-[#1aff75] text-[#04110a] font-semibold text-sm transition-colors duration-300 cursor-pointer"
               >
-                Ver Colección
+                Ver catálogo
               </button>
               <button
                 type="button"
                 onClick={onExploreStore}
-                className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white font-medium text-sm tracking-wide transition-colors duration-200 active:scale-95 cursor-pointer"
+                className="px-7 py-3.5 rounded-full border border-white/20 hover:border-white/40 hover:bg-white/[0.03] text-white font-semibold text-sm transition-colors duration-300 cursor-pointer"
               >
-                Visitar Tienda
+                Visitar la tienda
               </button>
             </div>
+
+            <ul
+              className="animate-rise hidden lg:flex mt-11 gap-7 text-[12.5px] text-white/45"
+              style={{ animationDelay: '480ms' }}
+            >
+              {TRUST.map((t) => (
+                <li key={t} className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00ff66]/70" aria-hidden="true" />
+                  {t}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* Modelos */}
-          <div className="lg:col-span-7 relative flex flex-col items-center justify-center">
-            <div className="w-full flex items-center justify-center gap-2 mb-4 overflow-x-auto pb-1 scrollbar-none">
-              {HERO_MODELS.map((m, idx) => {
-                const isSelected = modelIndex === idx;
-                return (
-                  <button
-                    key={m.id}
-                    type="button"
-                    onClick={() => goToModel(idx)}
-                    aria-pressed={isSelected}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-colors duration-200 cursor-pointer whitespace-nowrap ${
-                      isSelected
-                        ? 'bg-emerald-500/20 border border-[#00ff66] text-[#00ff66]'
-                        : 'bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    {m.modelTag}
-                  </button>
-                );
-              })}
+          {/* Producto en su vitrina */}
+          <div className="lg:col-span-7 animate-rise" style={{ animationDelay: '250ms' }}>
+            <div className="flex justify-center gap-6 sm:gap-8" role="group" aria-label="Elegir modelo">
+              {HERO_MODELS.map((m, i) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => selectModel(i)}
+                  aria-pressed={i === modelIndex}
+                  className={`relative py-2 text-[13px] sm:text-sm transition-colors duration-300 cursor-pointer ${
+                    i === modelIndex ? 'text-white' : 'text-white/40 hover:text-white/70'
+                  }`}
+                >
+                  {m.modelTag}
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-0 right-0 bottom-0 h-px bg-[#00ff66] transition-transform duration-500"
+                    style={{ transform: `scaleX(${i === modelIndex ? 1 : 0})`, transitionTimingFunction: EASE }}
+                  />
+                </button>
+              ))}
             </div>
 
-            <div className="relative w-full max-w-[520px] flex items-center justify-center">
-              <button
-                type="button"
-                onClick={() => goToModel(modelIndex - 1)}
-                className={`${ARROW_CLASS} left-0`}
-                aria-label="Modelo anterior"
-                title="Modelo anterior"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-
-              <div className="relative w-full aspect-square max-w-[440px] flex items-center justify-center">
-                {/* Escenario: disco de luz y sombra de piso para separar el producto del fondo */}
-                <div
-                  aria-hidden="true"
-                  className="absolute left-1/2 top-[46%] -translate-x-1/2 -translate-y-1/2 w-[88%] aspect-square rounded-full border border-white/10 bg-[radial-gradient(circle_at_50%_28%,rgba(110,231,183,0.22),rgba(16,185,129,0.08)_55%,rgba(16,185,129,0.02)_72%)]"
-                />
-                <div
-                  aria-hidden="true"
-                  className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[68%] h-7 bg-[radial-gradient(closest-side,rgba(0,0,0,0.8),transparent)]"
-                />
-
-                <ModelWatermark key={currentModel.id} text={currentModel.bgName} color={currentColor.hex} />
-
-                <div className="relative z-10 w-full h-full flex items-center justify-center px-6 pt-20 pb-4">
-                  {show3d && model3d ? (
-                    <Shoe3D
-                      key={currentModel.id}
-                      src={model3d}
-                      poster={heroImage(currentModel.id, currentColor.id)}
-                      alt={`${currentModel.name}, modelo 3D`}
-                      tint={currentColor.original ? null : currentColor.hex}
-                      onError={() => setFailed3d((f) => ({ ...f, [currentModel.id]: true }))}
-                    />
-                  ) : spin ? (
-                    <SpinViewer
-                      frames={spin.frames}
-                      labels={spin.labels}
-                      index={viewIndex}
-                      onIndexChange={setViewIndex}
-                      alt={`${currentModel.name}, color ${currentColor.name}`}
-                    />
-                  ) : (
-                    <img
-                      key={`${currentModel.id}-${currentColor.id}`}
-                      src={heroImage(currentModel.id, currentColor.id)}
-                      alt={`${currentModel.name}, color ${currentColor.name}`}
-                      fetchPriority="high"
-                      decoding="async"
-                      className="max-w-[92%] max-h-[92%] object-contain -rotate-3 select-none animate-in drop-shadow-[0_25px_35px_rgba(0,0,0,0.85)]"
-                      draggable={false}
-                    />
-                  )}
+            <div className="relative w-full max-w-[720px] mx-auto aspect-[6/5]">
+              <Showroom />
+              {model3d ? (
+                <div className="absolute inset-x-[10%] top-[8%] bottom-[18%]">
+                  <Shoe3D
+                    key={model.id}
+                    src={model3d}
+                    poster={frames[0]}
+                    alt={`${model.name}, modelo 3D`}
+                    tint={null}
+                    onError={() => setFailed3d((f) => ({ ...f, [model.id]: true }))}
+                  />
                 </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => goToModel(modelIndex + 1)}
-                className={`${ARROW_CLASS} right-0`}
-                aria-label="Siguiente modelo"
-                title="Siguiente modelo"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
+              ) : (
+                <div ref={tiltRef} className="absolute inset-0 will-change-transform">
+                  <div className="absolute inset-0 animate-float">
+                    {/* La foto se apoya en el centro del podio (83 % de la altura del escenario) */}
+                    <div key={model.id} className="absolute left-[13%] w-[74%] bottom-[10.5%] aspect-[4/3] animate-rise">
+                      {frames.map((src, i) => (
+                        <img
+                          key={src}
+                          src={src}
+                          alt={i === current ? `${model.name}, vista ${labels[i].toLowerCase()}` : ''}
+                          aria-hidden={i !== current}
+                          decoding="async"
+                          fetchPriority={i === 0 ? 'high' : 'low'}
+                          draggable={false}
+                          className="absolute inset-0 w-full h-full object-contain object-bottom -rotate-6 drop-shadow-[0_28px_28px_rgba(0,0,0,0.55)] select-none"
+                          style={{
+                            opacity: i === current ? 1 : 0,
+                            transition: `opacity 900ms ${EASE}`,
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {has3d && (
-              <div
-                className="mt-3 inline-flex rounded-full bg-white/[0.04] border border-white/10 p-1 text-xs z-10"
-                role="group"
-                aria-label="Tipo de vista"
-              >
-                {([['3d', '3D 360°'], ['fotos', 'Fotos']] as const).map(([id, label]) => (
-                  <button
-                    key={id}
-                    type="button"
-                    aria-pressed={mode === id}
-                    onClick={() => setMode(id)}
-                    className={`px-3.5 py-1 rounded-full font-semibold transition-colors cursor-pointer ${
-                      mode === id ? 'bg-[#00ff66] text-black' : 'text-gray-300 hover:text-white'
-                    }`}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <div className="mt-4 flex flex-col sm:flex-row items-center gap-3 z-10">
-              <div
-                className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-white/10"
-                role="group"
-                aria-label="Color de la zapatilla"
-              >
-                {colorways.map((c, idx) => {
-                  const isActive = colorIndex === idx;
-                  return (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:px-6">
+              <p className="text-sm text-white/55">
+                <span className="text-white font-semibold">{model.modelTag}</span>
+                <span className="ml-3 text-[#00ff66] font-semibold">{model.price}</span>
+              </p>
+              {!model3d && frames.length > 1 && (
+                <div className="flex items-center gap-2" role="group" aria-label="Ver otros ángulos">
+                  {frames.map((src, i) => (
                     <button
-                      key={c.id}
+                      key={src}
                       type="button"
-                      onClick={() => setColorIndex(idx)}
-                      aria-pressed={isActive}
-                      className={`w-5 h-5 rounded-full border border-white/20 transition-all duration-200 cursor-pointer ${
-                        isActive
-                          ? 'ring-2 ring-[#00ff66] ring-offset-2 ring-offset-[#070b09] scale-110'
-                          : 'opacity-60 hover:opacity-100'
+                      onClick={() => setView(i)}
+                      aria-pressed={i === current}
+                      aria-label={`Vista ${labels[i].toLowerCase()}`}
+                      title={labels[i]}
+                      className={`w-14 h-11 rounded-xl border p-1 cursor-pointer transition-all duration-500 ${
+                        i === current
+                          ? 'border-[#00ff66]/70 bg-white/[0.06]'
+                          : 'border-white/10 bg-white/[0.03] opacity-60 hover:opacity-100'
                       }`}
-                      style={{ backgroundColor: c.hex }}
-                      aria-label={`Color ${c.name}`}
-                      title={c.name}
-                    />
-                  );
-                })}
-              </div>
-
-              <span className="text-xs font-semibold text-gray-300 px-3 py-1 rounded-full bg-white/5 border border-white/5">
-                {currentColor.name}
-              </span>
-              <span className="text-xs text-gray-500">Color referencial · consulta disponibilidad</span>
+                    >
+                      <img src={src} alt="" className="w-full h-full object-contain" draggable={false} />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
+
+          {/* Botones en celular (debajo del producto) */}
+          <div className="lg:hidden flex gap-3">
+            <button
+              type="button"
+              onClick={onExploreCatalog}
+              className="flex-1 py-3.5 rounded-full bg-[#00ff66] text-[#04110a] font-semibold text-sm cursor-pointer"
+            >
+              Ver catálogo
+            </button>
+            <button
+              type="button"
+              onClick={onExploreStore}
+              className="flex-1 py-3.5 rounded-full border border-white/20 text-white font-semibold text-sm cursor-pointer"
+            >
+              Visitar la tienda
+            </button>
+          </div>
+        </div>
+
+        {/* Franja de marcas */}
+        <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-5 pb-7 pr-16 lg:pr-0 text-[10px] sm:text-[11.5px] uppercase tracking-[0.18em] text-white/35">
+          <span className="hidden sm:inline">Distribuidor exclusivo</span>
+          <b className="text-white/70 italic font-bold tracking-[0.08em] text-xs sm:text-sm">PUNTO</b>
+          <span className="w-px h-3.5 bg-white/15" aria-hidden="true" />
+          <span className="hidden sm:inline">Distribuidor oficial</span>
+          <b className="text-white/70 italic font-bold tracking-[0.08em] text-xs sm:text-sm">VELCAN</b>
+          <span className="hidden lg:flex ml-auto mr-20 items-center gap-2.5" aria-hidden="true">
+            <span className="w-px h-6 bg-gradient-to-b from-[#00ff66] to-transparent" />
+            Desliza
+          </span>
         </div>
       </div>
     </section>

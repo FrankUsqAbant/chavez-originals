@@ -136,4 +136,27 @@ export const STORE_INFO = {
   email: 'contacto@chavezoriginals.pe',
   instagram: '@chavezoriginals_',
   instagramUrl: 'https://instagram.com/chavezoriginals_',
+  slogan: 'Estilo que te impulsa, actitud que te define.',
 };
+
+/**
+ * Redes sociales que aparecen en el afiche del negocio. Una red sin `url` no se muestra:
+ * basta con pegar el enlace de la página para que aparezca en el pie de página.
+ */
+export const SOCIAL_LINKS: { id: 'instagram' | 'facebook' | 'tiktok' | 'youtube'; label: string; url: string }[] = [
+  { id: 'instagram', label: 'Instagram', url: STORE_INFO.instagramUrl },
+  { id: 'facebook', label: 'Facebook', url: '' },
+  { id: 'tiktok', label: 'TikTok', url: '' },
+  { id: 'youtube', label: 'YouTube', url: '' },
+];
+
+/** Provincias de la región Cajamarca (y La Libertad) adonde llegan los camiones de reparto ("Cerca de ti"). */
+export const DELIVERY_PROVINCES = [
+  'Cutervo',
+  'Chota',
+  'Santa Cruz',
+  'Celendín',
+  'San Pablo',
+  'Cajabamba',
+  'Huamachuco',
+];

@@ -8,6 +8,8 @@ import { scrollToSection } from './lib/smoothScroll';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { CatalogSection } from './components/CatalogSection';
+import { NosotrosSection } from './components/NosotrosSection';
+import { MayoristasSection } from './components/MayoristasSection';
 import { LogisticsSection } from './components/LogisticsSection';
 import { FooterSection } from './components/FooterSection';
 import { ProductDetailModal } from './components/ProductDetailModal';
@@ -37,6 +39,12 @@ export default function App() {
         <CatalogSection
           onSelectProductModal={(product) => setSelectedProduct(product)}
         />
+
+        {/* Nosotros: marcas que distribuimos, premio y Copa Perú */}
+        <NosotrosSection />
+
+        {/* Mayoristas: abastecimiento a negocios en provincias */}
+        <MayoristasSection />
 
         {/* MÓDULO 03: Logística B2B & Ubicación */}
         <LogisticsSection />

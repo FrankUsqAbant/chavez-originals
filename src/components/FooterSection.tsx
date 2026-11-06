@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { ChavezLogo } from './ChavezLogo';
 import { LegalModal, type LegalDocId } from './LegalModal';
-import { STORE_INFO } from '../data/storeData';
-import { MapPin, MessageCircle, Mail, Instagram, BookOpen } from 'lucide-react';
+import { SOCIAL_LINKS, STORE_INFO } from '../data/storeData';
+import { MapPin, MessageCircle, Mail, Instagram, Facebook, Youtube, Music2, BookOpen } from 'lucide-react';
+
+const SOCIAL_ICONS = { instagram: Instagram, facebook: Facebook, tiktok: Music2, youtube: Youtube };
 
 interface FooterSectionProps {
   onOpenLibroReclamaciones: () => void;
@@ -30,8 +32,10 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenLibroReclama
             <div className="space-y-4">
               <ChavezLogo size="md" />
               <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
-                Calzado deportivo y urbano Punto Original en Cajamarca.
+                Calzado deportivo y urbano en Cajamarca. Distribuidor exclusivo de Punto Original y distribuidor
+                oficial de VELCAN.
               </p>
+              <p className="text-sm font-semibold text-[#00ff66]">{STORE_INFO.slogan}</p>
             </div>
 
             {/* Contacto */}
@@ -62,12 +66,25 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenLibroReclama
                     {STORE_INFO.email}
                   </a>
                 </li>
-                <li className="flex items-center gap-3">
-                  <Instagram className="w-4 h-4 text-[#00ff66] shrink-0" aria-hidden="true" />
-                  <a href={STORE_INFO.instagramUrl} target="_blank" rel="noopener noreferrer" className={linkClass}>
-                    {STORE_INFO.instagram}
-                  </a>
-                </li>
+              </ul>
+              <ul className="flex items-center gap-2" aria-label="Redes sociales">
+                {SOCIAL_LINKS.filter((s) => s.url).map(({ id, label, url }) => {
+                  const Icon = SOCIAL_ICONS[id];
+                  return (
+                    <li key={id}>
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${label} de Chavez Originals`}
+                        title={label}
+                        className="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:border-[#00ff66] hover:text-[#00ff66] text-gray-300 flex items-center justify-center transition-colors"
+                      >
+                        <Icon className="w-4 h-4" aria-hidden="true" />
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
 
