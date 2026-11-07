@@ -85,7 +85,7 @@ const ProductDetailContent: React.FC<{ product: Product; initialColor?: string; 
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors cursor-pointer"
+          className="absolute z-20 top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors cursor-pointer"
           aria-label="Cerrar ventana de producto"
         >
           <X className="w-5 h-5" />
