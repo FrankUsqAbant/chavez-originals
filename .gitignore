@@ -12,3 +12,6 @@ archive/views-cut/
 
 # Modelos 3D originales (pesados): se publican optimizados con npm run model3d
 archive/models-src/
+
+# Material para presentar al cliente (videos, capturas)
+presentacion/
