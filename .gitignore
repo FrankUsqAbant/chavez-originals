@@ -15,3 +15,4 @@ archive/models-src/
 
 # Material para presentar al cliente (videos, capturas)
 presentacion/
+.playwright-mcp/
