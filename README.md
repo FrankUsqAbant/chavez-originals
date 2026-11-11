@@ -88,7 +88,6 @@ Diseño y desarrollo: **Frank Abanto** ([@FrankUsqAbant](https://github.com/Fran
 | `npm test` | Tests de la lógica de negocio |
 | `npm run spin -- <modelo>` | Genera las vistas (o el giro 360°) de un modelo, en todos sus colores |
 | `npm run model3d -- <modelo> <archivo.glb>` | Optimiza y publica el modelo 3D de una zapatilla (giro libre con el mouse) |
-| `node scripts/build-facade.mjs` | Limpia y amplía la foto de la fachada (quita pin y marca de agua de Street View) |
 
 ### Estructura
 
