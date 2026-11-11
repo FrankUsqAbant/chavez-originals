@@ -124,8 +124,8 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const STORE_INFO = {
-  name: 'Chavez Originals',
-  legalName: 'CHAVEZ ORIGINALS E.I.R.L.',
+  name: 'Clavez Originals',
+  legalName: 'CLAVEZ ORIGINALS E.I.R.L.',
   // TODO: valor provisional. Confirmar el RUC real antes de publicar.
   ruc: '20601234567',
   address: 'Av. San Martín 736, Cajamarca, Perú',
@@ -133,9 +133,9 @@ export const STORE_INFO = {
   whatsapp: '918902447',
   whatsappDisplay: '+51 918902447',
   // TODO: confirmar que el correo es real.
-  email: 'contacto@chavezoriginals.pe',
-  instagram: '@chavezoriginals_',
-  instagramUrl: 'https://instagram.com/chavezoriginals_',
+  email: 'contacto@clavezoriginals.pe',
+  instagram: '@clavezoriginals_',
+  instagramUrl: 'https://instagram.com/clavezoriginals_',
   slogan: 'Estilo que te impulsa, actitud que te define.',
 };
 

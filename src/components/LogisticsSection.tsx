@@ -30,7 +30,7 @@ export const LogisticsSection: React.FC = () => {
       phone: STORE_INFO.whatsapp,
       modelCode: 'TIENDA-CAJ',
       modelName: 'Consulta en Tienda Física',
-      notes: '¡Hola Chavez Originals! Deseo consultar modelos y tallas disponibles para visitar su tienda en Av. San Martín 736.',
+      notes: '¡Hola Clavez Originals! Deseo consultar modelos y tallas disponibles para visitar su tienda en Av. San Martín 736.',
     });
     window.open(link, '_blank', 'noopener,noreferrer');
   };
@@ -54,7 +54,7 @@ export const LogisticsSection: React.FC = () => {
                 loading="lazy"
                 decoding="async"
                 src="/assets/aistudio/Chaves_Originals_61e42aa8.webp"
-                alt="Fachada de la tienda Chavez Originals en Av. San Martín 736, Cajamarca"
+                alt="Fachada de la tienda Clavez Originals en Av. San Martín 736, Cajamarca"
                 className="absolute inset-0 w-full h-full object-cover object-top"
               />
               <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/85 to-transparent" aria-hidden="true" />
@@ -94,10 +94,10 @@ export const LogisticsSection: React.FC = () => {
                 </div>
                 <div className="text-sm text-gray-300 space-y-1">
                   <div>
-                    <strong className="text-white">Lunes a sábado:</strong> 8:30 AM – 9:00 PM
+                    <strong className="text-white">Lunes a sábado:</strong> 8:30 AM a 9:00 PM
                   </div>
                   <div>
-                    <strong className="text-white">Domingos:</strong> 9:00 AM – 2:00 PM
+                    <strong className="text-white">Domingos:</strong> 9:00 AM a 2:00 PM
                   </div>
                 </div>
               </div>
@@ -117,7 +117,7 @@ export const LogisticsSection: React.FC = () => {
               <button
                 type="button"
                 onClick={handleConsultStoreWhatsApp}
-                className="w-full py-4 px-6 rounded-2xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-black text-sm sm:text-base tracking-wide uppercase transition-colors duration-200 active:scale-[0.98] flex items-center justify-center gap-2.5 cursor-pointer"
+                className="w-full py-4 px-6 rounded-2xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-black text-sm sm:text-base transition-colors duration-200 active:scale-[0.98] flex items-center justify-center gap-2.5 cursor-pointer"
               >
                 <MessageCircle className="w-5 h-5" aria-hidden="true" />
                 <span>Consultar modelos y tallas</span>

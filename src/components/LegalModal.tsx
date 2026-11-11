@@ -49,7 +49,7 @@ const LegalContent: React.FC<{ doc: LegalDocId; onClose: () => void }> = ({ doc,
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 animate-in"
       onClick={onClose}
     >
       <div

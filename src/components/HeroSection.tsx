@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { COLORWAYS, HERO_MODELS } from '../data/heroModels';
+import { COLORWAYS, HERO_COLORS, HERO_MODELS, type SneakerColorway } from '../data/heroModels';
 import { useSpinFrames } from '../hooks/useSpinFrames';
 import { whenIdle } from '../lib/idle';
 import { model3dUrl } from '../lib/model3d';
 import { Shoe3D } from './Shoe3D';
+import { MoveHorizontal } from 'lucide-react';
 
 interface HeroSectionProps {
   onExploreCatalog: () => void;
@@ -66,12 +67,20 @@ const Showroom: React.FC = () => (
 export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onExploreStore }) => {
   const [modelIndex, setModelIndex] = useState(0);
   const [view, setView] = useState(0);
+  const [colorIndex, setColorIndex] = useState(0);
+  const [interacted, setInteracted] = useState(false);
+  const dragRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ x: number; base: number; id: number } | null>(null);
   const [failed3d, setFailed3d] = useState<Record<string, boolean>>({});
   const sectionRef = useRef<HTMLElement>(null);
   const tiltRef = useRef<HTMLDivElement>(null);
 
   const model = HERO_MODELS[modelIndex];
-  const color = COLORWAYS[model.id][0];
+  const palette = (HERO_COLORS[model.id] ?? [])
+    .map((id) => COLORWAYS[model.id].find((c) => c.id === id))
+    .filter((c): c is SneakerColorway => !!c);
+  const colors = palette.length ? palette : COLORWAYS[model.id].slice(0, 1);
+  const color = colors[Math.min(colorIndex, colors.length - 1)];
   const spin = useSpinFrames(model.id, color.id);
   const frames = spin?.frames ?? [`/assets/aistudio/spin/${model.id}/${color.id}/01.webp`];
   const labels = spin?.labels ?? ['Perfil'];
@@ -82,7 +91,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
   useEffect(
     () =>
       whenIdle(() => {
-        const urls = [...frames, ...HERO_MODELS.map((m) => `/assets/aistudio/spin/${m.id}/${COLORWAYS[m.id][0].id}/01.webp`)];
+        const urls = [
+          ...frames,
+          ...colors.map((c) => `/assets/aistudio/spin/${model.id}/${c.id}/01.webp`),
+          ...HERO_MODELS.map((m) => `/assets/aistudio/spin/${m.id}/${COLORWAYS[m.id][0].id}/01.webp`),
+        ];
         urls.forEach((src) => {
           const img = new Image();
           img.src = src;
@@ -124,6 +137,46 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
   const selectModel = (i: number) => {
     setModelIndex(i);
     setView(0);
+    setColorIndex(0);
+  };
+
+  // Probador: arrastrar (o las flechas del teclado) cambia el ángulo; el zapato se inclina con el dedo y vuelve suave.
+  const canTurn = frames.length > 1 && !model3d;
+  const total = frames.length;
+  const STEP_PX = 70;
+  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tilt = (deg: number, animate: boolean) => {
+    const el = dragRef.current;
+    if (!el) return;
+    el.style.transition = animate ? `transform 650ms ${EASE}` : 'none';
+    el.style.transform = `rotateY(${deg.toFixed(1)}deg)`;
+  };
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!canTurn || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    drag.current = { x: e.clientX, base: current, id: e.pointerId };
+    setInteracted(true);
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    if (!d || d.id !== e.pointerId) return;
+    const dx = e.clientX - d.x;
+    const steps = Math.trunc(dx / STEP_PX);
+    setView((((d.base + steps) % total) + total) % total);
+    if (!reduced()) tilt(Math.max(-16, Math.min(16, (dx - steps * STEP_PX) * 0.22)), false);
+  };
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!drag.current || drag.current.id !== e.pointerId) return;
+    drag.current = null;
+    tilt(0, !reduced());
+  };
+  const onStageKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!canTurn) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      setInteracted(true);
+      setView((v) => (v + (e.key === 'ArrowRight' ? 1 : -1) + total) % total);
+    }
   };
 
   return (
@@ -147,11 +200,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
           {/* Texto */}
           <div className="lg:col-span-5 text-center lg:text-left">
             <p
-              className="animate-rise inline-flex items-center gap-3 text-[11px] sm:text-xs uppercase tracking-[0.16em] text-white/55"
+              className="animate-rise inline-flex items-center gap-3 text-sm text-white/60"
               style={{ animationDelay: '80ms' }}
             >
               <span className="hidden lg:block w-6 h-px bg-[#00ff66]" aria-hidden="true" />
-              Cajamarca · Av. San Martín 736
+              Av. San Martín 736, Cajamarca
             </p>
 
             <h1
@@ -169,7 +222,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
               className="animate-rise mt-5 lg:mt-6 text-[15px] sm:text-[17px] leading-relaxed text-white/58 max-w-md mx-auto lg:mx-0"
               style={{ animationDelay: '280ms' }}
             >
-              Zapatillas y chimpunes originales Punto Original. Elige tu modelo y tu talla, y pídelo directo por WhatsApp.
+              Zapatillas y chimpunes Punto Original. Elige tu talla y pídelo por WhatsApp.
             </p>
 
             <div className="animate-rise hidden md:flex justify-center lg:justify-start mt-7 lg:mt-9 gap-3" style={{ animationDelay: '380ms' }}>
@@ -225,7 +278,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
               ))}
             </div>
 
-            <div className="relative w-full max-w-[720px] md:max-w-[min(720px,calc((100svh-420px)*1.2))] lg:max-w-[min(720px,calc((100svh-250px)*1.2))] mx-auto aspect-[6/5]">
+            <div
+              className={`relative w-full max-w-[720px] md:max-w-[min(720px,calc((100svh-420px)*1.2))] lg:max-w-[min(720px,calc((100svh-250px)*1.2))] mx-auto aspect-[6/5] select-none touch-pan-y rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-[#00ff66]/70 ${
+                canTurn ? 'cursor-grab active:cursor-grabbing' : ''
+              }`}
+              tabIndex={canTurn ? 0 : undefined}
+              role={canTurn ? 'group' : undefined}
+              aria-roledescription={canTurn ? 'probador' : undefined}
+              aria-label={canTurn ? `${model.name}, vista ${labels[current].toLowerCase()}. Arrastra o usa las flechas para girarlo.` : undefined}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={endDrag}
+              onPointerCancel={endDrag}
+              onKeyDown={onStageKey}
+            >
               <Showroom />
               {model3d ? (
                 <div className="absolute inset-x-[10%] top-[8%] bottom-[18%]">
@@ -241,8 +307,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
               ) : (
                 <div ref={tiltRef} className="absolute inset-0 will-change-transform">
                   <div className="absolute inset-0 animate-float">
+                    <div ref={dragRef} className="absolute inset-0" style={{ transformOrigin: '50% 80%' }}>
                     {/* La foto se apoya en el centro del podio (83 % de la altura del escenario) */}
-                    <div key={model.id} className="absolute left-[13%] w-[74%] bottom-[10.5%] aspect-[4/3] animate-rise">
+                    <div key={`${model.id}-${color.id}`} className="absolute left-[13%] w-[74%] bottom-[10.5%] aspect-[4/3] animate-rise">
                       {frames.map((src, i) => (
                         <img
                           key={src}
@@ -260,16 +327,53 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
                         />
                       ))}
                     </div>
+                    </div>
                   </div>
                 </div>
+              )}
+              {canTurn && (
+                <p
+                  aria-hidden="true"
+                  className={`pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-[2%] inline-flex items-center gap-2 rounded-full bg-black/60 px-3 py-1.5 text-xs text-white/75 whitespace-nowrap transition-opacity duration-700 ${
+                    interacted ? 'opacity-0' : 'opacity-100'
+                  }`}
+                >
+                  <MoveHorizontal className="w-3.5 h-3.5 text-[#00ff66]" aria-hidden="true" />
+                  Arrastra para girar
+                </p>
               )}
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:px-6">
-              <p className="text-sm text-white/55">
-                <span className="text-white font-semibold">{model.modelTag}</span>
-                <span className="ml-3 text-[#00ff66] font-semibold">{model.price}</span>
-              </p>
+              <div className="flex items-center gap-4">
+                <p className="text-sm text-white/55">
+                  <span className="text-white font-semibold">{model.modelTag}</span>
+                  <span className="ml-3 text-[#00ff66] font-semibold">{model.price}</span>
+                </p>
+                {colors.length > 1 && (
+                  <div className="flex items-center gap-0.5" role="group" aria-label={`Color: ${color.name}`}>
+                    {colors.map((c, i) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => setColorIndex(i)}
+                        aria-pressed={c.id === color.id}
+                        aria-label={c.name}
+                        title={c.name}
+                        className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-[#00ff66]/70"
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={`w-[18px] h-[18px] rounded-full border transition-shadow duration-300 ${
+                            c.id === color.id ? 'border-white shadow-[0_0_0_2px_#050806,0_0_0_3.5px_#00ff66]' : 'border-white/30'
+                          }`}
+                          style={{ backgroundColor: c.hex }}
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               {!model3d && frames.length > 1 && (
                 <div className="flex items-center gap-2" role="group" aria-label="Ver otros ángulos">
                   {frames.map((src, i) => (
@@ -280,7 +384,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
                       aria-pressed={i === current}
                       aria-label={`Vista ${labels[i].toLowerCase()}`}
                       title={labels[i]}
-                      className={`w-14 h-11 rounded-xl border p-1 cursor-pointer transition-all duration-500 ${
+                      className={`w-14 h-11 rounded-xl border p-1 cursor-pointer transition-[color,background-color,border-color,opacity,transform] duration-500 ${
                         i === current
                           ? 'border-[#00ff66]/70 bg-white/[0.06]'
                           : 'border-white/10 bg-white/[0.03] opacity-60 hover:opacity-100'
@@ -314,7 +418,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
         </div>
 
         {/* Franja de marcas */}
-        <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-5 pb-7 text-[10px] sm:text-[11.5px] uppercase tracking-[0.18em] text-white/35">
+        <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-5 pb-7 text-xs sm:text-[13px] text-white/40">
           <span className="hidden sm:inline">Distribuidor exclusivo</span>
           <b className="text-white/70 italic font-bold tracking-[0.08em] text-xs sm:text-sm">PUNTO</b>
           <span className="w-px h-3.5 bg-white/15" aria-hidden="true" />

@@ -50,7 +50,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ client, notice, onLoggedIn
           <span className="grid place-items-center w-10 h-10 rounded-lg bg-[#00ff66]/10 text-[#00ff66]"><ShieldCheck className="w-5 h-5" aria-hidden="true" /></span>
           <div>
             <h1 className="text-lg font-extrabold leading-tight">Administración</h1>
-            <p className="text-xs text-gray-400">Acceso solo para el equipo de Chavez Originals</p>
+            <p className="text-xs text-gray-400">Acceso solo para el equipo de Clavez Originals</p>
           </div>
         </div>
 

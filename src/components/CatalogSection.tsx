@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import type { Product } from '../data/storeData';
 import { useProducts } from '../lib/products';
 import { formatPeruvianCurrency } from '../utils/store';
@@ -9,7 +9,7 @@ interface CatalogSectionProps {
    * Abre la ficha del producto; `color` es el color que el cliente eligió en la tarjeta y `colors` los colores
    * que se ofrecen de ese modelo (los mismos de la tarjeta).
    */
-  onSelectProductModal: (product: Product, color?: string, colors?: string[]) => void;
+  onSelectProductModal: (product: Product, color?: string, colors?: string[], from?: HTMLElement | null) => void;
 }
 
 /** Colores que se muestran por modelo: los más llamativos, para no saturar la tarjeta. */
@@ -40,7 +40,7 @@ interface ModelGroup {
   colors: ColorOption[];
 }
 
-/** "Punto Original Fútbol Pro 2026 · Verde Chavez" → "Punto Original Fútbol Pro 2026" */
+/** "Punto Original Fútbol Pro 2026 · Verde Clavez" → "Punto Original Fútbol Pro 2026" */
 const baseName = (p: Product) => p.name.split(' · ')[0].trim();
 
 /**
@@ -95,8 +95,9 @@ const ModelCard: React.FC<{ group: ModelGroup; onOpen: CatalogSectionProps['onSe
 }) => {
   const [index, setIndex] = useState(0);
   const color = group.colors[index];
+  const imgRef = useRef<HTMLImageElement>(null);
   const open = () =>
-    onOpen(color.product, color.name || undefined, group.colors.map((c) => c.name).filter(Boolean));
+    onOpen(color.product, color.name || undefined, group.colors.map((c) => c.name).filter(Boolean), imgRef.current);
 
   return (
     <article
@@ -113,12 +114,13 @@ const ModelCard: React.FC<{ group: ModelGroup; onOpen: CatalogSectionProps['onSe
           aria-hidden="true"
         />
         <img
+          ref={imgRef}
           key={color.image}
           loading="lazy"
           decoding="async"
           src={color.image}
           alt={`${group.name}${color.name ? ` en color ${color.name}` : ''}`}
-          className="relative w-full h-full object-contain p-3 pt-8 animate-in transition-transform duration-500 group-hover:scale-105"
+          className="relative w-full h-full object-contain p-3 pt-8 animate-in"
         />
         {group.badge && (
           <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/70 text-[#00ff66] text-[11px] font-semibold tracking-wide">

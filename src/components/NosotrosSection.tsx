@@ -18,19 +18,19 @@ const BRANDS = [
 const MILESTONES = [
   {
     icon: Award,
-    image: '/assets/nosotros/premio.webp',
-    alt: 'Representantes de Chavez Originals con el trofeo y el diploma del Premio Nacional Innovación Empresarial',
-    title: 'Premio Nacional Innovación Empresarial',
-    text: 'Reconocidos en Cajamarca (septiembre de 2026) por nuestro esfuerzo, dedicación y desempeño durante el año.',
-    position: 'object-[50%_30%]',
+    image: '/assets/nosotros/premio-andino.webp',
+    alt: 'Ilustración del fundador de Clavez Originals con medalla de oro junto al trofeo del Premio Andino al Comercio Digital 2026',
+    title: 'Premio Andino al Comercio Digital 2026',
+    text: 'Elegidos Mejor tienda deportiva online en Cajamarca (octubre de 2026) por nuestro catálogo web y la atención por WhatsApp.',
+    position: 'object-[50%_50%]',
   },
   {
     icon: Trophy,
-    image: '/assets/nosotros/copa-peru-trofeo.webp',
-    alt: 'Trofeo de la Copa Perú 2026 con el logo de Chavez Originals en el estadio',
-    title: 'Auspiciador de la Copa Perú 2026',
-    text: 'Apoyamos el fútbol de nuestra región: el trofeo y las medallas de la etapa departamental llevan nuestra marca.',
-    position: 'object-[50%_62%]',
+    image: '/assets/nosotros/copa-clavez-junior.webp',
+    alt: 'Ilustración del fundador de Clavez Originals en la cancha junto al trofeo de la Copa Clavez Junior 2026',
+    title: 'Auspiciador de la Copa Clavez Junior 2026',
+    text: 'Impulsamos el fútbol de menores: 16 equipos sub-15 de los barrios de Cajamarca. El campeón recibe trofeo, medallas y chimpunes.',
+    position: 'object-[50%_45%]',
   },
 ];
 
@@ -38,7 +38,6 @@ export const NosotrosSection: React.FC = () => (
   <section id="modulo-nosotros" className="bg-[#060a08] py-20 scroll-mt-20 border-y border-white/5">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
       <div className="space-y-3 max-w-2xl">
-        <p className="text-xs font-bold tracking-[0.2em] text-[#00ff66] uppercase">Nosotros</p>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
           {STORE_INFO.slogan.split(',')[0]},{' '}
           <span className="text-[#00ff66]">{STORE_INFO.slogan.split(',')[1].trim()}</span>
@@ -53,7 +52,7 @@ export const NosotrosSection: React.FC = () => (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {BRANDS.map((b) => (
           <article key={b.name} className="rounded-3xl bg-[#0c1410] border border-white/10 p-6 sm:p-8 space-y-3">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#00ff66]">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#00ff66]">
               <BadgeCheck className="w-4 h-4" aria-hidden="true" />
               <span>{b.role}</span>
             </div>

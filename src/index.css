@@ -138,3 +138,25 @@ html.lenis body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Transición "el zapato viaja" entre la tarjeta y la ficha (lib/shoeTransition.ts) */
+::view-transition-group(zapato) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-old(zapato),
+::view-transition-new(zapato) {
+  height: 100%;
+  object-fit: contain;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

@@ -79,7 +79,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     <header
       className={`sticky top-0 z-50 w-full border-b transition-[background-color,border-color,backdrop-filter] duration-500 ${
         scrolled || mobileMenuOpen
-          ? 'bg-[#070b09]/85 backdrop-blur-md border-white/[0.06]'
+          ? 'bg-[#070b09]/95 border-white/[0.06]'
           : 'bg-transparent border-transparent'
       }`}
     >
@@ -124,10 +124,10 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Zone 3: Direct WhatsApp Action */}
         <div className="hidden sm:flex items-center gap-3 shrink-0">
           <a
-            href={`https://wa.me/51${STORE_INFO.whatsapp}?text=${encodeURIComponent('Hola Chavez Originals, deseo consultar sobre el calzado en exhibición.')}`}
+            href={`https://wa.me/51${STORE_INFO.whatsapp}?text=${encodeURIComponent('Hola Clavez Originals, deseo consultar sobre el calzado en exhibición.')}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-extrabold text-sm tracking-wide transition-all duration-200 active:scale-95 cursor-pointer whitespace-nowrap"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-extrabold text-sm tracking-wide transition-[color,background-color,border-color,opacity,transform] duration-200 active:scale-95 cursor-pointer whitespace-nowrap"
             aria-label="Contactar por WhatsApp"
           >
             <MessageCircle className="w-4 h-4 fill-current" />

@@ -71,7 +71,7 @@ const ProductDetailContent: React.FC<{ product: Product; initialColor?: string; 
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 animate-in"
       onClick={onClose}
     >
       <div
@@ -98,9 +98,10 @@ const ProductDetailContent: React.FC<{ product: Product; initialColor?: string; 
               src={activeImage}
               alt={`${product.name}, color ${selectedColor}`}
               className="relative z-10 w-full max-h-72 object-contain animate-in drop-shadow-[0_18px_22px_rgba(0,0,0,0.6)]"
+              style={{ viewTransitionName: 'zapato' }}
             />
             {product.badge && (
-              <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#00ff66] text-black font-extrabold text-xs tracking-wider uppercase">
+              <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#00ff66] text-black font-extrabold text-xs ">
                 {product.badge}
               </span>
             )}
@@ -109,7 +110,7 @@ const ProductDetailContent: React.FC<{ product: Product; initialColor?: string; 
           <div className="space-y-4">
             <div>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
-                <span className="font-mono text-[#00ff66] uppercase tracking-wider">CÓDIGO: {product.code}</span>
+                <span className="text-[#00ff66] ">Código: {product.code}</span>
                 <span className="inline-flex items-center gap-1 text-gray-400">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#00ff66]" aria-hidden="true" />
                   Original garantizado
@@ -117,7 +118,7 @@ const ProductDetailContent: React.FC<{ product: Product; initialColor?: string; 
               </div>
               <h3
                 id="product-modal-title"
-                className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white mt-1"
+                className="text-2xl sm:text-3xl font-black tracking-tight text-white mt-1"
               >
                 {product.name}
               </h3>
@@ -138,7 +139,7 @@ const ProductDetailContent: React.FC<{ product: Product; initialColor?: string; 
                       type="button"
                       onClick={() => setSelectedColor(c.name)}
                       aria-pressed={selectedColor === c.name}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer inline-flex items-center gap-2 ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-[color,background-color,border-color,opacity,transform] cursor-pointer inline-flex items-center gap-2 ${
                         selectedColor === c.name
                           ? 'border-[#00ff66] bg-[#00ff66]/15 text-[#00ff66]'
                           : 'border-white/15 bg-white/5 text-gray-300 hover:bg-white/10'
@@ -184,7 +185,7 @@ const ProductDetailContent: React.FC<{ product: Product; initialColor?: string; 
                     type="button"
                     onClick={() => setSelectedSize(sz)}
                     aria-pressed={selectedSize === sz}
-                    className={`py-2 rounded-lg font-bold text-xs transition-all cursor-pointer ${
+                    className={`py-2 rounded-lg font-bold text-xs transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                       selectedSize === sz
                         ? 'bg-[#00ff66] text-black font-black'
                         : 'bg-white/5 hover:bg-white/10 text-gray-300 border border-white/10'
@@ -246,7 +247,7 @@ const ProductDetailContent: React.FC<{ product: Product; initialColor?: string; 
               <button
                 type="button"
                 onClick={handleOrderWhatsApp}
-                className="flex-1 py-3.5 px-6 rounded-2xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-black text-sm tracking-wide uppercase transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className="flex-1 py-3.5 px-6 rounded-2xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-black text-sm transition-[color,background-color,border-color,opacity,transform] flex items-center justify-center gap-2 cursor-pointer"
               >
                 <ShoppingBag className="w-4 h-4" aria-hidden="true" />
                 <span>Pedir por WhatsApp</span>

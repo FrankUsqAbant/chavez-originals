@@ -1,10 +1,10 @@
 <p align="center">
   <a href="https://chavez-originals.pages.dev/">
-    <img src="docs/preview.webp" alt="Chavez Originals: El impulso de tu pasión. Zapatilla de fútbol roja sobre un podio con aro verde neón. Clic para ver el sitio." width="100%">
+    <img src="docs/preview.webp" alt="Clavez Originals: El impulso de tu pasión. Zapatilla de fútbol roja sobre un podio con aro verde neón. Clic para ver el sitio." width="100%">
   </a>
 </p>
 
-<h1 align="center">Chavez Originals</h1>
+<h1 align="center">Clavez Originals</h1>
 
 <p align="center">
   <b>Calzado deportivo y urbano · Cajamarca, Perú</b><br>
@@ -31,7 +31,7 @@
 
 ## El reto
 
-Chavez Originals es distribuidor exclusivo de Punto Original y oficial de VELCAN en Cajamarca. Vendía por Instagram y WhatsApp, sin un lugar donde ver el catálogo completo con precios, colores y tallas. Necesitaba una web que se sintiera **de marca deportiva** (no de catálogo genérico) y que el dueño pudiera actualizar sin depender de un programador.
+Clavez Originals es distribuidor exclusivo de Punto Original y oficial de VELCAN en Cajamarca. Vendía por Instagram y WhatsApp, sin un lugar donde ver el catálogo completo con precios, colores y tallas. Necesitaba una web que se sintiera **de marca deportiva** (no de catálogo genérico) y que el dueño pudiera actualizar sin depender de un programador.
 
 ## El concepto
 
@@ -93,7 +93,7 @@ Diseño y desarrollo: **Frank Abanto** ([@FrankUsqAbant](https://github.com/Fran
 ### Estructura
 
 - Página: Inicio (hero) → Catálogo → Nosotros → Mayoristas → Tienda. Las tallas se eligen en la ficha del producto.
-- Nosotros (`NosotrosSection.tsx`): distribuidor exclusivo de Punto Original y oficial de VELCAN, Premio Nacional Innovación Empresarial y auspicio de la Copa Perú 2026 (fotos en `public/assets/nosotros/`, originales en `archive/nosotros/`).
+- Nosotros (`NosotrosSection.tsx`): distribuidor exclusivo de Punto Original y oficial de VELCAN, Premio Andino al Comercio Digital 2026 y auspicio de la Copa Clavez Junior 2026 (ilustraciones en `public/assets/nosotros/`; datos de demostración).
 - Mayoristas (`MayoristasSection.tsx`): venta por mayor y reparto a provincias (lista `DELIVERY_PROVINCES` en `storeData.ts`).
 - Redes sociales: `SOCIAL_LINKS` en `storeData.ts`. Una red sin enlace no se muestra; para activar Facebook, TikTok o YouTube basta con pegar su URL.
 - `src/data/storeData.ts`: datos de la tienda (contacto, horario) y el catálogo de RESPALDO (el catálogo real está en Supabase, ver "Administración de productos").

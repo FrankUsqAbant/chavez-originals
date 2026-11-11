@@ -1,5 +1,5 @@
 /**
- * Utilidades de pedido y horario de Chavez Originals.
+ * Utilidades de pedido y horario de Clavez Originals.
  * Funciones puras de formato y cálculo, sin dependencias de UI.
  */
 
@@ -24,7 +24,7 @@ export function generateWhatsAppOrderLink(params: WhatsAppOrderParams): string {
   const internationalPhone = cleanPhone.startsWith('51') ? cleanPhone : `51${cleanPhone}`;
 
   const lines = [
-    `⚡ *NUEVO PEDIDO - CHAVEZ ORIGINALS*`,
+    `⚡ *NUEVO PEDIDO - CLAVEZ ORIGINALS*`,
     `--------------------------------------`,
     `👟 *Producto:* ${params.modelName}${params.modelCode ? ` (Cód: ${params.modelCode})` : ''}`,
     params.color ? `🎨 *Color:* ${params.color}` : '',

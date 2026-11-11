@@ -39,9 +39,9 @@ export const Shell: React.FC<ShellProps> = ({ email, active, onNavigate, onLogou
       {/* Barra lateral (escritorio) */}
       <aside className="hidden lg:flex flex-col sticky top-0 h-screen border-r border-white/10 bg-[#0a100d] p-5">
         <div className="px-1 pb-6 border-b border-white/10"><ChavezLogo size="md" /></div>
-        <p className="mt-6 mb-2 px-3 text-[11px] font-bold uppercase tracking-wider text-gray-500">Gestión</p>
+        <p className="mt-6 mb-2 px-3 text-[11px] font-bold text-gray-500">Gestión</p>
         <nav aria-label="Secciones del panel" className="space-y-1">{NAV.map((n) => navButton(n.page, n.label, n.Icon))}</nav>
-        <p className="mt-6 mb-2 px-3 text-[11px] font-bold uppercase tracking-wider text-gray-500">Enlaces</p>
+        <p className="mt-6 mb-2 px-3 text-[11px] font-bold text-gray-500">Enlaces</p>
         <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-lg text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/[0.05] transition-colors">
           <ExternalLink className="w-4 h-4" aria-hidden="true" />Ver tienda
         </a>

@@ -96,7 +96,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenLibroReclama
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label={`${label} de Chavez Originals`}
+                        aria-label={`${label} de Clavez Originals`}
                         title={label}
                         className="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:border-[#00ff66] hover:text-[#00ff66] text-gray-300 flex items-center justify-center transition-colors"
                       >

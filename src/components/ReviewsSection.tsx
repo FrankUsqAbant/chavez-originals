@@ -18,9 +18,9 @@ export const ReviewsSection: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start border-t border-white/10 pt-14">
           <div className="lg:col-span-7 space-y-6">
-            <p id="opiniones-titulo" className="text-xs font-bold uppercase tracking-[0.18em] text-[#00ff66]">
+            <h2 id="opiniones-titulo" className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Lo que dicen nuestros clientes
-            </p>
+            </h2>
             <figure className="space-y-6">
               <Quote className="w-9 h-9 text-[#00ff66]/70" aria-hidden="true" />
               <blockquote className="text-2xl sm:text-3xl font-semibold leading-snug tracking-tight text-white">
@@ -53,7 +53,7 @@ export const ReviewsSection: React.FC = () => {
                   rel="noopener noreferrer"
                   className="text-sm font-semibold text-gray-300 hover:text-[#00ff66] transition-colors"
                 >
-                  Mira más clientes en Instagram {STORE_INFO.instagram} →
+                  Ver más clientes en Instagram {STORE_INFO.instagram}
                 </a>
               </li>
             </ul>
