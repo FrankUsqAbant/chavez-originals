@@ -205,7 +205,7 @@ export const ProductEditor: React.FC<ProductEditorProps> = ({ client, initial, n
         <div className="space-y-6">
           <Card title="Información">
             <div className="grid sm:grid-cols-2 gap-4">
-              <Field id="f-nombre" label="Nombre *"><input id="f-nombre" value={nombre} maxLength={80} onChange={(e) => setNombre(e.target.value)} className={inputClass} placeholder="Punto Original Fútbol Pro 2026" /></Field>
+              <Field id="f-nombre" label="Nombre *"><input id="f-nombre" value={nombre} maxLength={80} onChange={(e) => setNombre(e.target.value)} className={inputClass} placeholder="Punto Orito Fútbol Pro 2026" /></Field>
               <Field id="f-codigo" label="Código *"><input id="f-codigo" value={codigo} maxLength={40} onChange={(e) => setCodigo(e.target.value)} className={inputClass} placeholder="EM0099-M9" /></Field>
               <Field id="f-precio" label="Precio (S/.) *"><input id="f-precio" inputMode="decimal" value={precio} onChange={(e) => setPrecio(e.target.value)} className={inputClass} placeholder="189.00" /></Field>
               <Field id="f-etiqueta" label="Etiqueta" hint="Texto corto sobre la foto: “NUEVO”, “OFERTA”…"><input id="f-etiqueta" value={etiqueta} maxLength={30} onChange={(e) => setEtiqueta(e.target.value)} className={inputClass} /></Field>

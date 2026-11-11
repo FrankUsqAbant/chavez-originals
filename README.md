@@ -31,7 +31,7 @@
 
 ## El reto
 
-Clavez Originals es distribuidor exclusivo de Punto Original y oficial de VELCAN en Cajamarca. Vendía por Instagram y WhatsApp, sin un lugar donde ver el catálogo completo con precios, colores y tallas. Necesitaba una web que se sintiera **de marca deportiva** (no de catálogo genérico) y que el dueño pudiera actualizar sin depender de un programador.
+Clavez Originals es distribuidor exclusivo de Punto Orito y oficial de Vena en Cajamarca. Vendía por Instagram y WhatsApp, sin un lugar donde ver el catálogo completo con precios, colores y tallas. Necesitaba una web que se sintiera **de marca deportiva** (no de catálogo genérico) y que el dueño pudiera actualizar sin depender de un programador.
 
 ## El concepto
 
@@ -93,7 +93,7 @@ Diseño y desarrollo: **Frank Abanto** ([@FrankUsqAbant](https://github.com/Fran
 ### Estructura
 
 - Página: Inicio (hero) → Catálogo → Nosotros → Mayoristas → Tienda. Las tallas se eligen en la ficha del producto.
-- Nosotros (`NosotrosSection.tsx`): distribuidor exclusivo de Punto Original y oficial de VELCAN, Premio Andino al Comercio Digital 2026 y auspicio de la Copa Clavez Junior 2026 (ilustraciones en `public/assets/nosotros/`; datos de demostración).
+- Nosotros (`NosotrosSection.tsx`): distribuidor exclusivo de Punto Orito y oficial de Vena, Premio Andino al Comercio Digital 2026 y auspicio de la Copa Clavez Junior 2026 (ilustraciones en `public/assets/nosotros/`; datos de demostración).
 - Mayoristas (`MayoristasSection.tsx`): venta por mayor y reparto a provincias (lista `DELIVERY_PROVINCES` en `storeData.ts`).
 - Redes sociales: `SOCIAL_LINKS` en `storeData.ts`. Una red sin enlace no se muestra; para activar Facebook, TikTok o YouTube basta con pegar su URL.
 - `src/data/storeData.ts`: datos de la tienda (contacto, horario) y el catálogo de RESPALDO (el catálogo real está en Supabase, ver "Administración de productos").
@@ -143,7 +143,7 @@ El hero ya trae el visor 3D (`Shoe3D.tsx`, basado en `<model-viewer>`): se gira 
 
 **Cómo conseguir el .glb (de mejor a más rápido):**
 - **Fotogrametría con el celular** (Polycam, KIRI Engine, Luma): 60–100 fotos alrededor de la zapatilla real, fondo liso y luz pareja. Es el resultado más fiel al producto.
-- **Archivo 3D de la fábrica** (diseño/CAD del modelo): si Punto Original lo tiene, es lo ideal.
+- **Archivo 3D de la fábrica** (diseño/CAD del modelo): si Punto Orito lo tiene, es lo ideal.
 - **Servicios de imagen a 3D con IA** (Tripo, Meshy, Hunyuan3D, Rodin): se suben las vistas de `archive/spin-src/<modelo>/` y se descarga el `.glb`. Es lo más rápido para una demo; la calidad es media y la parte trasera la inventa la IA.
 
 ### Administración de productos

@@ -6,7 +6,7 @@ import { MapPin, MessageCircle, Package, Truck, ShieldCheck } from 'lucide-react
 const BENEFITS = [
   { icon: Truck, title: 'Hasta la puerta de tu negocio', text: 'Nuestros camiones llevan el pedido a tu tienda en cada provincia.' },
   { icon: Package, title: 'Precios por mayor', text: 'Surte tu tienda con los modelos y tallas que más se venden.' },
-  { icon: ShieldCheck, title: 'Garantía de fábrica', text: 'Productos originales Punto Original y VELCAN, con respaldo directo.' },
+  { icon: ShieldCheck, title: 'Garantía de fábrica', text: 'Productos originales Punto Orito y Vena, con respaldo directo.' },
 ];
 
 export const MayoristasSection: React.FC = () => {
@@ -28,7 +28,7 @@ export const MayoristasSection: React.FC = () => {
               ¡Tu tienda vende, <span className="text-[#00ff66]">nosotros te abastecemos!</span>
             </h2>
             <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
-              Llevamos tu marca favorita Punto Original hasta la puerta de tu negocio. Haz tu pedido al{' '}
+              Llevamos tu marca favorita Punto Orito hasta la puerta de tu negocio. Haz tu pedido al{' '}
               <strong className="text-white">{STORE_INFO.whatsapp}</strong> y prepárate para vender más.
             </p>
 

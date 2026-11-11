@@ -8,7 +8,7 @@ const INFO_CARDS = [
   {
     icon: Store,
     title: 'Recojo en tienda',
-    text: 'Separa tu modelo y talla por WhatsApp y recógelo en Av. San Martín 736 sin costo adicional.',
+    text: 'Separa tu modelo y talla por WhatsApp y recógelo en Av. San Martín 7399 sin costo adicional.',
   },
   {
     icon: Truck,
@@ -30,7 +30,7 @@ export const LogisticsSection: React.FC = () => {
       phone: STORE_INFO.whatsapp,
       modelCode: 'TIENDA-CAJ',
       modelName: 'Consulta en Tienda Física',
-      notes: '¡Hola Clavez Originals! Deseo consultar modelos y tallas disponibles para visitar su tienda en Av. San Martín 736.',
+      notes: '¡Hola Clavez Originals! Deseo consultar modelos y tallas disponibles para visitar su tienda en Av. San Martín 7399.',
     });
     window.open(link, '_blank', 'noopener,noreferrer');
   };
@@ -41,7 +41,7 @@ export const LogisticsSection: React.FC = () => {
         <div className="space-y-2 max-w-xl">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Nuestra Tienda</h2>
           <p className="text-gray-400 text-sm sm:text-base">
-            Visítanos en <strong className="text-white">Av. San Martín 736, Cajamarca</strong> y pruébate tus pares
+            Visítanos en <strong className="text-white">Av. San Martín 7399, Cajamarca</strong> y pruébate tus pares
             favoritos con atención personalizada.
           </p>
         </div>
@@ -53,14 +53,14 @@ export const LogisticsSection: React.FC = () => {
               <img
                 loading="lazy"
                 decoding="async"
-                src="/assets/aistudio/Chaves_Originals_61e42aa8.webp"
-                alt="Fachada de la tienda Clavez Originals en Av. San Martín 736, Cajamarca"
+                src="/assets/tienda-clavez.webp"
+                alt="Ilustración de la fachada de Clavez Originals en Av. San Martín 7399, Cajamarca, con vitrinas de zapatillas"
                 className="absolute inset-0 w-full h-full object-cover object-top"
               />
               <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/85 to-transparent" aria-hidden="true" />
               <div className="absolute bottom-3 left-4 right-4 flex items-center gap-2 text-white">
                 <MapPin className="w-4 h-4 text-[#00ff66] shrink-0" aria-hidden="true" />
-                <span className="text-sm font-semibold">Av. San Martín 736, Cajamarca</span>
+                <span className="text-sm font-semibold">Av. San Martín 7399, Cajamarca</span>
               </div>
               <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/80 text-xs font-semibold text-white flex items-center gap-2">
                 <span

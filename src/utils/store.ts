@@ -10,7 +10,7 @@ export function formatPeruvianCurrency(amount: number): string {
 }
 
 export interface WhatsAppOrderParams {
-  phone: string; // e.g., '918902447'
+  phone: string; // e.g., '975713580'
   modelCode?: string;
   modelName: string;
   size?: number | string;
@@ -30,7 +30,7 @@ export function generateWhatsAppOrderLink(params: WhatsAppOrderParams): string {
     params.color ? `🎨 *Color:* ${params.color}` : '',
     params.size ? `📏 *Talla:* ${params.size}` : '',
     params.comboIncluded ? `🎁 *Promoción:* Combo Gratis (Mochila + Canilleras + Medias 3/4)` : '',
-    `📍 *Tienda:* Av. San Martín 736, Cajamarca`,
+    `📍 *Tienda:* Av. San Martín 7399, Cajamarca`,
     params.notes ? `📝 *Observaciones:* ${params.notes}` : '',
     `--------------------------------------`,
     `¡Hola! Vi su catálogo web y deseo coordinar la compra y disponibilidad.`,

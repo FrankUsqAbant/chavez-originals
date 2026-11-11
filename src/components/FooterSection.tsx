@@ -52,8 +52,8 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenLibroReclama
             <div className="space-y-4">
               <ChavezLogo size="md" />
               <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
-                Calzado deportivo y urbano en Cajamarca. Distribuidor exclusivo de Punto Original y distribuidor
-                oficial de VELCAN.
+                Calzado deportivo y urbano en Cajamarca. Distribuidor exclusivo de Punto Orito y distribuidor
+                oficial de Vena.
               </p>
               <p className="text-sm font-semibold text-[#00ff66]">{STORE_INFO.slogan}</p>
             </div>
@@ -79,7 +79,6 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenLibroReclama
                     {STORE_INFO.whatsappDisplay}
                   </a>
                 </li>
-                {/* TODO: confirmar que este correo es real. */}
                 <li className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-[#00ff66] shrink-0" aria-hidden="true" />
                   <a href={`mailto:${STORE_INFO.email}`} className={`${linkClass} truncate`}>
@@ -132,7 +131,12 @@ export const FooterSection: React.FC<FooterSectionProps> = ({ onOpenLibroReclama
             </div>
           </div>
 
-          <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+          <p className="pt-6 border-t border-white/10 text-xs leading-relaxed text-gray-400 text-center md:text-left">
+            <strong className="text-gray-200">Sitio de demostración.</strong> Proyecto de portafolio de Frank Abanto (desarrollo
+            web). Clavez Originals, Punto Orito y Vena son marcas ficticias; precios, RUC, opiniones y premios son inventados y
+            no se realizan ventas reales.
+          </p>
+          <div className="pt-2 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
               <p>
                 © 2026 {STORE_INFO.legalName} · RUC {STORE_INFO.ruc}
