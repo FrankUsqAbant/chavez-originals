@@ -136,7 +136,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ client, rows, failed
       </div>
 
       <section className={`${cardClass} overflow-hidden`} aria-label="Lista de productos">
-        <div className={`${GRID} hidden px-5 py-3 border-b border-white/10 text-[11px] font-bold uppercase tracking-wider text-gray-500`} aria-hidden="true">
+        <div className={`${GRID} hidden px-5 py-3 border-b border-white/10 text-[11px] font-bold text-gray-500`} aria-hidden="true">
           <span>Producto</span><span>Precio</span><span>Tallas</span><span>Visible</span><span className="text-right">Acciones</span>
         </div>
 
@@ -171,7 +171,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ client, rows, failed
 
                 <div className="flex items-center justify-between gap-3 md:contents">
                   <span className="font-extrabold text-[#00ff66]">{formatPeruvianCurrency(Number(row.precio))}</span>
-                  <span className="text-sm text-gray-400">Tallas {Math.min(...row.tallas)}–{Math.max(...row.tallas)}</span>
+                  <span className="text-sm text-gray-400">Tallas {Math.min(...row.tallas)} a {Math.max(...row.tallas)}</span>
                   <Switch checked={row.activo} disabled={busy} onChange={() => void toggle(row)} label={row.activo ? `Ocultar ${row.nombre} de la tienda` : `Mostrar ${row.nombre} en la tienda`} />
                 </div>
 

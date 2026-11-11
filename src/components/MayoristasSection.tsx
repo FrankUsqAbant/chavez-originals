@@ -14,7 +14,7 @@ export const MayoristasSection: React.FC = () => {
     const link = generateWhatsAppOrderLink({
       phone: STORE_INFO.whatsapp,
       modelName: 'Pedido por mayor para mi negocio',
-      notes: '¡Hola Chavez Originals! Tengo un negocio y deseo información de precios por mayor y entregas en mi provincia.',
+      notes: '¡Hola Clavez Originals! Tengo un negocio y deseo información de precios por mayor y entregas en mi provincia.',
     });
     window.open(link, '_blank', 'noopener,noreferrer');
   };
@@ -24,7 +24,6 @@ export const MayoristasSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl bg-gradient-to-br from-[#0f2219] via-[#0c1410] to-[#070b09] border border-emerald-500/20 p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-2 gap-10">
           <div className="space-y-5">
-            <p className="text-xs font-bold tracking-[0.2em] text-[#00ff66] uppercase">Mayoristas · Cerca de ti</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               ¡Tu tienda vende, <span className="text-[#00ff66]">nosotros te abastecemos!</span>
             </h2>
@@ -50,7 +49,7 @@ export const MayoristasSection: React.FC = () => {
             <button
               type="button"
               onClick={handleWholesale}
-              className="w-full sm:w-auto py-4 px-8 rounded-2xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-black text-sm tracking-wide uppercase transition-colors active:scale-[0.98] inline-flex items-center justify-center gap-2.5 cursor-pointer"
+              className="w-full sm:w-auto py-4 px-8 rounded-2xl bg-[#00ff66] hover:bg-[#1aff75] text-black font-black text-sm transition-colors active:scale-[0.98] inline-flex items-center justify-center gap-2.5 cursor-pointer"
             >
               <MessageCircle className="w-5 h-5" aria-hidden="true" />
               <span>Quiero vender en mi negocio</span>

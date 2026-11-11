@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { closeWithShoe, openWithShoe } from './lib/shoeTransition';
 import { scrollToSection } from './lib/smoothScroll';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
@@ -21,6 +22,8 @@ import { MessageCircle } from 'lucide-react';
 export default function App() {
   const [isLibroOpen, setIsLibroOpen] = useState(false);
   const [selected, setSelected] = useState<{ product: Product; color?: string; colors?: string[] } | null>(null);
+  // Foto de la tarjeta desde la que se abrió la ficha: el zapato vuelve a ella al cerrar
+  const shoeFrom = useRef<HTMLElement | null>(null);
 
   // El botón flotante de WhatsApp es solo para celular (en pantallas grandes está en la barra superior) y
   // aparece cuando el hero queda atrás, para no tapar sus botones.
@@ -48,13 +51,16 @@ export default function App() {
 
         {/* Catálogo Completo 2026 */}
         <CatalogSection
-          onSelectProductModal={(product, color, colors) => setSelected({ product, color, colors })}
+          onSelectProductModal={(product, color, colors, from) => {
+            shoeFrom.current = from ?? null;
+            openWithShoe(from ?? null, () => setSelected({ product, color, colors }));
+          }}
         />
 
         {/* Opiniones de clientes (solo se publican las reales) */}
         <ReviewsSection />
 
-        {/* Nosotros: marcas que distribuimos, premio y Copa Perú */}
+        {/* Nosotros: marcas que distribuimos, premio y auspicio */}
         <NosotrosSection />
 
         {/* Mayoristas: abastecimiento a negocios en provincias */}
@@ -75,7 +81,7 @@ export default function App() {
         }`}
       >
         <a
-          href={`https://wa.me/51${STORE_INFO.whatsapp}?text=${encodeURIComponent('Hola Chavez Originals, deseo cotizar calzado deportivo y urbano.')}`}
+          href={`https://wa.me/51${STORE_INFO.whatsapp}?text=${encodeURIComponent('Hola Clavez Originals, deseo cotizar calzado deportivo y urbano.')}`}
           target="_blank"
           rel="noopener noreferrer"
           tabIndex={pastHero ? 0 : -1}
@@ -91,7 +97,7 @@ export default function App() {
         product={selected?.product ?? null}
         initialColor={selected?.color}
         colorNames={selected?.colors}
-        onClose={() => setSelected(null)}
+        onClose={() => closeWithShoe(shoeFrom.current, () => setSelected(null))}
       />
 
       {/* Libro de Reclamaciones Virtual Modal */}

@@ -19,7 +19,7 @@ describe('generateWhatsAppOrderLink', () => {
     const url = generateWhatsAppOrderLink({
       phone: '918902447',
       modelCode: 'EM0099-M9',
-      modelName: 'Chavez Futbol Pro',
+      modelName: 'Clavez Futbol Pro',
       size: 40,
       color: 'Rojo Furia',
       comboIncluded: true,
@@ -73,7 +73,7 @@ describe('claims', () => {
   };
 
   it('buildClaimMessage incluye los datos clave', () => {
-    const msg = buildClaimMessage(baseClaim, 'CHAVEZ ORIGINALS E.I.R.L.', '20000000000');
+    const msg = buildClaimMessage(baseClaim, 'CLAVEZ ORIGINALS E.I.R.L.', '20000000000');
     expect(msg).toContain('N° de hoja:* REC-2026-0001');
     expect(msg).toContain('Ana Quispe');
     expect(msg).toContain('Cambio de producto');

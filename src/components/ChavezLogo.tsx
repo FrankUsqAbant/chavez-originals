@@ -16,6 +16,7 @@ export const ChavezLogo: React.FC<ChavezLogoProps> = ({
       {/* Dynamic Runner Graphic in Neon Green */}
       <div className="relative flex items-center justify-center">
         <svg
+          aria-hidden="true"
           viewBox="0 0 100 100"
           className={`${size === 'sm' ? 'w-8 h-8' : size === 'lg' ? 'w-12 h-12' : size === 'xl' ? 'w-16 h-16' : 'w-10 h-10'}`}
           fill="none"
@@ -42,14 +43,14 @@ export const ChavezLogo: React.FC<ChavezLogoProps> = ({
         </svg>
       </div>
 
-      {/* Typography: CHAVEZ ORIGINALS */}
+      {/* Typography: CLAVEZ ORIGINALS */}
       <div className="flex flex-col">
         <div className="flex items-baseline font-black italic tracking-tighter leading-none">
           <span className="text-[#00ff66] text-2xl md:text-3xl font-extrabold pr-0.5">
             C
           </span>
           <span className="text-white text-2xl md:text-3xl font-black tracking-tight uppercase">
-            HAVEZ
+            LAVEZ
           </span>
         </div>
         {showSubtitle && (
