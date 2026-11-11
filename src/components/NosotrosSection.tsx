@@ -4,14 +4,14 @@ import { Award, BadgeCheck, Trophy, Quote } from 'lucide-react';
 
 const BRANDS = [
   {
-    name: 'Punto Original',
+    name: 'Punto Orito',
     role: 'Distribuidor exclusivo',
-    text: 'Llevamos la marca Punto Original a toda la región, con la garantía de fábrica en cada par.',
+    text: 'Llevamos la marca Punto Orito a toda la región, con la garantía de fábrica en cada par.',
   },
   {
-    name: 'VELCAN',
+    name: 'Vena',
     role: 'Distribuidor oficial en todo Cajamarca',
-    text: 'VELCAN Own Way llega a cada provincia de Cajamarca, con el respaldo y la garantía de Punto Original.',
+    text: 'Vena llega a cada provincia de Cajamarca, con el respaldo y la garantía de Punto Orito.',
   },
 ];
 
@@ -43,7 +43,7 @@ export const NosotrosSection: React.FC = () => (
           <span className="text-[#00ff66]">{STORE_INFO.slogan.split(',')[1].trim()}</span>
         </h2>
         <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
-          Somos una empresa cajamarquina de calzado deportivo y urbano. Desde Av. San Martín 736 atendemos al público y
+          Somos una empresa cajamarquina de calzado deportivo y urbano. Desde Av. San Martín 7399 atendemos al público y
           abastecemos a negocios de toda la región.
         </p>
       </div>

@@ -35,7 +35,7 @@ export interface Product {
 const BASE_PRODUCTS: Product[] = [
   {
     id: 'futbol-pro',
-    name: 'Punto Original Fútbol Pro 2026',
+    name: 'Punto Orito Fútbol Pro 2026',
     code: 'EM0099-M9',
     price: 189.0,
     image: shoeImage('futbol-pro', 'red', 'thumb'),
@@ -53,7 +53,7 @@ const BASE_PRODUCTS: Product[] = [
   },
   {
     id: 'air-glow-tech',
-    name: 'Punto Original Air Glow Tech',
+    name: 'Punto Orito Air Glow Tech',
     code: 'URB-AIR-026',
     price: 179.0,
     image: shoeImage('air-glow-tech', 'air-white', 'thumb'),
@@ -70,7 +70,7 @@ const BASE_PRODUCTS: Product[] = [
   },
   {
     id: 'chunky-lavender',
-    name: 'Punto Original Chunky Lavender',
+    name: 'Punto Orito Chunky Lavender',
     code: 'URB-2026-CH',
     price: 169.0,
     image: shoeImage('chunky-lavender', 'chunky-lav', 'thumb'),
@@ -125,17 +125,16 @@ export const PRODUCTS: Product[] = [
 
 export const STORE_INFO = {
   name: 'Clavez Originals',
-  legalName: 'CLAVEZ ORIGINALS E.I.R.L.',
-  // TODO: valor provisional. Confirmar el RUC real antes de publicar.
-  ruc: '20601234567',
-  address: 'Av. San Martín 736, Cajamarca, Perú',
-  googleMapsUrl: 'https://maps.google.com/?q=Av.+San+Mart%C3%ADn+736,+Cajamarca,+Peru',
-  whatsapp: '918902447',
-  whatsappDisplay: '+51 918902447',
-  // TODO: confirmar que el correo es real.
-  email: 'contacto@clavezoriginals.pe',
-  instagram: '@clavezoriginals_',
-  instagramUrl: 'https://instagram.com/clavezoriginals_',
+  legalName: 'CLAVEZ ORIGINALS S.A.C.',
+  // DEMO: RUC de demostración (dígito verificador inválido a propósito: no pertenece a ninguna empresa).
+  ruc: '20612345670',
+  address: 'Av. San Martín 7399, Cajamarca, Perú',
+  googleMapsUrl: 'https://maps.google.com/?q=Av.+San+Mart%C3%ADn+7399,+Cajamarca,+Peru',
+  whatsapp: '975713580',
+  whatsappDisplay: '+51 975713580',
+  email: 'usquizafranquer@gmail.com',
+  instagram: '@abantofrank12',
+  instagramUrl: 'https://instagram.com/abantofrank12',
   slogan: 'Estilo que te impulsa, actitud que te define.',
 };
 
@@ -163,35 +162,34 @@ export const DELIVERY_PROVINCES = [
 
 /**
  * Opiniones de clientes.
- * DEMO: estas opiniones son INVENTADAS para presentar el diseño al cliente (`ejemplo: true`). Se ven en local
- * (npm run dev) y en un build con VITE_DEMO_RESENAS=true, pero NO en la página publicada normal. Antes de
- * publicar, reemplázalas por opiniones reales (con permiso del cliente) y quita `ejemplo`.
+ * DEMO (portafolio): opiniones INVENTADAS para mostrar el diseño (`ejemplo: true`). Se ven en local y en el build
+ * publicado con VITE_DEMO_RESENAS=true; en un build normal no se publican.
  */
 export const REVIEWS: { name: string; place: string; text: string; product?: string; ejemplo?: boolean }[] = [
   {
-    name: 'Luis M.',
+    name: 'Diego P.',
     place: 'Cajamarca',
-    text: 'Pedí mis chimpunes por WhatsApp en la mañana y en la tarde ya los estaba probando en la tienda. Originales, cómodos desde el primer partido y encima me llevé la mochila y las canilleras.',
+    text: 'Giré el chimpún en la web, lo vi en verde y lo pedí por WhatsApp. Al día siguiente lo recogí en la tienda, igualito a la foto. Ya lo estrené en el campeonato del barrio.',
     product: 'Fútbol Pro 2026',
     ejemplo: true,
   },
   {
-    name: 'Rosa C.',
-    place: 'Chota',
-    text: 'Me mandaron la talla por agencia y llegó en dos días, bien empacada. Me ayudaron a elegir la talla midiendo el pie.',
+    name: 'Andrea V.',
+    place: 'Celendín',
+    text: 'La guía de tallas en centímetros me salvó: medí mi pie y me quedaron perfectas. Llegaron por agencia en dos días.',
     product: 'Air Glow Tech',
     ejemplo: true,
   },
   {
-    name: 'Carlos R.',
-    place: 'Cutervo · tienda mayorista',
-    text: 'Trabajo con ellos hace un año: el camión llega puntual y los modelos se venden solos. Buena atención para negocios.',
+    name: 'Jorge L.',
+    place: 'Chota · tienda mayorista',
+    text: 'Cada mes surto mi tienda con ellos. El pedido es claro por WhatsApp y el camión llega cuando dicen.',
     ejemplo: true,
   },
   {
-    name: 'Milagros T.',
+    name: 'Kiara M.',
     place: 'Cajamarca',
-    text: 'Las Chunky son lindísimas y súper livianas. La atención en la tienda de la San Martín, de diez.',
+    text: 'Las Chunky en menta son lo más: livianas y combinan con todo. Me atendieron súper bien en la tienda.',
     product: 'Chunky Lavender',
     ejemplo: true,
   },

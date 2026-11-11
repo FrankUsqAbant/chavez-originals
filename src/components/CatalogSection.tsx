@@ -40,7 +40,7 @@ interface ModelGroup {
   colors: ColorOption[];
 }
 
-/** "Punto Original Fútbol Pro 2026 · Verde Clavez" → "Punto Original Fútbol Pro 2026" */
+/** "Punto Orito Fútbol Pro 2026 · Verde Clavez" → "Punto Orito Fútbol Pro 2026" */
 const baseName = (p: Product) => p.name.split(' · ')[0].trim();
 
 /**

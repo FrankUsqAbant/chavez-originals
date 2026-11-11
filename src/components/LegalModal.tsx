@@ -10,7 +10,7 @@ const DOCS: Record<LegalDocId, { title: string; body: string[] }> = {
   terminos: {
     title: 'Términos y Condiciones',
     body: [
-      `Las ventas al por mayor y al por menor de ${STORE_INFO.legalName} se rigen por la garantía de fábrica Punto Original, con reemplazo inmediato en tienda cuando corresponda.`,
+      `Las ventas al por mayor y al por menor de ${STORE_INFO.legalName} se rigen por la garantía de fábrica Punto Orito, con reemplazo inmediato en tienda cuando corresponda.`,
       'Los precios y la disponibilidad de modelos, tallas y colores pueden variar sin previo aviso. La disponibilidad se confirma por WhatsApp antes de concretar la compra.',
       'Los colores mostrados en pantalla son referenciales y pueden diferir ligeramente del producto real.',
     ],
@@ -28,7 +28,7 @@ const DOCS: Record<LegalDocId, { title: string; body: string[] }> = {
     body: [
       'Los despachos se realizan con guía de remisión a todo el norte peruano, mediante agencias autorizadas.',
       'Todos los productos cuentan con garantía por defecto de fabricación. Conserva tu comprobante de pago para cualquier cambio o reclamo.',
-      'Puedes probarte tu talla en tienda antes de comprar: Av. San Martín 736, Cajamarca.',
+      'Puedes probarte tu talla en tienda antes de comprar: Av. San Martín 7399, Cajamarca.',
     ],
   },
 };

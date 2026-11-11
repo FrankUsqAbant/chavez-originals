@@ -320,7 +320,7 @@ const LibroForm: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                   {(id) => (
                     <input id={id} type="text" value={form.goodDescription}
                       onChange={set('goodDescription')} maxLength={300}
-                      placeholder="Ej. Chimpún Punto Original EM0099-M9 talla 41" className={inputCls} />
+                      placeholder="Ej. Chimpún Punto Orito EM0099-M9 talla 41" className={inputCls} />
                   )}
                 </Field>
               </div>

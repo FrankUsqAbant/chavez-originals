@@ -29,7 +29,7 @@ export const HERO_COLORS: Record<string, string[]> = {
 
 /** Los modelos del hero (mismos precios que el catálogo de respaldo en storeData.ts). */
 export const HERO_MODELS: HeroModel[] = [
-  { id: 'futbol-pro', name: 'Punto Original Fútbol Pro 2026', modelTag: 'Fútbol Pro 2026', price: 'S/ 189' },
-  { id: 'air-glow-tech', name: 'Punto Original Air Glow Tech', modelTag: 'Air Glow Tech', price: 'S/ 179' },
-  { id: 'chunky-lavender', name: 'Punto Original Chunky Lavender', modelTag: 'Chunky Lavender', price: 'S/ 169' },
+  { id: 'futbol-pro', name: 'Punto Orito Fútbol Pro 2026', modelTag: 'Fútbol Pro 2026', price: 'S/ 189' },
+  { id: 'air-glow-tech', name: 'Punto Orito Air Glow Tech', modelTag: 'Air Glow Tech', price: 'S/ 179' },
+  { id: 'chunky-lavender', name: 'Punto Orito Chunky Lavender', modelTag: 'Chunky Lavender', price: 'S/ 169' },
 ];

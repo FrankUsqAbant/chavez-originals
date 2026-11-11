@@ -204,7 +204,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
               style={{ animationDelay: '80ms' }}
             >
               <span className="hidden lg:block w-6 h-px bg-[#00ff66]" aria-hidden="true" />
-              Av. San Martín 736, Cajamarca
+              Av. San Martín 7399, Cajamarca
             </p>
 
             <h1
@@ -222,7 +222,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
               className="animate-rise mt-5 lg:mt-6 text-[15px] sm:text-[17px] leading-relaxed text-white/58 max-w-md mx-auto lg:mx-0"
               style={{ animationDelay: '280ms' }}
             >
-              Zapatillas y chimpunes Punto Original. Elige tu talla y pídelo por WhatsApp.
+              Zapatillas y chimpunes Punto Orito. Elige tu talla y pídelo por WhatsApp.
             </p>
 
             <div className="animate-rise hidden md:flex justify-center lg:justify-start mt-7 lg:mt-9 gap-3" style={{ animationDelay: '380ms' }}>
@@ -420,10 +420,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onExploreCatalog, onEx
         {/* Franja de marcas */}
         <div className="flex items-center justify-center lg:justify-start gap-3 sm:gap-5 pb-7 text-xs sm:text-[13px] text-white/40">
           <span className="hidden sm:inline">Distribuidor exclusivo</span>
-          <b className="text-white/70 italic font-bold tracking-[0.08em] text-xs sm:text-sm">PUNTO</b>
+          <b className="text-white/70 italic font-bold tracking-[0.08em] text-xs sm:text-sm">PUNTO ORITO</b>
           <span className="w-px h-3.5 bg-white/15" aria-hidden="true" />
           <span className="hidden sm:inline">Distribuidor oficial</span>
-          <b className="text-white/70 italic font-bold tracking-[0.08em] text-xs sm:text-sm">VELCAN</b>
+          <b className="text-white/70 italic font-bold tracking-[0.08em] text-xs sm:text-sm">VENA</b>
           <span className="hidden lg:flex ml-auto mr-20 items-center gap-2.5" aria-hidden="true">
             <span className="w-px h-6 bg-gradient-to-b from-[#00ff66] to-transparent" />
             Desliza
